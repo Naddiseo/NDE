@@ -5,7 +5,7 @@
  *      Author: richard
  */
 
-#include "rendering/Renderer.h"
+#include "graphics/Renderer.hpp"
 
 namespace nde {
 

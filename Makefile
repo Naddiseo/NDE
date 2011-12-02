@@ -1,6 +1,6 @@
 CXXFLAGS=-g -I./includes -std=c++0x -Weffc++ -Wall -Werror -Wfatal-errors -fPIC
 
-SOURCES=src/rendering/Renderer.cpp \
+SOURCES=src/graphics/Renderer.cpp \
 		src/game/Game.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)

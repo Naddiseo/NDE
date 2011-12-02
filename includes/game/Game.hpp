@@ -6,9 +6,12 @@
  *      Author: richard
  */
 
+#include "game/Assets.hpp"
+
 namespace nde {
 
 class Game {
+	Assets assets;
 public:
 	static Game& getInstance() {
 		static Game instance;

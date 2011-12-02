@@ -5,17 +5,12 @@
  *      Author: richard
  */
 
-#include "game/Game.h"
+#include "game/Game.hpp"
 
 namespace nde {
 
-Game::Game() {
-	// TODO Auto-generated constructor stub
+Game::Game() {}
 
-}
-
-Game::~Game() {
-	// TODO Auto-generated destructor stub
-}
+Game::~Game() {}
 
 } /* namespace nde */

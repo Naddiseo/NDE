@@ -5,8 +5,10 @@
  *      Author: richard
  */
 
-
+#include "NDE.hpp"
 
 int main() {
+	nde::Game g = nde::Game::getInstance();
 
+	return 0;
 }
