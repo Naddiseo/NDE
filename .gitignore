@@ -28,3 +28,7 @@ RCS
 RCSLOG
 SCCS
 _$*
+*.so
+*.bin
+.cproject
+.project

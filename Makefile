@@ -1,13 +1,18 @@
-CXXFLAGS=-g -I. -std=c++0x -Weffc++ -Wall -Werror -Wfatal-errors -fPIC
+CXXFLAGS=-g -I./includes -std=c++0x -Weffc++ -Wall -Werror -Wfatal-errors -fPIC
 
-SOURCES=rendering/Renderer.cpp \
-		game/Game.cpp
+SOURCES=src/rendering/Renderer.cpp \
+		src/game/Game.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 
-library: nde.so
+all: library test01
 
-nde.so: $(OBJECTS)
+test01: tests/test01.o
+	$(CXX)  $^ -L ./ -lNDE $(CXXFLAGS)   -o test01.bin
+
+library: libNDE.so
+
+libNDE.so: $(OBJECTS)
 	$(CXX) $^ $(CXXFLAGS) -shared -o $@
 
 .cpp.o:
