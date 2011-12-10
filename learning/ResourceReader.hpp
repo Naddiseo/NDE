@@ -27,7 +27,7 @@ struct face_t {
 
 	Color col;
 
-	face_t() : tex_name(""), textureid(0), vertexes(), tex_points(), col() {}
+	face_t() : tex_name(""), textureid(0), vertexes(), tex_points(), mode(GL_QUADS), col() {}
 
 	~face_t() {
 		for (Vector3f* v : vertexes) {
