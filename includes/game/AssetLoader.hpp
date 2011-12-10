@@ -9,7 +9,7 @@ public:
 	AssetLoader();
 	virtual ~AssetLoader();
 
-	void loadAsset(std::string path);
+	bool loadAsset(const std::string& path);
 
 };
 

@@ -9,5 +9,6 @@
 
 
 #include "game/Game.hpp"
-#include "rendering/Renderer.hpp"
+#include "graphics/Renderer.hpp"
+#include "game/Scene.hpp"
 

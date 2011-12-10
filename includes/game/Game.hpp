@@ -7,6 +7,7 @@
  */
 
 #include "game/Assets.hpp"
+#include "game/World.hpp"
 
 namespace nde {
 
@@ -18,6 +19,14 @@ public:
 		return instance;
 	}
 	virtual ~Game();
+
+	bool loadScene(const std::string& path) {
+		return getWorld().getScene().loadScene(path);
+	}
+
+	World& getWorld() const {
+		return World::getInstance();
+	}
 private:
 	Game();
 	Game(Game const&);
