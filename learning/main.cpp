@@ -1,4 +1,11 @@
-#define __GXX_EXPERIMENTAL_CXX0X__  1
+#define __GXX_EXPERIMENTAL_CXX0X__ 1
+
+#if WINDOWS
+	#define WIN32_LEAN_AND_MEAN
+	#define _WIN32_WINNT 0x0500
+	#include <windows.h>
+#endif
+
 #include <iostream>
 #include <SDL/SDL.h>
 #include <GL/gl.h>
@@ -13,8 +20,18 @@ const int WIDTH = 640;
 bool has_shift(SDL_Event& event) {
 	return (event.key.keysym.mod & KMOD_LSHIFT) == KMOD_LSHIFT;
 }
-
-int main(int argc, char* argv[]) {
+#if WINDOWS
+int APIENTRY WinMain(
+	HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	LPSTR     lpCmdLine,
+	int       nCmdShow
+) {
+	HWND hWnd = GetConsoleWindow();
+	ShowWindow(hWnd, SW_HIDE);
+#else
+int main() {
+#endif
 	double angleZ = 0, angleX = 0;
 
 	SDL_Init(SDL_INIT_VIDEO);
@@ -44,7 +61,11 @@ int main(int argc, char* argv[]) {
 				case SDLK_q:
 					exit(0);
 					break;
+				default:
+					break;
 				}
+			default:
+				break;
 			}
 		}
 		angleZ+=1;

@@ -14,6 +14,14 @@ int yycolumn = 1;
 
 extern "C" int yylex(void);
 
+#if defined(WINDOWS) || !defined(strdup)
+char* strdup(char* str) {
+	char* newstr = new char[strlen(str)];
+	strcpy(newstr, str);
+	return newstr;
+}
+#endif
+
  void yyerror(const char* s, ...);
 
 %}

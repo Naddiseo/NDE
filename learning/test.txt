@@ -1,0 +1,9 @@
+face {
+	texname "brick.tga"
+	tex 0 0
+	vertex 0 -1 -1
+	tex 0 1
+	vertex 0 -1 1
+	tex 1 1
+	vertex 0 1 1
+}

@@ -23,6 +23,7 @@ struct face_t {
 	GLuint textureid;
 	vec_list_t vertexes;
 	point_list_t tex_points;
+	GLenum mode;
 
 	Color col;
 
@@ -47,6 +48,16 @@ struct face_t {
 		}
 	}
 
+	void setEnum() {
+		switch (vertexes.size()) {
+		case 1: mode = GL_POINTS; break;
+		case 2: mode = GL_LINES; break;
+		case 3: mode = GL_TRIANGLES; break;
+		case 4: mode = GL_QUADS; break;
+		default: mode = GL_POLYGON; break;
+		}
+	}
+
 	void draw() {
 		point_list_t::iterator tex_iter = tex_points.begin();
 
@@ -56,7 +67,7 @@ struct face_t {
 		else {
 			col.set();
 		}
-		glBegin(GL_QUADS);
+		glBegin(mode);
 		for (Vector3f* v : vertexes) {
 			if (tex_iter != tex_points.end()) {
 				glTexCoord2f((*tex_iter)->x, (*tex_iter)->y);

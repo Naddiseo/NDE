@@ -66,6 +66,7 @@ dfn_stmt
 	: T_FACE 
 		{ currentFace = new face_t(); } 
 		'{' opt_nl stmt_list opt_nl '}'  {
+		currentFace->setEnum();
 		faces.push_back(currentFace);
 	} 
 	;
