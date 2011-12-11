@@ -2,7 +2,7 @@ CXXFLAGS=-g -I. -DNDEBUG=1  -Weffc++ -std=c++0x -Wall -Werror -Wfatal-errors `pk
 FLEXFLAGS=-o resource.yy.c
 BISONFLAGS=-dvt
 
-SOURCES=main.cpp ResourceReader.cpp Color.cpp
+SOURCES=main.cpp ResourceReader.cpp Color.cpp Terrain.cpp Camera.cpp
 CSOURCES=resource.yy.c resource.tab.c
 
 BINARY_OBJ=$(SOURCES:.cpp=.o) $(CSOURCES:.c=.o)

@@ -214,7 +214,7 @@ public:
 	}
 
 	Vector3 operator*(const Vector3& other) const {
-		return {x * other.x, y * other.y, z*other.z, name};
+		return {x * other.x, y * other.y, z * other.z, name};
 	}
 
 
@@ -223,17 +223,17 @@ public:
 	}
 
 	Vector3 operator*(const T& other) const {
-		return {x * other, y * other, y * other, name};
+		return {x * other, y * other, z * other, name};
 	}
 
 	Vector3 operator/(const T& other) const {
-		return {x / other, y / other, y / other, name};
+		return {x / other, y / other, z / other, name};
 	}
 
 	Vector3& operator+=(const Vector3 other) {
 		x += other.x;
 		y += other.y;
-		z +=  other.z;
+		z += other.z;
 		return *this;
 	}
 
@@ -263,23 +263,26 @@ public:
 	Vector3& operator/=(const Vector3 other) {
 		x /= other.x;
 		y /= other.y;
+		z /= other.z;
 		return *this;
 	}
 
 	Vector3& operator*=(const T other) {
 		x *= other;
 		y *= other;
+		z *= other;
 		return *this;
 	}
 
 	Vector3& operator/=(const T other) {
 		x /= other;
 		y /= other;
+		z /= other;
 		return *this;
 	}
 
 	bool operator==(const Vector3& other) {
-		return (x == other.x) && (y == other.y);
+		return (x == other.x) && (y == other.y) && (z == other.z);
 	}
 
 	bool operator!=(const Vector3& other) {
@@ -287,7 +290,7 @@ public:
 	}
 
 	bool operator<(const Vector3 other) {
-		return (x < other.x) || (y < other.y);
+		return (x < other.x) || (y < other.y) || (z < other.z);
 	}
 
 	bool operator>(const Vector3& other) {
