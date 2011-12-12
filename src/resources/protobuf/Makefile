@@ -7,4 +7,7 @@ protoclasses: resource.proto
 	protoc --cpp_out=. resource.proto
 
 test: protoclasses
-	g++ $(CXXSOURCES) -I. -lprotobuff -o test.exe
+	g++ $(CXXSOURCES) -I. -lprotobuf -o test.exe
+
+clean:
+	-rm *.pb.h *.pb.cc *.exe
