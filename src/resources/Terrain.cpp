@@ -8,6 +8,7 @@
 
 #include <cstdlib>
 #include <ctime>
+#include "game/Game.hpp"
 #include "graphics/Face.hpp"
 #include "resources/Terrain.hpp"
 
@@ -43,7 +44,7 @@ void createPeak(int x, int y, int w, int h, float seed, std::vector<vec_list_t>&
 	Vector3f* center = points[cx][cy];
 	center->y += (a->y + b->y + c->y + d->y)/ 4;
 
-	seed -= 0.001;
+	seed -= 0.1;
 	createPeak(x, y, cx, cy, seed, points);
 	createPeak(cx, cy, w, cy, seed, points);
 	createPeak(x, cy, x, h, seed, points);
@@ -52,7 +53,7 @@ void createPeak(int x, int y, int w, int h, float seed, std::vector<vec_list_t>&
 
 }
 
-Terrain::Terrain(ResourceReader& resources) {
+Terrain::Terrain() {
 	std::vector<vec_list_t> points;
 	const int n_faces = (1<<5);
 	srand(time(NULL));
@@ -79,17 +80,18 @@ Terrain::Terrain(ResourceReader& resources) {
 			face->vertexes.push_back(points[i+1][j+1]);
 			face->vertexes.push_back(points[i][j+1]);
 
+#if 0
 			face->tex_points.push_back(new Vector2f(0,0));
 			face->tex_points.push_back(new Vector2f(0,1));
 			face->tex_points.push_back(new Vector2f(1,1));
 			face->tex_points.push_back(new Vector2f(1,0));
-#if 0
+
 			float avg = face->avgHeight();
 			if (avg < 5) {
-				face->textureid = resources.loadTexture("assets/grass.tga");
+				face->textureid = Game::getInstance().loadAsset("assets/grass.tga");
 			}
 			else if (avg >= 5) {
-				face->textureid = resources.loadTexture("assets/snow.tga");
+				face->textureid = Game::getInstance().loadAsset("assets/snow.tga");
 			}
 #else
 			face->col = Color((rand()%255), (rand()%255), (rand()%255));
@@ -101,10 +103,6 @@ Terrain::Terrain(ResourceReader& resources) {
 	std::cout << "done." << std::endl;
 }
 
-Terrain::~Terrain() {
-	for (Face* face : faces) {
-		delete face;
-	}
-}
+Terrain::~Terrain() {}
 
 } /* namespace nde */

@@ -6,6 +6,7 @@
  */
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <IL/il.h>
 #include "graphics/Renderer.hpp"
 #include "game/Settings.hpp"
 
@@ -28,6 +29,15 @@ Renderer::Renderer() : screen(NULL) {
 	gluPerspective(70, width/height, 1, 35);
 
 	SDL_EnableKeyRepeat(10,10);
+
+	if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION) {
+		// TODO: throw error
+
+	}
+
+	// initialize devIL
+	ilInit();
+
 }
 
 Renderer::~Renderer() {

@@ -12,7 +12,7 @@ namespace nde {
 
 class Terrain : public IsRendered {
 public:
-	Terrain(ResourceReader& resources);
+	Terrain();
 	virtual ~Terrain();
 
 };

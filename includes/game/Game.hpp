@@ -32,6 +32,10 @@ public:
 		return getWorld().getScene().loadScene(path);
 	}
 
+	GLuint loadAsset(const std::string& path) {
+		return assets.loadTexture(path);
+	}
+
 	World& getWorld() {
 		return world;
 	}
