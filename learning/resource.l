@@ -3,6 +3,7 @@
 #include <cstring>
 #include <cstdio>
 #include "ResourceReader.hpp"
+#include "Face.hpp"
 #include "resource.tab.h"
 
 /* handle locations */

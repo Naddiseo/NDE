@@ -14,6 +14,9 @@
 #include "ResourceReader.hpp"
 #include "Terrain.hpp"
 #include "Camera.hpp"
+#include "Face.hpp"
+
+using namespace nde;
 
 const int HEIGHT = 480;
 const int WIDTH = 640;
@@ -33,7 +36,7 @@ int APIENTRY WinMain(
 #else
 int main() {
 #endif
-	nde::Camera camera;
+	Camera camera;
 	int mouseX = 0, mouseY = 0;
 
 	SDL_Init(SDL_INIT_VIDEO);
@@ -52,8 +55,8 @@ int main() {
 
 	SDL_EnableKeyRepeat(10,10);
 
-	//ResourceReader resource("test.txt");
-	nde::Terrain terrain;
+	ResourceReader resources;
+	Terrain terrain(resources);
 	SDL_Event event;
 
 	camera.move({0.f, 8.f, 0.f});
@@ -130,7 +133,7 @@ int main() {
 		glLoadIdentity();
 		camera.render();
 
-		for (face_t* face : terrain.faces) {
+		for (Face* face : terrain.faces) {
 			face->draw();
 		}
 

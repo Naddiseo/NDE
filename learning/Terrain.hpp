@@ -11,7 +11,7 @@ namespace nde {
 
 class Terrain {
 public:
-	Terrain();
+	Terrain(ResourceReader resources);
 	virtual ~Terrain();
 
 	faces_t faces;

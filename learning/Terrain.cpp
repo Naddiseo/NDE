@@ -8,6 +8,7 @@
 #include "Terrain.hpp"
 #include <cstdlib>
 #include <ctime>
+#include "Face.hpp"
 
 float frand(float a, float b) {
 	return ((b-a) * ((float)rand())/RAND_MAX) + a;
@@ -51,13 +52,12 @@ void createPeak(int x, int y, int w, int h, float seed, std::vector<vec_list_t>&
 
 }
 
-Terrain::Terrain() : faces() {
+Terrain::Terrain(ResourceReader resources) : faces() {
 	std::vector<vec_list_t> points;
 	const int n_faces = (1<<5);
 	srand(time(NULL));
 
-	std::cout << "Starting Terrain Generation...";
-	fflush(stdout);
+	std::cout << "Starting Terrain Generation..." << std::flush;
 
 	for (int i = 0; i < n_faces; i++) {
 		vec_list_t row;
@@ -72,7 +72,7 @@ Terrain::Terrain() : faces() {
 
 	for (int i = 0; i < n_faces - 1; i++) {
 		for (int j = 0; j < n_faces - 1; j++) {
-			face_t* face = new face_t();
+			Face* face = new Face();
 
 			face->vertexes.push_back(points[i][j]);
 			face->vertexes.push_back(points[i+1][j]);
@@ -86,12 +86,10 @@ Terrain::Terrain() : faces() {
 #if 1
 			float avg = face->avgHeight();
 			if (avg < 5) {
-				face->tex_name = "grass.tga";
-				face->load();
+				face->textureid = resources.loadTexture("grass.tga");
 			}
 			else if (avg >= 5) {
-				face->tex_name = "snow.tga";
-				face->load();
+				face->textureid = resources.loadTexture("snow.tga");
 			}
 #else
 			face->col = Color((rand()%255), (rand()%255), (rand()%255));
@@ -104,7 +102,7 @@ Terrain::Terrain() : faces() {
 }
 
 Terrain::~Terrain() {
-	for (face_t* face : faces) {
+	for (Face* face : faces) {
 		delete face;
 	}
 }

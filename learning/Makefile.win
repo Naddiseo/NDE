@@ -6,7 +6,7 @@ CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DWINDOWS -DNDEBUG=1 -Weffc++ -std=c++0x -W
 FLEXFLAGS=-o resource.yy.c
 BISONFLAGS=-dvt
 
-SOURCES=main.cpp ResourceReader.cpp Color.cpp Terrain.cpp Camera.cpp
+SOURCES=main.cpp ResourceReader.cpp Color.cpp Terrain.cpp Camera.cpp Face.cpp misc.cpp
 CSOURCES=resource.yy.c resource.tab.c
 
 BINARY_OBJ=$(SOURCES:.cpp=.o) $(CSOURCES:.c=.o)

@@ -7,18 +7,16 @@
 #include <cstdlib>
 
 #include "ResourceReader.hpp"
-struct face_t;
+#include "Face.hpp"
 
 void yyerror(const char* s, ...) {
 	std::cerr << s << std::endl;
 }
 extern "C" int yylex(void);
 
-
-
 static faces_t faces = faces_t();
 
-face_t* currentFace;
+Face* currentFace;
 
 faces_t& get_faces() { return faces; }
 %}
@@ -31,7 +29,7 @@ faces_t& get_faces() { return faces; }
 	float fval;
 	char* ident;
 	
-	face_t* face;
+	Face* face;
 	Vector3f* vec;
 	Vector2f* point;
 }
