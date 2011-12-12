@@ -44,7 +44,6 @@ Assets::loadTexture(std::string path) {
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 				texture_map[path] = imageid;
-				std::cout << "ilid =" << texid << " glid=" <<imageid << std::endl;
 			}
 			else {
 				// TODO: runtime error

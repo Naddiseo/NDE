@@ -22,7 +22,16 @@ public:
 	bool loadScene(std::string const& path);
 	rendered_list_t& getToRender() { return to_render; }
 
-	void addRenderObject(IsRendered* obj);
+	template<typename H = IsRendered*>
+	void addRenderObjects(const H& obj) {
+		to_render.push_back(obj);
+	}
+
+	template<typename H = IsRendered*, typename... T>
+	void addRenderObjects(const H& obj, const T&... tail) {
+		addRenderObjects(obj);
+		addRenderObjects(tail...);
+	}
 private:
 	void getBoundingBox();
 };

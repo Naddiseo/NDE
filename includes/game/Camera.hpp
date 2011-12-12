@@ -7,7 +7,7 @@
  */
 
 #include <SDL/SDL.h>
-#include "resources/ResourceReader.hpp"
+#include "math/vector.hpp"
 
 namespace nde {
 

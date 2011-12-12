@@ -5,7 +5,6 @@
  *  Created on: 2011-12-10
  *      Author: richard
  */
-#include "resources/ResourceReader.hpp"
 #include "graphics/IsRendered.hpp"
 
 namespace nde {
