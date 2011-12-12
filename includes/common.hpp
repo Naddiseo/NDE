@@ -34,5 +34,17 @@ typedef std::map<std::string, GLuint> intmap_t;
 // defined in misc.cpp
 GLuint loadNewTexture(const char * filename,bool useMipMap=true);
 
-
 }
+
+
+#if WINDOWS
+#	define BEGIN_MAIN \
+	int APIENTRY WinMain(\
+		HINSTANCE hInstance,\
+		HINSTANCE hPrevInstance,\
+		LPSTR     lpCmdLine,\
+		int       nCmdShow\
+	)
+#else
+#	define BEGIN_MAIN int main(int argc, char* argv[])
+#endif

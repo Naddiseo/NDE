@@ -8,7 +8,7 @@ CFLAGS=-g -I./includes
 GAME_FILES=Camera.cpp Game.cpp Scene.cpp Settings.cpp World.cpp
 GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 
-GRAPHICS_FILES=Color.cpp Face.cpp Renderer.cpp SkyBox.cpp
+GRAPHICS_FILES=Color.cpp Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
 GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 
 RESOURCES_FILES=AssetLoader.cpp Assets.cpp misc.cpp ResourceReader.cpp Terrain.cpp
@@ -16,7 +16,7 @@ RESOURCES_SOURCES=$(addprefix src/resources/, $(RESOURCES_FILES))
 
 SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES)
 
-OBJECTS=$(SOURCES:.cpp=.o)
+OBJECTS=$(SOURCES:.cpp=.o) resource.yy.o resource.tab.o
 
 all: library test01
 
@@ -29,7 +29,7 @@ testc: test.o
 
 library: lexer parser libNDE.a
 
-libNDE.a: $(OBJECTS)
+libNDE.a: $(OBJECTS) 
 	echo "Objects= $^"
 	$(AR) rs $@ $^ 
 

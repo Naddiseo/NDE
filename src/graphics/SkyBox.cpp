@@ -9,13 +9,9 @@
 
 namespace nde {
 
-SkyBox::SkyBox() : faces() {
-	// TODO Auto-generated constructor stub
-
+SkyBox::SkyBox() {
 }
 
-SkyBox::~SkyBox() {
-	// TODO Auto-generated destructor stub
-}
+SkyBox::~SkyBox() {}
 
 } /* namespace nde */

@@ -7,11 +7,11 @@
  */
 #include "common.hpp"
 #include "graphics/Face.hpp"
+#include "graphics/IsRendered.hpp"
 
 namespace nde {
 
-class SkyBox {
-	Face faces[6];
+class SkyBox : public IsRendered {
 public:
 	SkyBox();
 	virtual ~SkyBox();

@@ -7,7 +7,7 @@
 #include <cstdlib>
 
 #include "resources/ResourceReader.hpp"
-#include "resources/Face.hpp"
+#include "graphics/Face.hpp"
 
 using namespace nde;
 void yyerror(const char* s, ...) {

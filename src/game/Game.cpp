@@ -23,6 +23,11 @@ Game::Game() : assets(), world(), renderer(), camera(), event() {
 	camera.rotateX(SGET_F("cam_rot_x"));
 	camera.rotateY(SGET_F("cam_rot_y"));
 	camera.rotateZ(SGET_F("cam_rot_z"));
+
+#ifdef WINDOWS
+	HWND hWnd = GetConsoleWindow();
+	ShowWindow(hWnd, SW_HIDE);
+#endif
 }
 
 Game::~Game() {}

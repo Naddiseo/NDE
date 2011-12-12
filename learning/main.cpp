@@ -11,10 +11,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "ResourceReader.hpp"
-#include "Terrain.hpp"
-#include "Camera.hpp"
-#include "Face.hpp"
+#include "NDE.hpp"
 
 using namespace nde;
 
@@ -24,18 +21,8 @@ const int WIDTH = 640;
 bool has_shift(SDL_Event& event) {
 	return (event.key.keysym.mod & KMOD_LSHIFT) == KMOD_LSHIFT;
 }
-#if WINDOWS
-int APIENTRY WinMain(
-	HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPSTR     lpCmdLine,
-	int       nCmdShow
-) {
-	HWND hWnd = GetConsoleWindow();
-	ShowWindow(hWnd, SW_HIDE);
-#else
-int main() {
-#endif
+
+BEGIN_MAIN {
 	Camera camera;
 	int mouseX = 0, mouseY = 0;
 

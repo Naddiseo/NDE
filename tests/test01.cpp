@@ -17,8 +17,8 @@
 #include "NDE.hpp"
 
 
-int main() {
-	nde::ResourceReader r();
+BEGIN_MAIN {
+	nde::ResourceReader r;
 	nde::Terrain* t = new nde::Terrain(r);
 
 	nde::Game::getInstance().getWorld().getScene().addRenderObject(t);
