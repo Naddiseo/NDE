@@ -22,6 +22,12 @@ Renderer::Renderer() : screen(NULL) {
 	SDL_Flip(screen);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
+
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity();
+	gluPerspective(70, width/height, 1, 35);
+
+	SDL_EnableKeyRepeat(10,10);
 }
 
 Renderer::~Renderer() {
