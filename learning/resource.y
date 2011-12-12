@@ -17,7 +17,7 @@ extern "C" int yylex(void);
 
 static faces_t faces = faces_t();
 
-Face* currentFace;
+nde::Face* currentFace;
 
 faces_t& get_faces() { return faces; }
 %}
@@ -32,7 +32,7 @@ faces_t& get_faces() { return faces; }
 	float fval;
 	char* ident;
 	
-	Face* face;
+	nde::Face* face;
 	Vector3f* vec;
 	Vector2f* point;
 }
