@@ -34,11 +34,7 @@ ResourceReader::load(std::string filename)  {
 	faces = get_faces();
 }
 
-ResourceReader::~ResourceReader() {
-	for (Face* face : faces) {
-		delete face;
-	}
-}
+ResourceReader::~ResourceReader() {}
 
 GLuint ResourceReader::loadTexture(std::string name) {
 	if (texture_map.find(name) == texture_map.end()) {

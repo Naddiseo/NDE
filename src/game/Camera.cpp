@@ -19,13 +19,13 @@ Camera::Camera()
 	 phi(0), theta(0),
 	 speed(0.01), sensitivity(0.2) {
 	SDL_WM_GrabInput(SDL_GRAB_ON);
-	SDL_ShowCursor(SDL_DISABLE);
+	//SDL_ShowCursor(SDL_DISABLE);
 
 }
 
 Camera::~Camera() {
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
-	SDL_ShowCursor(SDL_ENABLE);
+	//SDL_ShowCursor(SDL_ENABLE);
 }
 
 void Camera::print() {

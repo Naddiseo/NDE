@@ -14,14 +14,14 @@ Face::Face()
 
 Face::~Face() {
 	for (Vector3f* v : vertexes) {
-		delete v;
+		if (v) {
+			delete v;
+		}
 	}
 	for (Vector2f* v : tex_points) {
-		delete v;
-	}
-
-	if (textureid) {
-		glDeleteTextures(1, &textureid);
+		if (v) {
+			delete v;
+		}
 	}
 }
 

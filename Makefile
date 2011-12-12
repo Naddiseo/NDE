@@ -30,7 +30,6 @@ testc: test.o
 library: lexer parser libNDE.a
 
 libNDE.a: $(OBJECTS) 
-	echo "Objects= $^"
 	$(AR) rs $@ $^ 
 
 .cpp.o:

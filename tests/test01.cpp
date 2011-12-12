@@ -19,7 +19,7 @@
 
 BEGIN_MAIN {
 	nde::ResourceReader r;
-	nde::Terrain* t = new nde::Terrain(r);
+	nde::Terrain* t = new nde::Terrain(r); // Scene will delete this
 
 	nde::Game::getInstance().getWorld().getScene().addRenderObject(t);
 

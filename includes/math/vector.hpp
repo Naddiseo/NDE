@@ -58,14 +58,12 @@ template<class T>
 class Vector2 {
 public:
 	T x, y;
-	std::string name;
 
-	Vector2() : x(0), y(0), name("<anon>") {}
+	Vector2() : x(0), y(0) {}
 
-	Vector2(T _x, T _y) : x(_x), y(_y), name("<anon>") {}
-	Vector2(T _x, T _y, std::string _name) : x(_x), y(_y), name(_name) {}
+	Vector2(T _x, T _y) : x(_x), y(_y) {}
 
-	Vector2(const Vector2& other) : x(other.x), y(other.y), name(other.name) {}
+	Vector2(const Vector2& other) : x(other.x), y(other.y) {}
 
 	Vector2& operator=(const Vector2& other) {
 		x = other.x;
@@ -74,32 +72,32 @@ public:
 	}
 
 	Vector2 operator+(const Vector2& other) const {
-		return {x + other.x, y + other.y, name};
+		return {x + other.x, y + other.y};
 	}
 
 	Vector2 operator-(const Vector2& other) const {
-		return {x - other.x, y - other.y, name};
+		return {x - other.x, y - other.y};
 	}
 
 	Vector2 operator-() const {
-		return {-x, -y, name};
+		return {-x, -y};
 	}
 
 	Vector2 operator*(const Vector2& other) const {
-		return {x * other.x, y * other.y, name};
+		return {x * other.x, y * other.y};
 	}
 
 
 	Vector2 operator/(const Vector2& other) const {
-		return {x / other.x, y / other.y, name};
+		return {x / other.x, y / other.y};
 	}
 
 	Vector2 operator*(const T& other) const {
-		return {x * other, y * other, name};
+		return {x * other, y * other};
 	}
 
 	Vector2 operator/(const T& other) const {
-		return {x / other, y / other, name};
+		return {x / other, y / other};
 	}
 
 	Vector2& operator+=(const Vector2 other) {
@@ -124,7 +122,6 @@ public:
 		return {
 			(rot[0][0] * x) + (rot[0][1] * y),
 			(rot[1][0] * x) + (rot[1][1] * y),
-			name
 		};
 	}
 
@@ -175,7 +172,7 @@ typedef Vector2<float> Vector2f;
 
 template<class T>
 std::ostream& operator<<(std::ostream& os, const Vector2<T>& v) {
-	os << v.name << "(" << v.x << ", " << v.y << ")";
+	os << "(" << v.x << ", " << v.y << ")";
 	return os;
 }
 
@@ -185,14 +182,12 @@ template<class T>
 class Vector3 {
 public:
 	T x, y, z;
-	std::string name;
 
-	Vector3() : x(0), y(0), z(0), name("<anon>") {}
+	Vector3() : x(0), y(0), z(0) {}
 
-	Vector3(T _x, T _y, T _z) : x(_x), y(_y), z(_z), name("<anon>") {}
-	Vector3(T _x, T _y, T _z, std::string _name) : x(_x), y(_y), z(_z), name(_name) {}
+	Vector3(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
 
-	Vector3(const Vector3& other) : x(other.x), y(other.y), z(other.z), name(other.name) {}
+	Vector3(const Vector3& other) : x(other.x), y(other.y), z(other.z) {}
 
 	Vector3& operator=(const Vector3& other) {
 		x = other.x;
@@ -202,32 +197,32 @@ public:
 	}
 
 	Vector3 operator+(const Vector3& other) const {
-		return {x + other.x, y + other.y, z + other.z, name};
+		return {x + other.x, y + other.y, z + other.z};
 	}
 
 	Vector3 operator-(const Vector3& other) const {
-		return {x - other.x, y - other.y, z - other.z, name};
+		return {x - other.x, y - other.y, z - other.z};
 	}
 
 	Vector3 operator-() const {
-		return {-x, -y, -z, name};
+		return {-x, -y, -z};
 	}
 
 	Vector3 operator*(const Vector3& other) const {
-		return {x * other.x, y * other.y, z * other.z, name};
+		return {x * other.x, y * other.y, z * other.z};
 	}
 
 
 	Vector3 operator/(const Vector3& other) const {
-		return {x / other.x, y / other.y, z / other.z, name};
+		return {x / other.x, y / other.y, z / other.z};
 	}
 
 	Vector3 operator*(const T& other) const {
-		return {x * other, y * other, z * other, name};
+		return {x * other, y * other, z * other};
 	}
 
 	Vector3 operator/(const T& other) const {
-		return {x / other, y / other, z / other, name};
+		return {x / other, y / other, z / other};
 	}
 
 	Vector3& operator+=(const Vector3 other) {
@@ -256,7 +251,6 @@ public:
 			(rot[0][0] * x) + (rot[0][1] * y) + (rot[0][2] * z),
 			(rot[1][0] * x) + (rot[1][1] * y) + (rot[1][2] * z),
 			(rot[2][0] * x) + (rot[2][1] * y) + (rot[2][2] * z),
-			name
 		};
 	}
 

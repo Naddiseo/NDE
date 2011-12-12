@@ -83,13 +83,13 @@ Terrain::Terrain(ResourceReader& resources) {
 			face->tex_points.push_back(new Vector2f(0,1));
 			face->tex_points.push_back(new Vector2f(1,1));
 			face->tex_points.push_back(new Vector2f(1,0));
-#if 1
+#if 0
 			float avg = face->avgHeight();
 			if (avg < 5) {
-				face->textureid = resources.loadTexture("grass.tga");
+				face->textureid = resources.loadTexture("assets/grass.tga");
 			}
 			else if (avg >= 5) {
-				face->textureid = resources.loadTexture("snow.tga");
+				face->textureid = resources.loadTexture("assets/snow.tga");
 			}
 #else
 			face->col = Color((rand()%255), (rand()%255), (rand()%255));
