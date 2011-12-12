@@ -29,6 +29,7 @@ char* strdup(char* str) {
 
 %option noyywrap
 %option yylineno
+%option never-interactive
 
 %%
 
