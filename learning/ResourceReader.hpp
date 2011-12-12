@@ -79,6 +79,14 @@ struct face_t {
 
 	}
 
+	float avgHeight() const {
+		float sum = 0;
+		for (const Vector3f* v  : vertexes) {
+			sum += v->y;
+		}
+		return sum/vertexes.size();
+	}
+
 };
 typedef std::vector<face_t*> faces_t;
 

@@ -34,6 +34,8 @@ public:
 	void rotateY(float angle);
 	void rotateZ(float angle);
 
+	void print();
+
 };
 
 } /* namespace nde */

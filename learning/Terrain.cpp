@@ -9,36 +9,65 @@
 #include <cstdlib>
 #include <ctime>
 
+float frand(float a, float b) {
+	return ((b-a) * ((float)rand())/RAND_MAX) + a;
+}
+
 namespace nde {
 
 
-void createPeak(int center_x, int center_y, int r, std::vector<vec_list_t>& points) {
+void createPeak(int x, int y, int w, int h, float seed, std::vector<vec_list_t>& points) {
 	// Three iterations
-	for (int i = 0; i < 3; i++) {
-		for (int x = center_x-r; x < center_x+r; x++) {
-			for (int y = center_y-r; y < center_y+r; y++) {
-				points[x][y]->y += (rand()%5);
-			}
-		}
-		r /= 2;
+	w--;
+	h--;
+
+	if (x >= w || h >= y) {
+		return;
 	}
+
+	int cx = (w-x)>>1;
+	int cy = (h-y)>>1;
+
+
+	Vector3f* a = points[x][y];
+	Vector3f* b = points[x][h];
+	Vector3f* c = points[w][h];
+	Vector3f* d = points[w][y];
+
+	a->y += frand(-seed, +seed);
+	b->y += frand(-seed, +seed);
+	c->y += frand(-seed, +seed);
+	d->y += frand(-seed, +seed);
+
+	Vector3f* center = points[cx][cy];
+	center->y += (a->y + b->y + c->y + d->y)/ 4;
+
+	seed -= 0.001;
+	createPeak(x, y, cx, cy, seed, points);
+	createPeak(cx, cy, w, cy, seed, points);
+	createPeak(x, cy, x, h, seed, points);
+	createPeak(cx, cy, w, h, seed, points);
+
+
 }
 
 Terrain::Terrain() : faces() {
 	std::vector<vec_list_t> points;
-	const int n_faces = 1<<6;
-	const int n_face_h = n_faces >> 1;
+	const int n_faces = (1<<5);
 	srand(time(NULL));
 
-	for (int i = -n_face_h; i < n_face_h; i++) {
+	std::cout << "Starting Terrain Generation...";
+	fflush(stdout);
+
+	for (int i = 0; i < n_faces; i++) {
 		vec_list_t row;
-		for (int j = -n_face_h; j < n_face_h; j++) {
-			row.push_back(new Vector3f(i, 0, j));
+		for (int j = 0; j < n_faces; j++) {
+			row.push_back(new Vector3f(i, frand(-1,1), j));
 		}
 		points.push_back(row);
 	}
 
-	createPeak(30, 30, 20, points);
+	createPeak(0, 0, n_faces, n_faces, 5.0f, points);
 
 
 	for (int i = 0; i < n_faces - 1; i++) {
@@ -49,12 +78,29 @@ Terrain::Terrain() : faces() {
 			face->vertexes.push_back(points[i+1][j]);
 			face->vertexes.push_back(points[i+1][j+1]);
 			face->vertexes.push_back(points[i][j+1]);
-			face->col = Color((rand()%255), (rand()%255), (rand()%255));
 
+			face->tex_points.push_back(new Vector2f(0,0));
+			face->tex_points.push_back(new Vector2f(0,1));
+			face->tex_points.push_back(new Vector2f(1,1));
+			face->tex_points.push_back(new Vector2f(1,0));
+#if 1
+			float avg = face->avgHeight();
+			if (avg < 5) {
+				face->tex_name = "grass.tga";
+				face->load();
+			}
+			else if (avg >= 5) {
+				face->tex_name = "snow.tga";
+				face->load();
+			}
+#else
+			face->col = Color((rand()%255), (rand()%255), (rand()%255));
+#endif
 			faces.push_back(face);
 		}
 	}
 
+	std::cout << "done." << std::endl;
 }
 
 Terrain::~Terrain() {

@@ -28,6 +28,13 @@ Camera::~Camera() {
 	SDL_ShowCursor(SDL_ENABLE);
 }
 
+void Camera::print() {
+	std::cout
+		<< position << " "
+		<< direction << " "
+		<< "(" << rot_x << "," << rot_y << "," << rot_z << ")" << std::endl;
+}
+
 void Camera::render() {
 
 	Vector3f s1, s2;
@@ -55,7 +62,7 @@ void Camera::moveForwards(float distance) {
 }
 
 void Camera::strafeRight(float distance) {
-	Vector3f move(direction.x, 0, direction.z * -distance);
+	Vector3f move(direction.z*distance, 0, direction.x * -distance);
 
 	position += move;
 }

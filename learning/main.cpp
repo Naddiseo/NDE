@@ -48,7 +48,7 @@ int main() {
 
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
-	gluPerspective(70, WIDTH/HEIGHT, 1, 1000);
+	gluPerspective(70, WIDTH/HEIGHT, 1, 35);
 
 	SDL_EnableKeyRepeat(10,10);
 
@@ -56,11 +56,12 @@ int main() {
 	nde::Terrain terrain;
 	SDL_Event event;
 
-	camera.move({0,0, 45});
-	camera.moveForwards(1);
-	camera.rotateY(90);
+	camera.move({0.f, 8.f, 0.f});
+	camera.rotateX(-16.4);
+	camera.rotateY(-90);
 
 	for (;;) {
+
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 			case SDL_QUIT:
@@ -76,28 +77,28 @@ int main() {
 					exit(0);
 					break;
 				case SDLK_UP:
-					camera.rotateX(1);
+					camera.rotateX(3);
 					break;
 				case SDLK_DOWN:
-					camera.rotateX(-1);
+					camera.rotateX(-3);
 					break;
 				case SDLK_RIGHT:
-					camera.strafeRight(0.1);
+					camera.rotateY(-1);
 					break;
 				case SDLK_LEFT:
-					camera.strafeRight(-0.1);
-					break;
-				case SDLK_w:
-					camera.moveForwards(-0.1);
-					break;
-				case SDLK_s:
-					camera.moveForwards(0.1);
-					break;
-				case SDLK_a:
 					camera.rotateY(1);
 					break;
+				case SDLK_w:
+					camera.moveForwards(-0.3);
+					break;
+				case SDLK_s:
+					camera.moveForwards(0.3);
+					break;
+				case SDLK_a:
+					camera.strafeRight(0.1);
+					break;
 				case SDLK_d:
-					camera.rotateY(-1);
+					camera.strafeRight(-0.1);
 					break;
 				default:
 					break;
