@@ -31,6 +31,7 @@ char* strdup(char* str) {
 %option yylineno
 %option nounistd
 %option never-interactive
+
 %%
 
 #.*\n { /* ignore comments*/ return NL; }
