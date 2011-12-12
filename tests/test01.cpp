@@ -19,11 +19,11 @@
 
 BEGIN_MAIN {
 	nde::Terrain* t = new nde::Terrain(); // Scene will delete this
-	nde::SkyBox* s = new nde::SkyBox();
+	//nde::SkyBox* s = new nde::SkyBox();
 
 	nde::Game::getInstance().loadAsset("assets/grass.tga");
 
-	nde::Game::getInstance().getWorld().getScene().addRenderObjects(t, s);
+	nde::Game::getInstance().getWorld().getScene().addRenderObjects(t);
 
 	nde::Game::getInstance().mainLoop();
 

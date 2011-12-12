@@ -75,7 +75,7 @@ SkyBox::~SkyBox() {}
 
 void SkyBox::predraw() {
 	glPushMatrix();
-	glScalef(25, 25, 25);
+	glScalef(50, 50, 50);
 	glTranslated(0, 0, 0);
 }
 void SkyBox::postdraw() {
