@@ -1,5 +1,7 @@
 #include "common.hpp"
 
+namespace nde {
+
 SDL_Surface * flipSurface(SDL_Surface * surface)
 {
     int current_line,pitch;
@@ -100,4 +102,6 @@ GLuint loadNewTexture(const char * filename,bool useMipMap)
     SDL_FreeSurface(picture_surface);
 
     return glID;
+}
+
 }

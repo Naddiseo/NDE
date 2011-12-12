@@ -9,6 +9,7 @@
 #include "ResourceReader.hpp"
 #include "Face.hpp"
 
+using namespace nde;
 void yyerror(const char* s, ...) {
 	std::cerr << s << std::endl;
 }
@@ -20,6 +21,8 @@ Face* currentFace;
 
 faces_t& get_faces() { return faces; }
 %}
+
+
 
 %error-verbose
 %locations
@@ -62,7 +65,7 @@ dfn_list
 
 dfn_stmt
 	: T_FACE 
-		{ currentFace = new face_t(); } 
+		{ currentFace = new Face(); } 
 		'{' opt_nl stmt_list opt_nl '}'  {
 		currentFace->setEnum();
 		faces.push_back(currentFace);
@@ -84,8 +87,7 @@ stmt
 		str[len-1] = 0;
 		str++;
 		std::cout << "loading texture file '" << str << "'" << std::endl;
-		currentFace->tex_name = std::string(str); 
-		currentFace->load(); 
+		//TODO
 	}
 	;
 
