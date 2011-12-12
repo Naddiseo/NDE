@@ -7,7 +7,7 @@
  */
 
 #include <SDL/SDL.h>
-#include "resources/ResourceReader.hpp"
+#include "math/vector.hpp"
 
 namespace nde {
 
@@ -35,6 +35,10 @@ public:
 	void rotateZ(float angle);
 
 	void print();
+
+	float getRotX() const { return rot_x; }
+	float getRotY() const { return rot_y; }
+	float getRotZ() const { return rot_z; }
 
 };
 

@@ -21,6 +21,8 @@ class Game {
 
 
 	SDL_Event event;
+
+	float fov;
 public:
 	static Game& getInstance() {
 		static Game instance;
@@ -30,6 +32,10 @@ public:
 
 	bool loadScene(const std::string& path) {
 		return getWorld().getScene().loadScene(path);
+	}
+
+	GLuint loadAsset(const std::string& path) {
+		return assets.loadTexture(path);
 	}
 
 	World& getWorld() {
@@ -44,6 +50,8 @@ private:
 
 	void handleMouse();
 	void handleEvents();
+
+	void drawAxis();
 
 };
 

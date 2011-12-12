@@ -5,9 +5,10 @@
  *      Author: richard
  */
 
-#include "game/Camera.hpp"
-#include <GL/gl.h>
 #include <cmath>
+#include <GL/gl.h>
+
+#include "game/Camera.hpp"
 
 #define PI 3.1415265359
 #define PIdiv180 3.1415265359/180.0

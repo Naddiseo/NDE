@@ -23,12 +23,8 @@ Scene::loadScene(const std::string& path) {
 }
 
 void
-Scene::getBoundingBox() {
-}
+Scene::getBoundingBox() {}
 
-void
-Scene::addRenderObject(IsRendered* obj) {
-	to_render.push_back(obj);
-}
+
 
 } //namespace nde

@@ -19,4 +19,5 @@
 #include "graphics/Renderer.hpp"
 #include "game/Scene.hpp"
 #include "resources/Terrain.hpp"
+#include "graphics/SkyBox.hpp"
 

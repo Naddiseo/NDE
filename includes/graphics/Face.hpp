@@ -24,9 +24,13 @@ public:
 	Face();
 	virtual ~Face();
 
+	void add(float x, float y, float z);
+	void tex(float x, float y);
+
 	void draw();
 
 	void setEnum();
+	void hasTexBox();
 	float avgHeight() const;
 };
 

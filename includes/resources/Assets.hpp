@@ -1,20 +1,18 @@
 #pragma once
 
-#include <string>
 #include <map>
-#include <vector>
-
-#include "resources/AssetLoader.hpp"
-#include "game/Scene.hpp"
+#include "common.hpp"
 
 namespace nde
 {
 
-class Assets
-{
+class Assets {
+	intmap_t texture_map;
 public:
 	Assets();
-	~Assets();
+	virtual ~Assets();
+
+	GLuint loadTexture(std::string path);
 };
 
 } // namespace nde

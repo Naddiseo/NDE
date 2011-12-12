@@ -15,6 +15,11 @@ class SkyBox : public IsRendered {
 public:
 	SkyBox();
 	virtual ~SkyBox();
+
+	virtual void predraw();
+	virtual void postdraw();
+
+	std::string id() { return "skybox"; }
 };
 
 } /* namespace nde */
