@@ -19,7 +19,7 @@ OBJECTS=$(SOURCES:.cpp=.o)
 all: library test01
 
 test01: tests/test01.o
-	$(CXX)  $^ -L ./ -lNDE $(LINKFLAGS)  $(CXXFLAGS)   -o test01.bin
+	$(CXX)  $^ -L ./ -lNDE $(LINKFLAGS)  $(CXXFLAGS)   -o nde.bin
 
 library: libNDE.a
 
@@ -36,4 +36,4 @@ clean:
 	-rm `find . \( -name "*.o" -o -name "*.bin" -o -name "*.so" -o -name "*.a" -o -name "*.yy.c" -o -name "*.tab.[ch]" -o -name "*.o" -o -name "*.output" \)  -print`
 
 run:
-	./test01.bin 
+	./nde.bin 

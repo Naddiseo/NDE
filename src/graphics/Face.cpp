@@ -35,6 +35,15 @@ Face::draw() {
 	else {
 		col.set();
 	}
+
+	/*glEnable(GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA ,GL_ONE_MINUS_SRC_ALPHA);
+	glPolygonMode (GL_BACK, GL_LINE);
+	glLineWidth (1);
+	glCullFace (GL_FRONT);
+	glDepthFunc (GL_LEQUAL);
+	glColor3f(33,33,33);
+	 */
 	glBegin(mode);
 	for (Vector3f* v : vertexes) {
 		if (tex_iter != tex_points.end()) {
@@ -44,6 +53,13 @@ Face::draw() {
 		glVertex3f(v->x, v->y, v->z);
 	}
 	glEnd();
+
+	/*
+	glDepthFunc (GL_LESS);
+	glCullFace (GL_BACK);
+	glPolygonMode (GL_BACK, GL_FILL);
+	glEnable(GL_BLEND);
+	*/
 }
 
 void Face::setEnum() {
@@ -62,6 +78,24 @@ float Face::avgHeight() const {
 		sum += v->y;
 	}
 	return sum/vertexes.size();
+}
+
+void
+Face::add(float x, float y, float z) {
+	vertexes.push_back(new Vector3f(x, y, z));
+}
+
+void
+Face::tex(float x, float y) {
+	tex_points.push_back(new Vector2f(x, y));
+}
+
+void
+Face::hasTexBox() {
+	tex(0, 0);
+	tex(1, 0);
+	tex(1, 1);
+	tex(0, 1);
 }
 
 } /* namespace nde */

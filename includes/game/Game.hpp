@@ -21,6 +21,8 @@ class Game {
 
 
 	SDL_Event event;
+
+	float fov;
 public:
 	static Game& getInstance() {
 		static Game instance;
@@ -48,6 +50,8 @@ private:
 
 	void handleMouse();
 	void handleEvents();
+
+	void drawAxis();
 
 };
 

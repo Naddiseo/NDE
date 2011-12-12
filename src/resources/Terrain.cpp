@@ -80,7 +80,7 @@ Terrain::Terrain() {
 			face->vertexes.push_back(points[i+1][j+1]);
 			face->vertexes.push_back(points[i][j+1]);
 
-#if 0
+#if 1
 			face->tex_points.push_back(new Vector2f(0,0));
 			face->tex_points.push_back(new Vector2f(0,1));
 			face->tex_points.push_back(new Vector2f(1,1));

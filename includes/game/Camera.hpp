@@ -36,6 +36,10 @@ public:
 
 	void print();
 
+	float getRotX() const { return rot_x; }
+	float getRotY() const { return rot_y; }
+	float getRotZ() const { return rot_z; }
+
 };
 
 } /* namespace nde */
