@@ -9,7 +9,7 @@
 
 namespace nde {
 
-Game::Game() : assets() {}
+Game::Game() : assets(), world(), renderer() {}
 
 Game::~Game() {}
 

@@ -5,7 +5,7 @@
  *  Created on: 2011-12-10
  *      Author: richard
  */
-#include "ResourceReader.hpp"
+#include "resources/ResourceReader.hpp"
 
 namespace nde {
 

@@ -14,7 +14,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "matrix.hpp"
+#include "math/vector.hpp"
 
 namespace nde {
 

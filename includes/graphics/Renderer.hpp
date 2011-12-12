@@ -5,20 +5,18 @@
  *  Created on: 2011-12-01
  *      Author: richard
  */
+#include <SDL/SDL.h>
 
 namespace nde {
 
 class Renderer {
+	SDL_Surface* screen;
 public:
-	static Renderer& getInstance() {
-			static Renderer instance;
-			return instance;
-		}
-		virtual ~Renderer();
-	private:
-		Renderer();
-		Renderer(Renderer const&);
-		void operator=(Renderer const&);
+	Renderer();
+	virtual ~Renderer();
+
+	Renderer(const Renderer &other);
+	Renderer& operator=(const Renderer &other);
 };
 
 } /* namespace nde */

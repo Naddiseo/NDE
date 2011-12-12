@@ -6,17 +6,10 @@ namespace nde {
 class World {
 	Scene scene;
 public:
-	static World& getInstance() {
-		static World instance;
-		return instance;
-	}
+	World();
 	virtual ~World();
 
 	Scene& getScene() { return scene; }
-private:
-	World();
-	World(World const&);
-	void operator=(World const&);
 };
 
 } // namespace nde

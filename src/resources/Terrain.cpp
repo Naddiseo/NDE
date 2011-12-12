@@ -5,10 +5,11 @@
  *      Author: richard
  */
 
-#include "Terrain.hpp"
+
 #include <cstdlib>
 #include <ctime>
-#include "Face.hpp"
+#include "graphics/Face.hpp"
+#include "resources/Terrain.hpp"
 
 float frand(float a, float b) {
 	return ((b-a) * ((float)rand())/RAND_MAX) + a;
@@ -18,7 +19,6 @@ namespace nde {
 
 
 void createPeak(int x, int y, int w, int h, float seed, std::vector<vec_list_t>& points) {
-	// Three iterations
 	w--;
 	h--;
 

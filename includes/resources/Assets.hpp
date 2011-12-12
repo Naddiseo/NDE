@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <map>
-#include "game/AssetLoader.hpp"
+#include "resources/AssetLoader.hpp"
 #include "game/Scene.hpp"
 
 namespace nde {

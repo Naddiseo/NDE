@@ -6,8 +6,8 @@
 #include <cstring>
 #include <cstdlib>
 
-#include "ResourceReader.hpp"
-#include "Face.hpp"
+#include "resources/ResourceReader.hpp"
+#include "resources/Face.hpp"
 
 using namespace nde;
 void yyerror(const char* s, ...) {

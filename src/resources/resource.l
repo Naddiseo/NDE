@@ -2,8 +2,8 @@
 #include <iostream>
 #include <cstring>
 #include <cstdio>
-#include "ResourceReader.hpp"
-#include "Face.hpp"
+#include "resources/ResourceReader.hpp"
+#include "resources/Face.hpp"
 #include "resource.tab.h"
 
 /* handle locations */
@@ -29,7 +29,8 @@ char* strdup(char* str) {
 
 %option noyywrap
 %option yylineno
-
+%option nounistd
+%option never-interactive
 %%
 
 #.*\n { /* ignore comments*/ return NL; }

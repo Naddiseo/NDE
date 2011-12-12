@@ -1,4 +1,4 @@
-#include "game/Assets.hpp"
+#include "resources/Assets.hpp"
 
 namespace nde {
 

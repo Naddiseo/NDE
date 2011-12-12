@@ -5,7 +5,7 @@
  *      Author: richard
  */
 
-#include "Camera.hpp"
+#include "game/Camera.hpp"
 #include <GL/gl.h>
 #include <cmath>
 

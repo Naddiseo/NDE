@@ -5,7 +5,7 @@
  *      Author: richard
  */
 
-#include "Face.hpp"
+#include "graphics/Face.hpp"
 
 namespace nde {
 

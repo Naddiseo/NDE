@@ -7,7 +7,7 @@
  */
 
 #include <SDL/SDL.h>
-#include "ResourceReader.hpp"
+#include "resources/ResourceReader.hpp"
 
 namespace nde {
 

@@ -9,8 +9,8 @@
 #include <fstream>
 #include <cstring>
 #include <cstdio>
-#include "ResourceReader.hpp"
-#include "Face.hpp"
+#include "resources/ResourceReader.hpp"
+#include "graphics/Face.hpp"
 
 
 extern FILE* yyin;

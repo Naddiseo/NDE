@@ -1,6 +1,7 @@
 #include <map>
 #include <string>
-#include "Color.hpp"
+#include "graphics/Color.hpp"
+
 typedef std::map<std::string, Color> colors_map_t;
 static colors_map_t colors_map;
 

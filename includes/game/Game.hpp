@@ -6,13 +6,16 @@
  *      Author: richard
  */
 
-#include "game/Assets.hpp"
+#include "resources/Assets.hpp"
 #include "game/World.hpp"
+#include "graphics/Renderer.hpp"
 
 namespace nde {
 
 class Game {
 	Assets assets;
+	World world;
+	Renderer renderer;
 public:
 	static Game& getInstance() {
 		static Game instance;
@@ -24,8 +27,8 @@ public:
 		return getWorld().getScene().loadScene(path);
 	}
 
-	World& getWorld() const {
-		return World::getInstance();
+	World& getWorld() {
+		return world;
 	}
 private:
 	Game();
