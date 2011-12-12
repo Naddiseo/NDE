@@ -63,8 +63,11 @@ SkyBox::SkyBox() {
 
 
 	faces.push_back(top);
+	faces.push_back(bottom);
+	faces.push_back(front);
 	faces.push_back(back);
 	faces.push_back(right);
+	faces.push_back(left);
 
 }
 

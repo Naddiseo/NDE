@@ -1,5 +1,5 @@
 INCFLAGS=-I./includes -I.
-LINKFLAGS=`pkg-config sdl gl glu SDL_image ILU --cflags --libs`
+LINKFLAGS=`pkg-config sdl gl glu ILU --cflags --libs`
 CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DNDEBUG=1  -Weffc++ -std=c++0x -Wall -Werror -Wfatal-errors 
 CFLAGS=-g -I./includes 
 

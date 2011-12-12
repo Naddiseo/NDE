@@ -1,7 +1,7 @@
 MINGWDIR=C:/MinGW
 CXX=$(MINGWDIR)/bin/g++
 INCFLAGS=-I$(WINGWDIR)/include -I. -I./includes 
-LINKFLAGS=-lopengl32 -lSDL -lglu32 -lSDL_image -lILU -lIL -static-libgcc -static-libstdc++
+LINKFLAGS=-lopengl32 -lSDL -lglu32 -lILU -lIL -static-libgcc -static-libstdc++
 CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DWINDOWS -DNDEBUG=1  -Weffc++ -std=c++0x -Wall -Werror -Wfatal-errors
 
 CFLAGS=-g -I./includes
