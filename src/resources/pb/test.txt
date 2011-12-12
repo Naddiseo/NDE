@@ -1,0 +1,40 @@
+mesh {
+	id: 100
+	
+	vertex { x: 0 y: 0 z: -1 }
+	vertex { x: 1 y: 0 z:  0 }
+	vertex { x: 0 y: 1 z:  0 }
+	
+	face { a: 0 b: 1 c: 2 }
+}
+
+model {
+	id: 101
+	
+	position  { x: 0 y: 0 z: 0 }
+	direction { x: 0 y: 0 z: 1 }
+	
+	mesh: 100
+}
+
+camera {
+	id: 102
+	
+	position  { x: 0 y: 0 z: 0 }
+	direction { x: 0 y: 0 z: 1 }
+}
+
+material {
+	id: 103
+	file: "test.tga"
+}
+
+uvmap {
+	id: 104
+	material: 103
+	mesh: 100
+	
+	coord { vertex: 0 u: 0 v: 0 }
+	coord { vertex: 1 u: 0 v: 1 }
+	coord { vertex: 2 u: 1 v: 1 }
+}

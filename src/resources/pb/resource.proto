@@ -1,0 +1,58 @@
+package nde.pb;
+
+message Vector3f {
+	required float x = 1;
+	required float y = 2;
+	required float z = 3;
+}
+
+message UV {
+	required uint32 vertex = 1;
+	required float u = 2;
+	required float v = 3;
+}
+
+message Material {
+	required uint32 id = 1;
+	optional string file = 2;
+}
+
+message Face {
+	required uint32 a = 1;
+	required uint32 b = 2;
+	required uint32 c = 3;
+}
+
+message UVMap {
+	required uint32 id = 1;
+	required uint32 material = 2;
+	required uint32 mesh = 3;
+	repeated UV coord = 4;
+}
+
+message Mesh {
+	required uint32 id = 1;
+	repeated Vector3f vertex = 2;
+	repeated Face face = 3;
+}
+
+message Model {
+	required uint32 id = 1;
+	required Vector3f position = 2;
+	required Vector3f direction = 3;
+	required uint32 mesh = 4;
+}
+
+message Camera {
+	required uint32 id = 1;
+	required Vector3f position = 2;
+	required Vector3f direction = 3;
+}
+
+message Assets {
+	repeated Material material = 2;
+	repeated UVMap uvmap = 3;
+	repeated Mesh mesh = 4;
+	repeated Model model = 5;
+	repeated Camera camera = 6;
+}

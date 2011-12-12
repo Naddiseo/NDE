@@ -1,14 +1,20 @@
 #pragma once
+
 #include <string>
 #include <map>
+#include <vector>
+
 #include "resources/AssetLoader.hpp"
 #include "game/Scene.hpp"
 
-namespace nde {
+namespace nde
+{
 
-class Assets {
+class Assets
+{
 public:
 	Assets();
-	virtual ~Assets();
+	~Assets();
 };
+
 } // namespace nde

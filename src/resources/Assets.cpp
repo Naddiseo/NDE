@@ -8,6 +8,4 @@ Assets::~Assets() {
 
 }
 
-
-
 } //namespace nde
