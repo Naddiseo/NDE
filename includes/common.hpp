@@ -23,8 +23,9 @@ typedef std::vector<Vector3f*> vec_list_t;
 typedef std::vector<Vector2f*> point_list_t;
 
 class Face;
+class IsRendered;
 typedef std::vector<Face*> faces_t;
-
+typedef std::vector<IsRendered*> rendered_list_t;
 
 
 typedef std::map<std::string, GLuint> intmap_t;

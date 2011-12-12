@@ -52,7 +52,7 @@ void createPeak(int x, int y, int w, int h, float seed, std::vector<vec_list_t>&
 
 }
 
-Terrain::Terrain(ResourceReader resources) : faces() {
+Terrain::Terrain(ResourceReader& resources) {
 	std::vector<vec_list_t> points;
 	const int n_faces = (1<<5);
 	srand(time(NULL));

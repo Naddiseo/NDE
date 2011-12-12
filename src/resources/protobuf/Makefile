@@ -12,3 +12,6 @@ protoclasses: resource.proto
 
 test: protoclasses
 	g++ $(CXXSOURCES) $(CXXFLAGS) -o test.exe
+
+clean:
+	-rm *.pb.h *.pb.cc *.exe

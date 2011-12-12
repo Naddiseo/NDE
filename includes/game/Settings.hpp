@@ -18,6 +18,7 @@ public:
 	virtual ~Settings();
 
 	int get_int(const std::string& key);
+	float get_flt(const std::string& key);
 	std::string& get_str(const std::string& key);
 
 
@@ -27,5 +28,10 @@ private:
 	Settings(Settings const&);
 	void operator=(Settings const&);
 };
+
+
+#define SGET_I(key) Settings::getInstance().get_int(key)
+#define SGET_F(key) Settings::getInstance().get_flt(key)
+#define SGET_S(key) Settings::getInstance().get_str(key)
 
 } // namespace nde

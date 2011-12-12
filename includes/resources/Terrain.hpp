@@ -6,15 +6,15 @@
  *      Author: richard
  */
 #include "resources/ResourceReader.hpp"
+#include "graphics/IsRendered.hpp"
 
 namespace nde {
 
-class Terrain {
+class Terrain : public IsRendered {
 public:
-	Terrain(ResourceReader resources);
+	Terrain(ResourceReader& resources);
 	virtual ~Terrain();
 
-	faces_t faces;
 };
 
 } /* namespace nde */
