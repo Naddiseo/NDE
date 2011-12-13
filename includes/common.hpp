@@ -28,8 +28,6 @@ typedef std::vector<Face*> faces_t;
 typedef std::vector<IsRendered*> rendered_list_t;
 
 
-typedef std::map<std::string, GLuint> intmap_t;
-
 // defined in misc.cpp
 GLuint loadNewTexture(const char * filename,bool useMipMap=true);
 
