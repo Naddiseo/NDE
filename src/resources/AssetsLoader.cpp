@@ -27,7 +27,7 @@ LoadPBAssetsFromText(const std::string& file)
 	std::fstream input(file.c_str(), std::ios::in | std::ios::binary);
 	google::protobuf::io::IstreamInputStream input2(&input);
 	
-	if (!google::protobuf::TextFormat::Parse(&input2, &assets)) {
+	if (!google::protobuf::TextFormat::Parse(&input2, assets)) {
 		delete assets;
 		return 0;
 	}
@@ -45,37 +45,37 @@ ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
 		assets->materials.push_back(xmat);
 	}
 	
-	for (int i = 0; i < pbassets.uvmap_size(); ++i) {
-		pb::Mesh* mesh = pbassets.mutable_mesh(i);
+	for (int i = 0; i < pbassets->uvmap_size(); ++i) {
+		pb::Mesh* mesh = pbassets->mutable_mesh(i);
 		
 		Mesh* xmesh = new Mesh();
 		xmesh->id = mesh->id();
 		
 		for (int j = 0; j < mesh->vertex_size(); ++j) {
-			pb::Vector3f* v = mesh->vertex(j);
+			pb::Vector3f v = mesh->vertex(j);
 			
 			Vector3f xv;
-			xv.x = v->x();
-			xv.y = v->y();
-			xv.z = v->z();
+			xv.x = v.x();
+			xv.y = v.y();
+			xv.z = v.z();
 			
 			xmesh->vertices.push_back(xv);
 		}
 		
 		for (int j = 0; j < mesh->face_size(); ++j) {
-			pb::Face* f = mesh->face(j);
+			pb::Face f = mesh->face(j);
 			
 			Face xf;
-			xf.vertexes.push_back(&xmesh->vertices[f->a()]);
-			xf.vertexes.push_back(&xmesh->vertices[f->b()]);
-			xf.vertexes.push_back(&xmesh->vertices[f->c()]);
+			xf.vertexes.push_back(&xmesh->vertices[f.a()]);
+			xf.vertexes.push_back(&xmesh->vertices[f.b()]);
+			xf.vertexes.push_back(&xmesh->vertices[f.c()]);
 			
 			xmesh->faces.push_back(xf);
 		}
 		
 		assets->meshes.push_back(xmesh);
 	}
-	
+#if 0 // TODO implement these
 	for (int i = 0; i < pbassets->uvmap_size(); ++i) {
 		pb::Model* mod = pbassets->mutable_model(i);
 		
@@ -92,6 +92,7 @@ ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
 		pb::UVMap* uvm = pbassets->mutable_uvmap(i);
 		// TODO: Merge this into the Faces; texture, uv coords
 	}
+#endif
 }
 
 void

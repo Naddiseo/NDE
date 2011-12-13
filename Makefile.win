@@ -12,12 +12,12 @@ GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 GRAPHICS_FILES=Color.cpp Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
 GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 
-RESOURCES_FILES=Assets.cpp Terrain.cpp
+RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Material.cpp Terrain.cpp
 RESOURCES_SOURCES=$(addprefix src/resources/, $(RESOURCES_FILES))
 
 SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES)
 
-OBJECTS=$(SOURCES:.cpp=.o)
+OBJECTS=src/resources/pb/resource.pb.o $(SOURCES:.cpp=.o)
 
 all: library test01
 
@@ -26,7 +26,7 @@ test01: tests/test01.o
 
 library: libNDE.a
 
-libNDE.a protobuf: $(OBJECTS)
+libNDE.a: $(OBJECTS)
 	$(AR) rs $@ $^ 
 
 .cpp.o:
