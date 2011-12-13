@@ -14,7 +14,7 @@ RESOURCES_SOURCES=$(addprefix src/resources/, $(RESOURCES_FILES))
 
 SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES)
 
-OBJECTS=$(SOURCES:.cpp=.o)
+OBJECTS=$(SOURCES:.cpp=.o) src/resources/pb/resource.pb.o
 
 all: library test01
 
@@ -23,7 +23,7 @@ test01: tests/test01.o
 
 library: libNDE.a
 
-libNDE.a: $(OBJECTS) 
+libNDE.a:  $(OBJECTS) 
 	$(AR) rs $@ $^ 
 
 .cpp.o:
@@ -32,8 +32,14 @@ libNDE.a: $(OBJECTS)
 .c.o: 
 	$(CXX) -c $< $(CXXFLAGS) -Wno-error -Wno-all -Wno-fatal-errors -o $@
 
+src/resources/pb/resource.pb.o: src/resources/pb/resource.pb.cc
+	$(CXX) -c $< $(CXXFLAGS) -Wno-error -Wno-effc++ -Wno-all -Wno-fatal-errors -o $@
+
+src/resources/pb/resource.pb.cc: src/resources/pb/resource.proto
+	protoc --cpp_out=. $^
+
 clean:
-	-rm `find . \( -name "*.o" -o -name "*.bin" -o -name "*.so" -o -name "*.a" -o -name "*.yy.c" -o -name "*.tab.[ch]" -o -name "*.o" -o -name "*.output" \)  -print`
+	-rm `find . \( -name "*.o" -o -name "*.bin" -o -name "*.so" -o -name "*.a" -o -name "*.yy.c" -o -name "*.pb.h" -o -name "*.pb.cc" -o -name "*.o" -o -name "*.output" \)  -print`
 
 run:
 	./nde.bin 

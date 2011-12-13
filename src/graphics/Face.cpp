@@ -13,11 +13,13 @@ Face::Face()
 	: textureid(0), vertexes(), tex_points(), mode(GL_QUADS), col() {}
 
 Face::~Face() {
-	for (Vector3f* v : vertexes) {
+	/*
+	 * Can't delete vertexes here, because multiple faces may point to the same vertex
+	 * for (Vector3f* v : vertexes) {
 		if (v) {
 			delete v;
 		}
-	}
+	}*/
 	for (Vector2f* v : tex_points) {
 		if (v) {
 			delete v;
@@ -54,6 +56,7 @@ Face::draw() {
 	}
 	glEnd();
 
+	col.reset();
 	/*
 	glDepthFunc (GL_LESS);
 	glCullFace (GL_BACK);

@@ -23,7 +23,7 @@ void createPeak(int x, int y, int w, int h, float seed, std::vector<vec_list_t>&
 	w--;
 	h--;
 
-	if (x >= w || h >= y) {
+	if (x >= w || y >= h) {
 		return;
 	}
 
@@ -44,7 +44,7 @@ void createPeak(int x, int y, int w, int h, float seed, std::vector<vec_list_t>&
 	Vector3f* center = points[cx][cy];
 	center->y += (a->y + b->y + c->y + d->y)/ 4;
 
-	seed -= 0.1;
+	seed -= 0.01;
 	createPeak(x, y, cx, cy, seed, points);
 	createPeak(cx, cy, w, cy, seed, points);
 	createPeak(x, cy, x, h, seed, points);
@@ -63,7 +63,7 @@ Terrain::Terrain() {
 	for (int i = 0; i < n_faces; i++) {
 		vec_list_t row;
 		for (int j = 0; j < n_faces; j++) {
-			row.push_back(new Vector3f(i, frand(-1,1), j));
+			row.push_back(new Vector3f(i, 0, j));
 		}
 		points.push_back(row);
 	}
@@ -80,7 +80,7 @@ Terrain::Terrain() {
 			face->vertexes.push_back(points[i+1][j+1]);
 			face->vertexes.push_back(points[i][j+1]);
 
-#if 1
+#if 0
 			face->tex_points.push_back(new Vector2f(0,0));
 			face->tex_points.push_back(new Vector2f(0,1));
 			face->tex_points.push_back(new Vector2f(1,1));
@@ -103,6 +103,6 @@ Terrain::Terrain() {
 	std::cout << "done." << std::endl;
 }
 
-Terrain::~Terrain() {}
+Terrain::~Terrain() { }
 
 } /* namespace nde */

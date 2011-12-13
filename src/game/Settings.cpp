@@ -4,15 +4,15 @@
 namespace nde {
 
 Settings::Settings() : settings() {
-	settings["HEIGHT"] = "480";
-	settings["WIDTH"] = "640";
+	settings["HEIGHT"] = "600";
+	settings["WIDTH"] = "800";
 
 	settings["cam_x"] = "20";
-	settings["cam_y"] = "8";
+	settings["cam_y"] = "5";
 	settings["cam_z"] = "20";
 
-	settings["cam_rot_x"] = "-16";
-	settings["cam_rot_y"] = "-90";
+	settings["cam_rot_x"] = "45";
+	settings["cam_rot_y"] = "0";
 	settings["cam_rot_z"] = "0";
 
 

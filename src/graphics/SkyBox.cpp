@@ -21,27 +21,27 @@ SkyBox::SkyBox() {
 	top->textureid =  Game::getInstance().loadAsset("assets/sky.tga");
 
 	Face* bottom = new Face();
+	bottom->add(1, -1, 1);
 	bottom->add(1, -1, -1);
 	bottom->add(-1, -1, -1);
 	bottom->add(-1, -1, 1);
-	bottom->add(1, -1, 1);
 	bottom->hasTexBox();
 	bottom->textureid =  Game::getInstance().loadAsset("assets/sky.tga");
 	bottom->col = Color(255, 255, 255);
 
 	Face* back = new Face();
-	back->add(1, -1, -1);
-	back->add(1, 1, -1);
+	back->add(-1, -1, -1);
+	back->add(-1, 1, -1);
 	back->add(-1, 1, 1);
 	back->add(-1, -1, 1);
 	back->hasTexBox();
 	back->textureid =  Game::getInstance().loadAsset("assets/sky.tga");
 
 	Face* front = new Face();
-	front->add(1, -1, -1);
-	front->add(1, 1, -1);
 	front->add(1, 1, 1);
 	front->add(1, -1, 1);
+	front->add(1, -1, -1);
+	front->add(1, 1, -1);
 	front->hasTexBox();
 	front->textureid =  Game::getInstance().loadAsset("assets/sky.tga");
 
@@ -75,7 +75,7 @@ SkyBox::~SkyBox() {}
 
 void SkyBox::predraw() {
 	glPushMatrix();
-	glScalef(25, 25, 25);
+	glScalef(50, 50, 50);
 	glTranslated(0, 0, 0);
 }
 void SkyBox::postdraw() {

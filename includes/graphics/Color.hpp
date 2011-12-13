@@ -20,6 +20,8 @@ struct Color {
 	void set() {
 		glColor3ub(r, g, b);
 	}
+
+	void reset() { glColor4f(1,1,1,1); }
 };
 
 void add_color(std::string, unsigned char r, unsigned char g, unsigned char b);

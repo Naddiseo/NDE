@@ -23,7 +23,7 @@ BEGIN_MAIN {
 
 	nde::Game::getInstance().loadAsset("assets/grass.tga");
 
-	nde::Game::getInstance().getWorld().getScene().addRenderObjects(t, s);
+	nde::Game::getInstance().getWorld().getScene().addRenderObjects(s, t);
 
 	nde::Game::getInstance().mainLoop();
 
