@@ -40,6 +40,8 @@ public:
 	float getRotY() const { return rot_y; }
 	float getRotZ() const { return rot_z; }
 
+	const Vector3f& getPos() const { return position; }
+
 };
 
 } /* namespace nde */

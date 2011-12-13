@@ -79,19 +79,41 @@ Game::handleEvents() {
 				camera.rotateY(1);
 				break;
 			case SDLK_w:
-				camera.moveForwards(-0.3 * speed);
+				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
+					Vector3f tmp(0, 0.3 * speed, 0);
+					camera.move(tmp);
+				}
+				else {
+					camera.moveForwards(-0.3 * speed);
+				}
 				break;
 			case SDLK_s:
-				camera.moveForwards(0.3 * speed);
+				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
+					Vector3f tmp(0, -0.3 * speed, 0);
+					camera.move(tmp);
+				}
+				else {
+					camera.moveForwards(0.3 * speed);
+				}
 				break;
 			case SDLK_a:
-				camera.strafeRight(0.1);
+				camera.strafeRight(0.1 * speed);
 				break;
 			case SDLK_d:
-				camera.strafeRight(-0.1);
+				camera.strafeRight(-0.1 * speed);
 				break;
 
-
+			case SDLK_KP0:
+				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
+					Vector3f tmp = -camera.getPos();
+					camera.move(tmp);
+				}
+				else {
+					camera.rotateX(-camera.getRotX());
+					camera.rotateY(-camera.getRotY());
+					camera.rotateZ(-camera.getRotZ());
+				}
+				break;
 			default:
 				break;
 			}

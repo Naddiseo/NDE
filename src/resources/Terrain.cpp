@@ -68,7 +68,7 @@ Terrain::Terrain() {
 		points.push_back(row);
 	}
 
-	createPeak(0, 0, n_faces>>1, n_faces>>1, 5.0f, points);
+	createPeak(0, 0, n_faces, n_faces, 5.0f, points);
 
 
 	for (int i = 0; i < n_faces - 1; i++) {
@@ -103,6 +103,6 @@ Terrain::Terrain() {
 	std::cout << "done." << std::endl;
 }
 
-Terrain::~Terrain() { std::cout << "Terrain::~Terrain()" << std::endl; }
+Terrain::~Terrain() { }
 
 } /* namespace nde */
