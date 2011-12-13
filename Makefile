@@ -9,7 +9,7 @@ GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 GRAPHICS_FILES=Color.cpp Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
 GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 
-RESOURCES_FILES=Assets.cpp Terrain.cpp
+RESOURCES_FILES=Assets.cpp Material.cpp Terrain.cpp
 RESOURCES_SOURCES=$(addprefix src/resources/, $(RESOURCES_FILES))
 
 SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES)
@@ -31,6 +31,8 @@ libNDE.a:  $(OBJECTS)
 
 .c.o: 
 	$(CXX) -c $< $(CXXFLAGS) -Wno-error -Wno-all -Wno-fatal-errors -o $@
+
+proto: src/resources/pb/resource.pb.o
 
 src/resources/pb/resource.pb.o: src/resources/pb/resource.pb.cc
 	$(CXX) -c $< $(CXXFLAGS) -Wno-error -Wno-effc++ -Wno-all -Wno-fatal-errors -o $@

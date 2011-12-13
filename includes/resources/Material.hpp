@@ -4,14 +4,12 @@
 
 #include <GL/glu.h>
 
-namespace nde
-{
+namespace nde {
 
-class Material
-{
+class Material {
+public:
 	GLuint image_id;
 	
-public:
 	uint32_t id;
 	std::string file;
 	

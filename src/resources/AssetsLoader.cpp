@@ -14,7 +14,7 @@
 #include "math/vector.hpp"
 #include "graphics/Face.hpp"
 
-#include "resources/resource.pb.h"
+#include "proto.hpp"
 
 namespace nde
 {

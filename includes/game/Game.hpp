@@ -10,6 +10,7 @@
 #include "game/World.hpp"
 #include "graphics/Renderer.hpp"
 #include "game/Camera.hpp"
+#include "resources/Material.hpp"
 
 namespace nde {
 
@@ -35,7 +36,11 @@ public:
 	}
 
 	GLuint loadAsset(const std::string& path) {
-		return assets.loadTexture(path);
+		static int id = 0;
+		id++;
+		Material m(id, path);
+		return m.image_id;
+
 	}
 
 	World& getWorld() {

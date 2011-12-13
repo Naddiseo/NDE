@@ -5,8 +5,7 @@
 
 #include "common.hpp"
 
-namespace nde
-{
+namespace nde {
 
 class Material;
 class UVMap;
@@ -23,7 +22,7 @@ public:
 	std::vector<Camera*> cameras;
 	
 	Assets();
-	~Assets();
+	virtual ~Assets();
 };
 
 } // namespace nde

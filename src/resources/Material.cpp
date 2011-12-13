@@ -1,15 +1,16 @@
+#include <string>
+#include <map>
+
+#include <GL/gl.h>
+#include <IL/il.h>
+
 #include "resources/Material.hpp"
 
-#include <string>
-
-#include <GL/glu.h>
-
-namespace nde
-{
+namespace nde {
 
 typedef std::map<std::string, GLuint> intmap_t;
 
-intmap_t texture_map;
+static intmap_t texture_map = intmap_t();
 
 GLuint
 loadTexture(const std::string& path) {

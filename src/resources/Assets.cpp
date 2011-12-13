@@ -1,15 +1,15 @@
 #include <GL/gl.h>
-#include <IL/il.h>
-#include <IL/ilut.h>
+
 #include "resources/Assets.hpp"
+#include "resources/Material.hpp"
 
 namespace nde {
 
-Assets::Assets() : texture_map() {}
+Assets::Assets() : materials(), uvmaps(), models(), meshes(), cameras() {}
 
 Assets::~Assets() {
-	for (intmap_t::value_type& it : texture_map) {
-		glDeleteTextures(1, &it.second);
+	for (Material* m : materials) {
+		glDeleteTextures(1, &m->image_id);
 	}
 }
 
