@@ -5,10 +5,12 @@
  *      Author: richard
  */
 #include <SDL/SDL.h>
+#include <IL/ilu.h>
 #include "game/Game.hpp"
 #include "game/Settings.hpp"
 #include "graphics/IsRendered.hpp"
 #include "graphics/Face.hpp"
+
 
 namespace nde {
 
@@ -113,6 +115,21 @@ Game::handleEvents() {
 					camera.rotateY(-camera.getRotY());
 					camera.rotateZ(-camera.getRotZ());
 				}
+				break;
+			case SDLK_PRINTSCREEN: {
+				int width = SGET_I("WIDTH");
+				int height = SGET_I("HEIGHT");
+				unsigned char* imageData = new unsigned char[width * height * 4];
+
+				glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+
+				ilLoadDataL(imageData, width*height*4, width, height, 1, 4);
+				iluFlipImage();
+				ilEnable(IL_FILE_OVERWRITE);
+				ilSave(IL_PNG, "Screenshot.png");
+
+				delete[] imageData;
+			};
 				break;
 			default:
 				break;
