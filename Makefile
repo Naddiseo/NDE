@@ -1,15 +1,15 @@
 INCFLAGS=-I./includes -I.
-LINKFLAGS=`pkg-config sdl gl glu ILU --cflags --libs`
-CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DNDEBUG=1  -Weffc++ -std=c++0x -Wall -Werror -Wfatal-errors 
+LINKFLAGS=`pkg-config sdl gl glu ILU bullet --cflags --libs`
+CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DNDEBUG=1  -std=c++0x -Wall -Werror -Wfatal-errors 
 CFLAGS=-g -I./includes 
 
-GAME_FILES=Camera.cpp Game.cpp Scene.cpp Settings.cpp World.cpp
+GAME_FILES=Camera.cpp Entity.cpp Game.cpp Scene.cpp Settings.cpp World.cpp
 GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 
 GRAPHICS_FILES=Color.cpp Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
 GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 
-RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Material.cpp Terrain.cpp
+RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Material.cpp Mesh.cpp Terrain.cpp
 RESOURCES_SOURCES=$(addprefix src/resources/, $(RESOURCES_FILES))
 
 SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES)

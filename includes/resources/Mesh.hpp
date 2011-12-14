@@ -15,6 +15,8 @@ public:
 
 	Mesh() : id(0), vertices(), faces() {}
 	virtual ~Mesh();
+
+	void render(Vector3f& translate);
 };
 
 }

@@ -3,6 +3,7 @@
 #include <string>
 
 #include <cmath>
+#include <LinearMath/btVector3.h>
 /*
  * matrix.hpp
  *
@@ -189,6 +190,12 @@ public:
 
 	Vector3(const Vector3& other) : x(other.x), y(other.y), z(other.z) {}
 
+	Vector3(const btVector3& other) : x(other.getX()), y(other.getY()), z(other.getZ()) {}
+
+	operator btVector3 () const {
+		return btVector3(x, y, z);
+	}
+
 	Vector3& operator=(const Vector3& other) {
 		x = other.x;
 		y = other.y;
@@ -211,7 +218,6 @@ public:
 	Vector3 operator*(const Vector3& other) const {
 		return {x * other.x, y * other.y, z * other.z};
 	}
-
 
 	Vector3 operator/(const Vector3& other) const {
 		return {x / other.x, y / other.y, z / other.z};
@@ -311,6 +317,8 @@ public:
 		}
 		return len;
 	}
+
+
 };
 
 typedef Vector3<float> Vector3f;

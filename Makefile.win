@@ -2,17 +2,17 @@ MINGWDIR=C:/MinGW
 CXX=$(MINGWDIR)/bin/g++
 INCFLAGS=-I$(WINGWDIR)/include -I. -I./includes 
 LINKFLAGS=-lopengl32 -lSDL -lglu32 -lILU -lIL -static-libgcc -static-libstdc++
-CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DWINDOWS -DNDEBUG=1  -Weffc++ -std=c++0x -Wall -Werror -Wfatal-errors
+CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DWINDOWS -DNDEBUG=1 -std=c++0x -Wall -Werror -Wfatal-errors
 
 CFLAGS=-g -I./includes
 
-GAME_FILES=Camera.cpp Game.cpp Scene.cpp World.cpp
+GAME_FILES=Camera.cpp Entity.cpp Game.cpp Scene.cpp World.cpp
 GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 
 GRAPHICS_FILES=Color.cpp Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
 GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 
-RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Material.cpp Terrain.cpp
+RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Material.cpp Mesh.cpp Terrain.cpp
 RESOURCES_SOURCES=$(addprefix src/resources/, $(RESOURCES_FILES))
 
 SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES)

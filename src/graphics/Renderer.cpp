@@ -38,6 +38,7 @@ Renderer::Renderer() : screen(NULL) {
 	// initialize devIL
 	ilInit();
 
+
 }
 
 Renderer::~Renderer() {

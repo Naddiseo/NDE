@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <GL/gl.h>
+#include <SDL/SDL.h>
 
 #include "game/Camera.hpp"
 

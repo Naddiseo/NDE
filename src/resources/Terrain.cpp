@@ -79,7 +79,7 @@ Terrain::Terrain() {
 		points.push_back(row);
 	}
 
-	createPeak(0, 0, n_faces>>1, n_faces>>1, 0.1f, 1.5, points);
+	//createPeak(0, 0, n_faces>>1, n_faces>>1, 0.1f, 1.5, points);
 
 
 	for (int i = 0; i < n_faces - 1; i++) {
