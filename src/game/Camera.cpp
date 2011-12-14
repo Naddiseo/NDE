@@ -43,7 +43,7 @@ void Camera::render() {
 
 	s1.x = cos((rot_y + 90) * PIdiv180);
 	s1.z = -sin((rot_y + 90) * PIdiv180);
-	double cosX = cos(rot_x * PIdiv180);
+	scalar cosX = cos(rot_x * PIdiv180);
 
 	s2.x = s1.x * cosX;
 	s2.z = s1.z * cosX;
@@ -57,13 +57,13 @@ void Camera::render() {
 	glTranslatef(-position.x, -position.y, -position.z);
 }
 
-void Camera::moveForwards(float distance) {
+void Camera::moveForwards(scalar distance) {
 	Vector3f move(direction.x * -distance, direction.y * -distance, direction.z * -distance);
 
 	position += move;
 }
 
-void Camera::strafeRight(float distance) {
+void Camera::strafeRight(scalar distance) {
 	Vector3f move(direction.z*distance, 0, direction.x * -distance);
 
 	position += move;
@@ -78,13 +78,13 @@ void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
 	rot_x -= event.yrel * sensitivity;
 }
 
-void Camera::rotateX(float angle) {
+void Camera::rotateX(scalar angle) {
 	rot_x += angle;
 }
-void Camera::rotateY(float angle) {
+void Camera::rotateY(scalar angle) {
 	rot_y += angle;
 }
-void Camera::rotateZ(float angle) {
+void Camera::rotateZ(scalar angle) {
 	rot_z += angle;
 }
 

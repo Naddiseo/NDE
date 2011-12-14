@@ -18,7 +18,7 @@ public:
 
 	virtual void render(Vector3f& translate);
 
-	virtual Vector3f* add(float x, float y, float z);
+	virtual Vector3f* add(scalar x, scalar y, scalar z);
 
 	template<typename H = Face*>
 	void addFaces(const H& f) {

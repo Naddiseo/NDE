@@ -26,7 +26,7 @@ void Mesh::render(Vector3f& translate) {
 }
 
 Vector3f*
-Mesh::add(float x, float y, float z) {
+Mesh::add(scalar x, scalar y, scalar z) {
 	Vector3f* ret = new Vector3f(x, y, z);
 
 	vertices.push_back(ret);

@@ -69,8 +69,8 @@ void Face::setEnum() {
 	}
 }
 
-float Face::avgHeight() const {
-	float sum = 0;
+scalar Face::avgHeight() const {
+	scalar sum = 0;
 	for (const Vector3f* v  : vertexes) {
 		sum += v->y;
 	}
@@ -83,7 +83,7 @@ Face::add(Vector3f* v) {
 }
 
 void
-Face::tex(float x, float y) {
+Face::tex(scalar x, scalar y) {
 	tex_points.push_back(new Vector2f(x, y));
 }
 

@@ -141,9 +141,9 @@ Game::handleEvents() {
 }
 
 void Game::drawAxis() {
-	float fvViewMatrix[16];
-	double cx = 0, cy = 0, l = 1000;
-	double xx, xy, yx, yy, zx, zy;
+	scalar fvViewMatrix[16];
+	scalar cx = 0, cy = 0, l = 1000;
+	scalar xx, xy, yx, yy, zx, zy;
 	glGetFloatv(GL_MODELVIEW_MATRIX, fvViewMatrix);
 
 

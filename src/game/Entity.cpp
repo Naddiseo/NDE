@@ -34,8 +34,9 @@ void Entity::tick() {
 		body->getMotionState()->getWorldTransform(trans);
 		newPos = trans.getOrigin();
 
-
+		predraw();
 		mesh.render(newPos);
+		postdraw();
 	}
 }
 

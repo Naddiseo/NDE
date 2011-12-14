@@ -10,50 +10,7 @@
  *  Created on: 2011-11-25
  *      Author: richard
  */
-const float PI = 3.14159265;
-static float radian(float deg) {
-	return deg * PI/180;
-}
-
-struct RotationMatrix {
-	// [row][col]
-	float data[3][3];
-
-	RotationMatrix(float theta, float phi = 0, float psi = 0) : data({{0,0,0}, {0,0,0}, {0,0,0}}) {
-		rotate(theta, phi, psi);
-	}
-
-	void rotate(float theta, float phi = 0, float psi = 0) {
-		theta = radian(theta);
-		phi = radian(phi);
-		psi = radian(psi);
-
-		float cos_theta = std::cos(theta);
-		float sin_theta = std::sin(theta);
-		float cos_phi = std::cos(phi);
-		float sin_phi = std::sin(phi);
-		float cos_psi = std::cos(psi);
-		float sin_psi = std::sin(psi);
-
-		float cos_phi_sin_theta = cos_phi * sin_theta;
-		float sin_phi_sin_theta = sin_phi * sin_theta;
-
-		data[0][0] = cos_theta * cos_psi;
-		data[0][1] = (cos_phi * sin_psi) + (sin_phi_sin_theta * cos_psi);
-		data[0][2] = (sin_theta * sin_psi) - (cos_phi_sin_theta * cos_psi);
-		data[1][0] = -cos_theta * sin_psi;
-		data[1][1] = (cos_phi * cos_psi) - (sin_phi_sin_theta * sin_psi);
-		data[1][2] = (sin_phi * cos_psi) + (cos_phi_sin_theta * sin_psi);
-		data[2][0] = sin_theta;
-		data[2][1] = -sin_phi * cos_theta;
-		data[2][2] = cos_phi * cos_theta;
-	}
-
-	float* operator[](int row) {
-		return data[row];
-	}
-
-};
+typedef float scalar;
 
 template<class T>
 class Vector2 {
@@ -119,13 +76,6 @@ public:
 		return *this;
 	}
 
-	Vector2 operator*(const RotationMatrix& rot) const {
-		return {
-			(rot[0][0] * x) + (rot[0][1] * y),
-			(rot[1][0] * x) + (rot[1][1] * y),
-		};
-	}
-
 	Vector2& operator/=(const Vector2 other) {
 		x /= other.x;
 		y /= other.y;
@@ -169,7 +119,7 @@ public:
 	}
 };
 
-typedef Vector2<float> Vector2f;
+typedef Vector2<scalar> Vector2f;
 
 template<class T>
 std::ostream& operator<<(std::ostream& os, const Vector2<T>& v) {
@@ -252,14 +202,6 @@ public:
 		return *this;
 	}
 
-	Vector3 operator*(const RotationMatrix& rot) const {
-		return {
-			(rot[0][0] * x) + (rot[0][1] * y) + (rot[0][2] * z),
-			(rot[1][0] * x) + (rot[1][1] * y) + (rot[1][2] * z),
-			(rot[2][0] * x) + (rot[2][1] * y) + (rot[2][2] * z),
-		};
-	}
-
 	Vector3& operator/=(const Vector3 other) {
 		x /= other.x;
 		y /= other.y;
@@ -321,7 +263,7 @@ public:
 
 };
 
-typedef Vector3<float> Vector3f;
+typedef Vector3<scalar> Vector3f;
 
 template<class T>
 std::ostream& operator<<(std::ostream& os, const Vector3<T>& v) {

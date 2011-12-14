@@ -23,7 +23,7 @@ class Game {
 
 	SDL_Event event;
 
-	float fov;
+	scalar fov;
 public:
 	static Game& getInstance() {
 		static Game instance;

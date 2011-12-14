@@ -14,25 +14,25 @@ namespace nde {
 class Camera {
 	Vector3f position;
 	Vector3f direction;
-	float rot_x, rot_y, rot_z;
-	float phi, theta;
-	float speed, sensitivity;
+	scalar rot_x, rot_y, rot_z;
+	scalar phi, theta;
+	scalar speed, sensitivity;
 public:
 	Camera();
 	virtual ~Camera();
 
 	void render();
 
-	void moveForwards(float distance);
-	void strafeRight(float distance);
+	void moveForwards(scalar distance);
+	void strafeRight(scalar distance);
 	void move(Vector3f dir);
 
 	void onMouseMotion(const SDL_MouseMotionEvent& event);
 
 
-	void rotateX(float angle);
-	void rotateY(float angle);
-	void rotateZ(float angle);
+	void rotateX(scalar angle);
+	void rotateY(scalar angle);
+	void rotateZ(scalar angle);
 
 	void print();
 

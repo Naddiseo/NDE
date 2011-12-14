@@ -23,6 +23,11 @@ public:
 
 	void tick();
 
+private:
+	virtual void predraw() {}
+	virtual void postdraw() {}
+	virtual std::string id() { return "IsRendered"; }
+
 };
 
 } // namespace nde

@@ -26,8 +26,8 @@ int Settings::get_int(const std::string& key) {
 	return ret;
 }
 
-float Settings::get_flt(const std::string& key) {
-	float ret = 0;
+scalar Settings::get_flt(const std::string& key) {
+	scalar ret = 0;
 	std::istringstream(settings[key]) >> ret;
 	return ret;
 }

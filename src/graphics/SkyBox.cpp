@@ -56,6 +56,8 @@ SkyBox::SkyBox() {
 
 	mesh.addFaces(top, bottom, front, back, right, left);
 
+	mass = 0.f; // We're a static body
+
 }
 
 SkyBox::~SkyBox() {}

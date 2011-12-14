@@ -18,7 +18,7 @@ struct Color {
 		: r(_r), g(_g), b(_b), a(_a) {}
 
 	void set() {
-		glColor3ub(r, g, b);
+		glColor4ub(r, g, b, a);
 	}
 
 	void reset() { glColor4f(1,1,1,1); }

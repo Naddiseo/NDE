@@ -18,7 +18,7 @@ public:
 	virtual ~Settings();
 
 	int get_int(const std::string& key);
-	float get_flt(const std::string& key);
+	scalar get_flt(const std::string& key);
 	std::string& get_str(const std::string& key);
 
 

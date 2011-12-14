@@ -25,13 +25,13 @@ public:
 	virtual ~Face();
 
 	void add(Vector3f* v);
-	void tex(float x, float y);
+	void tex(scalar x, scalar y);
 
 	void draw();
 
 	void setEnum();
 	void hasTexBox();
-	float avgHeight() const;
+	scalar avgHeight() const;
 };
 
 } /* namespace nde */
