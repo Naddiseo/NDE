@@ -13,61 +13,48 @@ namespace nde {
 SkyBox::SkyBox() {
 	// top face
 	Face* top = new Face();
-	top->add(1, 1, 1);
-	top->add(1, 1, -1);
-	top->add(-1, 1, -1);
-	top->add(-1, 1, 1);
-	top->hasTexBox();
-	top->textureid =  Game::getInstance().loadAsset("assets/sky.tga");
+	top->add(mesh.add(1, 1, 1));
+	top->add(mesh.add(1, 1, -1));
+	top->add(mesh.add(-1, 1, -1));
+	top->add(mesh.add(-1, 1, 1));
+	top->col = Color(255, 255, 255);
 
 	Face* bottom = new Face();
-	bottom->add(1, -1, 1);
-	bottom->add(1, -1, -1);
-	bottom->add(-1, -1, -1);
-	bottom->add(-1, -1, 1);
-	bottom->hasTexBox();
-	bottom->textureid =  Game::getInstance().loadAsset("assets/sky.tga");
+	bottom->add(mesh.add(1, -1, 1));
+	bottom->add(mesh.add(1, -1, -1));
+	bottom->add(mesh.add(-1, -1, -1));
+	bottom->add(mesh.add(-1, -1, 1));
 	bottom->col = Color(255, 255, 255);
 
 	Face* back = new Face();
-	back->add(-1, -1, -1);
-	back->add(-1, 1, -1);
-	back->add(-1, 1, 1);
-	back->add(-1, -1, 1);
-	back->hasTexBox();
-	back->textureid =  Game::getInstance().loadAsset("assets/sky.tga");
+	back->add(mesh.add(-1, -1, -1));
+	back->add(mesh.add(-1, 1, -1));
+	back->add(mesh.add(-1, 1, 1));
+	back->add(mesh.add(-1, -1, 1));
+	back->col = Color(255, 255, 255);
 
 	Face* front = new Face();
-	front->add(1, 1, 1);
-	front->add(1, -1, 1);
-	front->add(1, -1, -1);
-	front->add(1, 1, -1);
-	front->hasTexBox();
-	front->textureid =  Game::getInstance().loadAsset("assets/sky.tga");
+	front->add(mesh.add(1, 1, 1));
+	front->add(mesh.add(1, -1, 1));
+	front->add(mesh.add(1, -1, -1));
+	front->add(mesh.add(1, 1, -1));
+	front->col = Color(255, 255, 255);
 
 	Face* right = new Face();
-	right->add(1, -1, 1);
-	right->add(-1, -1, 1);
-	right->add(-1, 1, 1);
-	right->add(1, 1, 1);
-	right->hasTexBox();
-	right->textureid =  Game::getInstance().loadAsset("assets/sky.tga");
+	right->add(mesh.add(1, -1, 1));
+	right->add(mesh.add(-1, -1, 1));
+	right->add(mesh.add(-1, 1, 1));
+	right->add(mesh.add(1, 1, 1));
+	right->col = Color(255, 255, 255);
 
 	Face* left = new Face();
-	left->add(1, 1, -1);
-	left->add(1, -1, -1);
-	left->add(-1, -1, -1);
-	left->add(-1, 1, -1);
-	left->hasTexBox();
-	left->textureid =  Game::getInstance().loadAsset("assets/sky.tga");
+	left->add(mesh.add(1, 1, -1));
+	left->add(mesh.add(1, -1, -1));
+	left->add(mesh.add(-1, -1, -1));
+	left->add(mesh.add(-1, 1, -1));
+	left->col = Color(255, 255, 255);
 
-
-	faces.push_back(top);
-	faces.push_back(bottom);
-	faces.push_back(front);
-	faces.push_back(back);
-	faces.push_back(right);
-	faces.push_back(left);
+	mesh.addFaces(top, bottom, front, back, right, left);
 
 }
 

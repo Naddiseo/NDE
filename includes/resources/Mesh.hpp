@@ -10,13 +10,26 @@ namespace nde {
 class Mesh {
 public:
 	uint32_t id;
-	std::vector<Vector3f> vertices;
-	std::vector<Face> faces;
+	std::vector<Vector3f*> vertices;
+	std::vector<Face*> faces;
 
 	Mesh() : id(0), vertices(), faces() {}
 	virtual ~Mesh();
 
-	void render(Vector3f& translate);
+	virtual void render(Vector3f& translate);
+
+	virtual Vector3f* add(float x, float y, float z);
+
+	template<typename H = Face*>
+	void addFaces(const H& f) {
+		faces.push_back(f);
+	}
+
+	template<typename H = Face*, typename... T>
+	void addFaces(const H& f, const T&... tail) {
+		addFaces(f);
+		addFaces(tail...);
+	}
 };
 
 }

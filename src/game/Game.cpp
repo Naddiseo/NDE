@@ -251,12 +251,8 @@ Game::mainLoop() {
 		}
 		*/
 
-		for (IsRendered* r : world.getScene().getToRender()) {
-			r->predraw();
-			for (Face* face : r->faces) {
-				face->draw();
-			}
-			r->postdraw();
+		for (Entity* r : world.getScene().getToRender()) {
+			r->tick();
 		}
 
 		drawAxis();

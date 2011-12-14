@@ -13,13 +13,7 @@ Face::Face()
 	: textureid(0), vertexes(), tex_points(), mode(GL_QUADS), col() {}
 
 Face::~Face() {
-	/*
-	 * Can't delete vertexes here, because multiple faces may point to the same vertex
-	 * for (Vector3f* v : vertexes) {
-		if (v) {
-			delete v;
-		}
-	}*/
+	// Mesh will delete vertexes
 	for (Vector2f* v : tex_points) {
 		if (v) {
 			delete v;
@@ -84,8 +78,8 @@ float Face::avgHeight() const {
 }
 
 void
-Face::add(float x, float y, float z) {
-	vertexes.push_back(new Vector3f(x, y, z));
+Face::add(Vector3f* v) {
+	vertexes.push_back(v);
 }
 
 void

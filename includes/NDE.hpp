@@ -16,6 +16,7 @@
 #include "common.hpp"
 
 #include "game/Game.hpp"
+#include "game/Entity.hpp"
 #include "graphics/Renderer.hpp"
 #include "game/Scene.hpp"
 #include "resources/Terrain.hpp"

@@ -3,7 +3,7 @@
 
 #include "common.hpp"
 #include "math/vector.hpp"
-#include "graphics/IsRendered.hpp"
+#include "game/Entity.hpp"
 
 namespace nde {
 
@@ -22,12 +22,12 @@ public:
 	bool loadScene(std::string const& path);
 	rendered_list_t& getToRender() { return to_render; }
 
-	template<typename H = IsRendered*>
+	template<typename H = Entity>
 	void addRenderObjects(const H& obj) {
 		to_render.push_back(obj);
 	}
 
-	template<typename H = IsRendered*, typename... T>
+	template<typename H = Entity*, typename... T>
 	void addRenderObjects(const H& obj, const T&... tail) {
 		addRenderObjects(obj);
 		addRenderObjects(tail...);

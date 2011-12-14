@@ -24,7 +24,7 @@ public:
 	Face();
 	virtual ~Face();
 
-	void add(float x, float y, float z);
+	void add(Vector3f* v);
 	void tex(float x, float y);
 
 	void draw();

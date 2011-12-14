@@ -1,14 +1,30 @@
 #include "game/Entity.hpp"
-
+#include "game/Game.hpp"
 
 namespace nde {
 
-Entity::Entity() : mass(0.0), localIntertia(0, 0, 0) {
+Entity::Entity() : body(NULL), mass(0.0),  collisionShapes() {
 
 	location.setIdentity();
 }
 
 Entity::~Entity() {
+	for (int j=0;j<collisionShapes.size();j++) {
+		btCollisionShape* shape = collisionShapes[j];
+		collisionShapes[j] = 0;
+		delete shape;
+	}
+}
+
+void Entity::addCollisionShape(btCollisionShape* shape) {
+	collisionShapes.push_back(shape);
+
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(location);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,shape, {0,0,0});
+	body = new btRigidBody(rbInfo);
+
+	Game::getInstance().getWorld().addRigidBody(body);
+
 }
 
 void Entity::tick() {
@@ -16,10 +32,8 @@ void Entity::tick() {
 		Vector3f newPos;
 		btTransform trans;
 		body->getMotionState()->getWorldTransform(trans);
+		newPos = trans.getOrigin();
 
-		newPos.x = trans.getOrigin().getX();
-		newPos.y = trans.getOrigin().getY();
-		newPos.z = trans.getOrigin().getZ();
 
 		mesh.render(newPos);
 	}
