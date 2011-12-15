@@ -10,7 +10,7 @@
 namespace nde {
 
 Face::Face()
-	: textureid(0), vertexes(), tex_points(), mode(GL_QUADS), col() {}
+	: textureid(0), vertexes(), tex_points(), mode(GL_TRIANGLES), col() {}
 
 Face::~Face() {
 	// Mesh will delete vertexes
@@ -32,14 +32,6 @@ Face::draw() {
 		col.set();
 	}
 
-	/*glEnable(GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA ,GL_ONE_MINUS_SRC_ALPHA);
-	glPolygonMode (GL_BACK, GL_LINE);
-	glLineWidth (1);
-	glCullFace (GL_FRONT);
-	glDepthFunc (GL_LEQUAL);
-	glColor3f(33,33,33);
-	 */
 	glBegin(mode);
 	for (Vector3f* v : vertexes) {
 		if (tex_iter != tex_points.end()) {
@@ -51,12 +43,6 @@ Face::draw() {
 	glEnd();
 
 	col.reset();
-	/*
-	glDepthFunc (GL_LESS);
-	glCullFace (GL_BACK);
-	glPolygonMode (GL_BACK, GL_FILL);
-	glEnable(GL_BLEND);
-	*/
 }
 
 void Face::setEnum() {

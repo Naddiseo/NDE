@@ -25,8 +25,8 @@ class Game {
 
 	scalar fov;
 
-	std::string errstr;
 	bool haserror;
+	std::string errstr;
 public:
 	static Game& getInstance() {
 		static Game instance;

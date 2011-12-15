@@ -18,7 +18,6 @@ scalar frand(scalar a, scalar b) {
 
 namespace nde {
 
-
 void createPeak(int x, int y, int w, int h, scalar seed, scalar avg, std::vector<vec_list_t>& points) {
 	w--;
 	h--;
@@ -65,6 +64,7 @@ void createPeak(int x, int y, int w, int h, scalar seed, scalar avg, std::vector
 }
 
 Terrain::Terrain() {
+#if 0 // TODO: rewrite to use triangles and Mesh
 	std::vector<vec_list_t> points;
 	const int n_faces = (1<<5);
 	srand(time(NULL));
@@ -99,10 +99,10 @@ Terrain::Terrain() {
 
 			float avg = face->avgHeight();
 			if (avg < 5) {
-				face->textureid = Game::getInstance().loadAsset("assets/grass.tga");
+				face->textureid = Game::getInstance().getAssets().loadMaterial("assets/grass.tga");
 			}
 			else if (avg >= 5) {
-				face->textureid = Game::getInstance().loadAsset("assets/snow.tga");
+				face->textureid = Game::getInstance().getAssets().loadMaterial("assets/snow.tga");
 			}
 #else
 			face->col = Color((rand()%255), (rand()%255), (rand()%255));
@@ -112,6 +112,7 @@ Terrain::Terrain() {
 	}
 
 	std::cout << "done." << std::endl;
+#endif
 }
 
 Terrain::~Terrain() { }

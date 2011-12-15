@@ -2,7 +2,7 @@
 
 #include <string>
 #include <fstream>
-
+#include <cstdint>
 #include <google/protobuf/text_format.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 
@@ -45,10 +45,10 @@ ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
 {
 	for (int i = 0; i < pbassets->material_size(); ++i) {
 		pb::Material* mat = pbassets->mutable_material(i);
-		assets->allocMaterial(mat->id(), mat->file());
+		assets->allocMaterial((size_t)mat->id(), mat->file());
 	}
 	
-	for (int i = 0; i < pbassets->uvmap_size(); ++i) {
+	for (int i = 0; i < pbassets->mesh_size(); ++i) {
 		pb::Mesh* mesh = pbassets->mutable_mesh(i);
 		
 		Mesh* xmesh = assets->allocMesh();
@@ -62,21 +62,18 @@ ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
 		for (int j = 0; j < mesh->face_size(); ++j) {
 			pb::Face f = mesh->face(j);
 			
-			Face* xf = new Face();
-			xf->vertexes.push_back(xmesh->vertices[f.a()]);
-			xf->vertexes.push_back(xmesh->vertices[f.b()]);
-			xf->vertexes.push_back(xmesh->vertices[f.c()]);
+			Face* xf = xmesh->allocFace();
+			xf->vertexes.push_back((Vector3f*)xmesh->vertices[f.a()]);
+			xf->vertexes.push_back((Vector3f*)xmesh->vertices[f.b()]);
+			xf->vertexes.push_back((Vector3f*)xmesh->vertices[f.c()]);
 			
-			xmesh->faces.push_back(xf);
 		}
-		
-		assets->meshes.push_back(xmesh);
 	}
 
 	for (int i = 0; i < pbassets->entity_size(); ++i) {
 		pb::Entity* mod = pbassets->mutable_entity(i);
 		
-		Entity* e = new Entity();
+		Entity* e = assets->allocEntity();
 
 		pb::Vector3f pos = mod->position();
 		pb::Vector3f dir = mod->direction();
@@ -90,7 +87,6 @@ ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
 		delete tmppos;
 		delete tmpdir;
 
-		assets->entities.push_back(e);
 	}
 
 

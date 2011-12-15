@@ -14,13 +14,14 @@ class Mesh;
 class Camera;
 
 class Assets {
-public:
+
 	std::vector<Material*> materials;
 	std::vector<UVMap*> uvmaps;
 	std::vector<Entity*> entities;
 	std::vector<Mesh*> meshes;
 	std::vector<Camera*> cameras;
-	
+
+public:
 	Assets();
 	virtual ~Assets();
 
