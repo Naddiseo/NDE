@@ -144,6 +144,9 @@ void Game::drawAxis() {
 	scalar fvViewMatrix[16];
 	scalar cx = 0, cy = 0, l = 1000;
 	scalar xx, xy, yx, yy, zx, zy;
+	static Color* red = assets.getColor("red");
+	static Color* green = assets.getColor("green");
+	static Color* blue = assets.getColor("blue");
 	glGetFloatv(GL_MODELVIEW_MATRIX, fvViewMatrix);
 
 
@@ -171,13 +174,13 @@ void Game::drawAxis() {
 	glRotatef (camera.getRotX(), 1,0,0);
 
 	glBegin(GL_LINES);
-	Color(255, 255/3, 255/3).set(); //x axis
+	red->set(); // x axis
 	glVertex2d(cx, cy);
 	glVertex2d(cx + xx, cy + xy);
-	Color(255/3, 255, 255/3).set(); // y axis
+	green->set(); //y axis
 	glVertex2d(cx, cy);
 	glVertex2d(cx + yx, cy + yy);
-	Color(255/3, 255/3, 255).set(); // z axis
+	blue->set();  // z axis
 	glVertex2d(cx, cy);
 	glVertex2d(cx + zx, cy + zy);
 	glEnd();
@@ -212,6 +215,13 @@ void
 Game::mainLoop() {
 	int height = SGET_I("HEIGHT");
 	int width = SGET_I("WIDTH");
+
+	//set up basic colors
+	assets.allocColor("red", 1.f, 0.3f, 0.3f);
+	assets.allocColor("green", 0.3f, 1.f, 0.3f);
+	assets.allocColor("blue", 0.3f, 0.3f, 1.f);
+	assets.allocColor("black", 0.f, 0.f, 0.f);
+	assets.allocColor("white", 1.f, 1.f, 1.f);
 
 	while (!haserror) {
 

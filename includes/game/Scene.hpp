@@ -22,18 +22,25 @@ public:
 	bool loadScene(std::string const& path);
 	rendered_list_t& getToRender() { return to_render; }
 
-	template<typename H = Entity>
-	void addRenderObjects(const H& obj) {
-		to_render.push_back(obj);
-	}
+	template<typename H = Entity*>
+	void addRenderObjects(const H& obj);
 
 	template<typename H = Entity*, typename... T>
-	void addRenderObjects(const H& obj, const T&... tail) {
-		addRenderObjects(obj);
-		addRenderObjects(tail...);
-	}
+	void addRenderObjects(const H& obj, const T&... tail);
+
 private:
 	void getBoundingBox();
 };
+
+template<typename H>
+void Scene::addRenderObjects(const H& obj) {
+	to_render.push_back(obj);
+}
+
+template<typename H, typename... T>
+void Scene::addRenderObjects(const H& obj, const T&... tail) {
+	addRenderObjects(obj);
+	addRenderObjects(tail...);
+}
 
 } // namespace nde

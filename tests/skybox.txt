@@ -1,0 +1,33 @@
+mesh {
+	id : 1
+	
+	vertex { x: -1 y: -1 z: -1 }
+	vertex { x: 0 y: 0 z: 0 }
+	vertex { x: 1 y: 0 z: 0 }
+	vertex { x: 1 y: 1 z: 0 }
+	vertex { x: 0 y: 1 z: 0 }
+	vertex { x: 0 y: 0 z: 1 }
+	vertex { x: 1 y: 0 z: 1 }
+	vertex { x: 1 y: 1 z: 1 }
+	vertex { x: 0 y: 1 z: 1 }
+	
+	face { a: 1 b: 2 c: 4 }
+	face { a: 2 b: 3 c: 4 }
+	face { a: 5 b: 6 c: 1 }
+	face { a: 6 b: 1 c: 1 }
+	face { a: 2 b: 6 c: 3 }
+	face { a: 6 b: 7 c: 3 }
+	face { a: 4 b: 3 c: 8 }
+	face { a: 3 b: 7 c: 8 }
+	face { a: 5 b: 1 c: 8 }
+	face { a: 1 b: 4 c: 8 }
+	face { a: 8 b: 7 c: 5 }
+}
+# skybox
+entity {
+	id: 1
+	position  { x: 0 y: 0 z: 0 }
+	direction { x: 0 y: 0 z: 0 }
+	
+	meshes: 1
+}

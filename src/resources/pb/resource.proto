@@ -49,10 +49,20 @@ message Camera {
 	required Vector3f direction = 3;
 }
 
+message Color {
+	required uint32 id = 1;
+	required string name = 2;
+	required float r = 3;
+	required float g = 4;
+	required float b = 5;
+	optional float a = 6;
+}
+
 message Assets {
 	repeated Material material = 2;
 	repeated UVMap uvmap = 3;
 	repeated Mesh mesh = 4;
 	repeated Entity entity = 5;
 	repeated Camera camera = 6;
+	repeated Color color = 7;
 }

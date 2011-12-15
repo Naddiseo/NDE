@@ -41,6 +41,7 @@ class UVMap;
 class Mesh;
 class Entity;
 class Camera;
+class Color;
 class Assets;
 
 // ===================================================================
@@ -888,6 +889,142 @@ class Camera : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class Color : public ::google::protobuf::Message {
+ public:
+  Color();
+  virtual ~Color();
+  
+  Color(const Color& from);
+  
+  inline Color& operator=(const Color& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Color& default_instance();
+  
+  void Swap(Color* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Color* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Color& from);
+  void MergeFrom(const Color& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required uint32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+  
+  // required string name = 2;
+  inline bool has_name() const;
+  inline void clear_name();
+  static const int kNameFieldNumber = 2;
+  inline const ::std::string& name() const;
+  inline void set_name(const ::std::string& value);
+  inline void set_name(const char* value);
+  inline void set_name(const char* value, size_t size);
+  inline ::std::string* mutable_name();
+  inline ::std::string* release_name();
+  
+  // required float r = 3;
+  inline bool has_r() const;
+  inline void clear_r();
+  static const int kRFieldNumber = 3;
+  inline float r() const;
+  inline void set_r(float value);
+  
+  // required float g = 4;
+  inline bool has_g() const;
+  inline void clear_g();
+  static const int kGFieldNumber = 4;
+  inline float g() const;
+  inline void set_g(float value);
+  
+  // required float b = 5;
+  inline bool has_b() const;
+  inline void clear_b();
+  static const int kBFieldNumber = 5;
+  inline float b() const;
+  inline void set_b(float value);
+  
+  // optional float a = 6;
+  inline bool has_a() const;
+  inline void clear_a();
+  static const int kAFieldNumber = 6;
+  inline float a() const;
+  inline void set_a(float value);
+  
+  // @@protoc_insertion_point(class_scope:nde.pb.Color)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_name();
+  inline void clear_has_name();
+  inline void set_has_r();
+  inline void clear_has_r();
+  inline void set_has_g();
+  inline void clear_has_g();
+  inline void set_has_b();
+  inline void clear_has_b();
+  inline void set_has_a();
+  inline void clear_has_a();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* name_;
+  ::google::protobuf::uint32 id_;
+  float r_;
+  float g_;
+  float b_;
+  float a_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto();
+  friend void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto();
+  friend void protobuf_ShutdownFile_src_2fresources_2fpb_2fresource_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Color* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class Assets : public ::google::protobuf::Message {
  public:
   Assets();
@@ -1002,6 +1139,18 @@ class Assets : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Camera >*
       mutable_camera();
   
+  // repeated .nde.pb.Color color = 7;
+  inline int color_size() const;
+  inline void clear_color();
+  static const int kColorFieldNumber = 7;
+  inline const ::nde::pb::Color& color(int index) const;
+  inline ::nde::pb::Color* mutable_color(int index);
+  inline ::nde::pb::Color* add_color();
+  inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Color >&
+      color() const;
+  inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Color >*
+      mutable_color();
+  
   // @@protoc_insertion_point(class_scope:nde.pb.Assets)
  private:
   
@@ -1012,9 +1161,10 @@ class Assets : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::nde::pb::Mesh > mesh_;
   ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity > entity_;
   ::google::protobuf::RepeatedPtrField< ::nde::pb::Camera > camera_;
+  ::google::protobuf::RepeatedPtrField< ::nde::pb::Color > color_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
   
   friend void  protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto();
   friend void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto();
@@ -1683,6 +1833,178 @@ inline ::nde::pb::Vector3f* Camera::release_direction() {
 
 // -------------------------------------------------------------------
 
+// Color
+
+// required uint32 id = 1;
+inline bool Color::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Color::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Color::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Color::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 Color::id() const {
+  return id_;
+}
+inline void Color::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+}
+
+// required string name = 2;
+inline bool Color::has_name() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Color::set_has_name() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Color::clear_has_name() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Color::clear_name() {
+  if (name_ != &::google::protobuf::internal::kEmptyString) {
+    name_->clear();
+  }
+  clear_has_name();
+}
+inline const ::std::string& Color::name() const {
+  return *name_;
+}
+inline void Color::set_name(const ::std::string& value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void Color::set_name(const char* value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void Color::set_name(const char* value, size_t size) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Color::mutable_name() {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  return name_;
+}
+inline ::std::string* Color::release_name() {
+  clear_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = name_;
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// required float r = 3;
+inline bool Color::has_r() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Color::set_has_r() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Color::clear_has_r() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Color::clear_r() {
+  r_ = 0;
+  clear_has_r();
+}
+inline float Color::r() const {
+  return r_;
+}
+inline void Color::set_r(float value) {
+  set_has_r();
+  r_ = value;
+}
+
+// required float g = 4;
+inline bool Color::has_g() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Color::set_has_g() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Color::clear_has_g() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Color::clear_g() {
+  g_ = 0;
+  clear_has_g();
+}
+inline float Color::g() const {
+  return g_;
+}
+inline void Color::set_g(float value) {
+  set_has_g();
+  g_ = value;
+}
+
+// required float b = 5;
+inline bool Color::has_b() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void Color::set_has_b() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void Color::clear_has_b() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void Color::clear_b() {
+  b_ = 0;
+  clear_has_b();
+}
+inline float Color::b() const {
+  return b_;
+}
+inline void Color::set_b(float value) {
+  set_has_b();
+  b_ = value;
+}
+
+// optional float a = 6;
+inline bool Color::has_a() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void Color::set_has_a() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void Color::clear_has_a() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void Color::clear_a() {
+  a_ = 0;
+  clear_has_a();
+}
+inline float Color::a() const {
+  return a_;
+}
+inline void Color::set_a(float value) {
+  set_has_a();
+  a_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // Assets
 
 // repeated .nde.pb.Material material = 2;
@@ -1808,6 +2130,31 @@ Assets::camera() const {
 inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Camera >*
 Assets::mutable_camera() {
   return &camera_;
+}
+
+// repeated .nde.pb.Color color = 7;
+inline int Assets::color_size() const {
+  return color_.size();
+}
+inline void Assets::clear_color() {
+  color_.Clear();
+}
+inline const ::nde::pb::Color& Assets::color(int index) const {
+  return color_.Get(index);
+}
+inline ::nde::pb::Color* Assets::mutable_color(int index) {
+  return color_.Mutable(index);
+}
+inline ::nde::pb::Color* Assets::add_color() {
+  return color_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Color >&
+Assets::color() const {
+  return color_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Color >*
+Assets::mutable_color() {
+  return &color_;
 }
 
 

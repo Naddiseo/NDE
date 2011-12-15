@@ -124,7 +124,7 @@ void World::addRigidBody(btRigidBody* body) {
 }
 
 void World::step() {
-	dynamicsWorld->stepSimulation(1.f/60.f,10);
+	//dynamicsWorld->stepSimulation(1.f/60.f,10);
 }
 
 } //namespace nde

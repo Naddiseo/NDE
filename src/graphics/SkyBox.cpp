@@ -7,12 +7,15 @@
 
 #include "graphics/SkyBox.hpp"
 #include "game/Game.hpp"
+#include "resources/AssetsLoader.hpp"
 
 namespace nde {
 
 SkyBox::SkyBox() {
 	// top face
-	mesh = Game::getInstance().getAssets().allocMesh();
+	LoadAssetsFromText("tests/skybox.txt", Game::getInstance().getAssets());
+
+	/*mesh = Game::getInstance().getAssets().allocMesh();
 
 	Face* top = new Face();
 	top->add(mesh->add(1, 1, 1));
@@ -57,7 +60,7 @@ SkyBox::SkyBox() {
 	left->col = Color(255, 255, 255);
 
 	mesh->addFaces(top, bottom, front, back, right, left);
-
+	 */
 	mass = 0.f; // We're a static body
 
 }

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "common.hpp"
+#include "graphics/Color.hpp"
 
 namespace nde {
 
@@ -20,6 +21,7 @@ class Assets {
 	std::vector<Entity*> entities;
 	std::vector<Mesh*> meshes;
 	std::vector<Camera*> cameras;
+	std::map<std::string, Color*> colors;
 
 public:
 	Assets();
@@ -40,7 +42,12 @@ public:
 	/*template<typename ...Args>
 	Camera* allocCamera(Args&&... params);*/
 
+	template<typename ...Args>
+	Color* allocColor(Args&&... params);
+
 	GLuint loadMaterial(const std::string& path);
+
+	Color* getColor(std::string name) { return colors[name]; }
 };
 
 template<typename ...Args>
@@ -77,5 +84,21 @@ Camera* Assets::allocCamera(Args&&... params) {
 	cameras.push_back(ret);
 	return ret;
 }*/
+
+template<typename ...Args>
+Color* Assets::allocColor(Args&&... params) {
+	Color* ret = new Color(std::forward<Args>(params)...);
+	if (colors.find(ret->name) != colors.end()) {
+		// color already exists with this name
+		std::string _name = ret->name; // make a copy
+		delete ret;
+		ret =  colors[_name];
+	}
+	else {
+		colors[ret->name] = ret; // new color
+	}
+
+	return ret;
+}
 
 } // namespace nde

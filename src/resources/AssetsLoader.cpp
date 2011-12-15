@@ -41,17 +41,17 @@ LoadPBAssetsFromText(const std::string& file)
 
 // TODO: Need a map to get Messages by id
 void
-ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
+ConvertPBAssets(pb::Assets* pbassets, Assets& assets)
 {
 	for (int i = 0; i < pbassets->material_size(); ++i) {
 		pb::Material* mat = pbassets->mutable_material(i);
-		assets->allocMaterial((size_t)mat->id(), mat->file());
+		assets.allocMaterial((size_t)mat->id(), mat->file());
 	}
 	
 	for (int i = 0; i < pbassets->mesh_size(); ++i) {
 		pb::Mesh* mesh = pbassets->mutable_mesh(i);
 		
-		Mesh* xmesh = assets->allocMesh();
+		Mesh* xmesh = assets.allocMesh();
 		
 		for (int j = 0; j < mesh->vertex_size(); ++j) {
 			pb::Vector3f v = mesh->vertex(j);
@@ -73,7 +73,7 @@ ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
 	for (int i = 0; i < pbassets->entity_size(); ++i) {
 		pb::Entity* mod = pbassets->mutable_entity(i);
 		
-		Entity* e = assets->allocEntity();
+		Entity* e = assets.allocEntity();
 
 		pb::Vector3f pos = mod->position();
 		pb::Vector3f dir = mod->direction();
@@ -87,6 +87,17 @@ ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
 		delete tmppos;
 		delete tmpdir;
 
+	}
+
+	for (int i = 0; i < pbassets->color_size(); ++i) {
+		pb::Color* c = pbassets->mutable_color(i);
+
+		if (c->has_a()) {
+			assets.allocColor(c->name(), c->r(), c->g(), c->b(), c->a());
+		}
+		else {
+			assets.allocColor(c->name(), c->r(), c->g(), c->b());
+		}
 	}
 
 
@@ -106,7 +117,7 @@ ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
 }
 
 void
-LoadAssetsFromText(const std::string& file, Assets* assets)
+LoadAssetsFromText(const std::string& file, Assets& assets)
 {
 	pb::Assets* pbassets = LoadPBAssetsFromText(file);
 	

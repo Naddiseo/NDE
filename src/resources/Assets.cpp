@@ -7,7 +7,7 @@
 
 namespace nde {
 
-Assets::Assets() : materials(), uvmaps(), entities(), meshes(), cameras() {}
+Assets::Assets() : materials(), uvmaps(), entities(), meshes(), cameras(), colors() {}
 
 Assets::~Assets() {
 	for (Entity* e : entities) {
@@ -18,6 +18,9 @@ Assets::~Assets() {
 	}
 	for (Material* m : materials) {
 		delete m;
+	}
+	for (std::pair<std::string, Color*> p : colors) {
+		delete p.second;
 	}
 }
 

@@ -9,22 +9,22 @@
 #include <GL/gl.h>
 
 struct Color {
-	unsigned char r, g, b, a;
-	Color() : r(0), g(0), b(0), a(255) {}
-	Color(unsigned char _r, unsigned char _g, unsigned char _b)
-		: r(_r), g(_g), b(_b), a(255) {}
+	std::string name; // If no English name, use HTML hex code.
+	float r, g, b, a;
+	Color() : name("black"), r(0), g(0), b(0), a(1) {}
+	Color(std::string _name) : name(_name), r(0), g(0), b(0), a(1) {}
+	Color(std::string _name, float _r, float _g, float _b)
+		: name(_name), r(_r), g(_g), b(_b), a(1) {}
 	
-	Color(unsigned char _r, unsigned char _g, unsigned char _b, unsigned char _a)
-		: r(_r), g(_g), b(_b), a(_a) {}
+	Color(std::string _name, float _r, float _g, float _b, float _a)
+		: name(_name), r(_r), g(_g), b(_b), a(_a) {}
 
 	void set() {
-		glColor4ub(r, g, b, a);
+		glColor4f(r, g, b, a);
 	}
 
 	void reset() { glColor4f(1,1,1,1); }
 };
 
-void add_color(std::string, unsigned char r, unsigned char g, unsigned char b);
-Color& get_color(std::string);
 
 
