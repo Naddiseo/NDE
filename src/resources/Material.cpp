@@ -57,8 +57,15 @@ loadTexture(const std::string& path) {
 	return texture_map[path];
 }
 
-Material::Material(uint32_t id, const std::string& file)
-	: image_id(loadTexture(file)), id(id), file(file)
-{ }
+Material::Material() {}
+
+Material::Material(const std::string& file)
+	: image_id(loadTexture(file)), file(file) {}
+
+Material::~Material() {
+	if (image_id > 0) {
+		glDeleteTextures(1, &image_id);
+	}
+}
 
 }

@@ -6,9 +6,7 @@ Scene::Scene() : sceneMin(1e10f, 1e10f, 1e10f), sceneMax(-1e10f,-1e10f,-1e10f), 
 }
 
 Scene::~Scene() {
-	for (IsRendered* r : to_render) {
-		delete r;
-	}
+	// assests owns the pointers in to_render
 }
 
 bool

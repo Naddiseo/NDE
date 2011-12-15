@@ -9,10 +9,13 @@ GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 GRAPHICS_FILES=Color.cpp Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
 GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 
+MISC_FILES=HasId.cpp
+MISC_SOURCES=$(addprefix src/misc/, $(MISC_FILES))
+
 RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Material.cpp Mesh.cpp Terrain.cpp
 RESOURCES_SOURCES=$(addprefix src/resources/, $(RESOURCES_FILES))
 
-SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES)
+SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES) $(MISC_SOURCES)
 
 OBJECTS=src/resources/pb/resource.pb.o $(SOURCES:.cpp=.o)
 

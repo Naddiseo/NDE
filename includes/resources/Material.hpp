@@ -4,16 +4,19 @@
 
 #include <GL/glu.h>
 
+#include "HasId.hpp"
+
 namespace nde {
 
-class Material {
+class Material : public HasId {
 public:
 	GLuint image_id;
 	
-	uint32_t id;
 	std::string file;
-	
-	Material(uint32_t id, const std::string& file);
+	Material();
+	Material(const std::string& file);
+
+	virtual ~Material();
 };
 
 }

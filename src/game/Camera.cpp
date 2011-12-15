@@ -20,13 +20,13 @@ Camera::Camera()
 	 rot_x(0), rot_y(0), rot_z(0),
 	 phi(0), theta(0),
 	 speed(0.01), sensitivity(0.2) {
-	SDL_WM_GrabInput(SDL_GRAB_ON);
+	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
 	//SDL_ShowCursor(SDL_DISABLE);
 
 }
 
 Camera::~Camera() {
-	SDL_WM_GrabInput(SDL_GRAB_OFF);
+	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
 	//SDL_ShowCursor(SDL_ENABLE);
 }
 

@@ -36,9 +36,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* Mesh_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Mesh_reflection_ = NULL;
-const ::google::protobuf::Descriptor* Model_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* Entity_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  Model_reflection_ = NULL;
+  Entity_reflection_ = NULL;
 const ::google::protobuf::Descriptor* Camera_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Camera_reflection_ = NULL;
@@ -157,24 +157,24 @@ void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Mesh));
-  Model_descriptor_ = file->message_type(6);
-  static const int Model_offsets_[4] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Model, id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Model, position_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Model, direction_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Model, mesh_),
+  Entity_descriptor_ = file->message_type(6);
+  static const int Entity_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, position_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, direction_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, mesh_),
   };
-  Model_reflection_ =
+  Entity_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      Model_descriptor_,
-      Model::default_instance_,
-      Model_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Model, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Model, _unknown_fields_),
+      Entity_descriptor_,
+      Entity::default_instance_,
+      Entity_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(Model));
+      sizeof(Entity));
   Camera_descriptor_ = file->message_type(7);
   static const int Camera_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Camera, id_),
@@ -197,7 +197,7 @@ void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, material_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, uvmap_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, mesh_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, model_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, entity_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, camera_),
   };
   Assets_reflection_ =
@@ -236,7 +236,7 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Mesh_descriptor_, &Mesh::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    Model_descriptor_, &Model::default_instance());
+    Entity_descriptor_, &Entity::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Camera_descriptor_, &Camera::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
@@ -258,8 +258,8 @@ void protobuf_ShutdownFile_src_2fresources_2fpb_2fresource_2eproto() {
   delete UVMap_reflection_;
   delete Mesh::default_instance_;
   delete Mesh_reflection_;
-  delete Model::default_instance_;
-  delete Model_reflection_;
+  delete Entity::default_instance_;
+  delete Entity_reflection_;
   delete Camera::default_instance_;
   delete Camera_reflection_;
   delete Assets::default_instance_;
@@ -282,16 +282,16 @@ void protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto() {
     "al\030\002 \002(\r\022\014\n\004mesh\030\003 \002(\r\022\031\n\005coord\030\004 \003(\0132\n."
     "nde.pb.UV\"P\n\004Mesh\022\n\n\002id\030\001 \002(\r\022 \n\006vertex\030"
     "\002 \003(\0132\020.nde.pb.Vector3f\022\032\n\004face\030\003 \003(\0132\014."
-    "nde.pb.Face\"j\n\005Model\022\n\n\002id\030\001 \002(\r\022\"\n\010posi"
-    "tion\030\002 \002(\0132\020.nde.pb.Vector3f\022#\n\tdirectio"
-    "n\030\003 \002(\0132\020.nde.pb.Vector3f\022\014\n\004mesh\030\004 \002(\r\""
-    "]\n\006Camera\022\n\n\002id\030\001 \002(\r\022\"\n\010position\030\002 \002(\0132"
-    "\020.nde.pb.Vector3f\022#\n\tdirection\030\003 \002(\0132\020.n"
-    "de.pb.Vector3f\"\244\001\n\006Assets\022\"\n\010material\030\002 "
-    "\003(\0132\020.nde.pb.Material\022\034\n\005uvmap\030\003 \003(\0132\r.n"
-    "de.pb.UVMap\022\032\n\004mesh\030\004 \003(\0132\014.nde.pb.Mesh\022"
-    "\034\n\005model\030\005 \003(\0132\r.nde.pb.Model\022\036\n\006camera\030"
-    "\006 \003(\0132\016.nde.pb.Camera", 741);
+    "nde.pb.Face\"k\n\006Entity\022\n\n\002id\030\001 \002(\r\022\"\n\010pos"
+    "ition\030\002 \002(\0132\020.nde.pb.Vector3f\022#\n\tdirecti"
+    "on\030\003 \002(\0132\020.nde.pb.Vector3f\022\014\n\004mesh\030\004 \002(\r"
+    "\"]\n\006Camera\022\n\n\002id\030\001 \002(\r\022\"\n\010position\030\002 \002(\013"
+    "2\020.nde.pb.Vector3f\022#\n\tdirection\030\003 \002(\0132\020."
+    "nde.pb.Vector3f\"\246\001\n\006Assets\022\"\n\010material\030\002"
+    " \003(\0132\020.nde.pb.Material\022\034\n\005uvmap\030\003 \003(\0132\r."
+    "nde.pb.UVMap\022\032\n\004mesh\030\004 \003(\0132\014.nde.pb.Mesh"
+    "\022\036\n\006entity\030\005 \003(\0132\016.nde.pb.Entity\022\036\n\006came"
+    "ra\030\006 \003(\0132\016.nde.pb.Camera", 744);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "src/resources/pb/resource.proto", &protobuf_RegisterTypes);
   Vector3f::default_instance_ = new Vector3f();
@@ -300,7 +300,7 @@ void protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto() {
   Face::default_instance_ = new Face();
   UVMap::default_instance_ = new UVMap();
   Mesh::default_instance_ = new Mesh();
-  Model::default_instance_ = new Model();
+  Entity::default_instance_ = new Entity();
   Camera::default_instance_ = new Camera();
   Assets::default_instance_ = new Assets();
   Vector3f::default_instance_->InitAsDefaultInstance();
@@ -309,7 +309,7 @@ void protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto() {
   Face::default_instance_->InitAsDefaultInstance();
   UVMap::default_instance_->InitAsDefaultInstance();
   Mesh::default_instance_->InitAsDefaultInstance();
-  Model::default_instance_->InitAsDefaultInstance();
+  Entity::default_instance_->InitAsDefaultInstance();
   Camera::default_instance_->InitAsDefaultInstance();
   Assets::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_src_2fresources_2fpb_2fresource_2eproto);
@@ -2070,29 +2070,29 @@ void Mesh::Swap(Mesh* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int Model::kIdFieldNumber;
-const int Model::kPositionFieldNumber;
-const int Model::kDirectionFieldNumber;
-const int Model::kMeshFieldNumber;
+const int Entity::kIdFieldNumber;
+const int Entity::kPositionFieldNumber;
+const int Entity::kDirectionFieldNumber;
+const int Entity::kMeshFieldNumber;
 #endif  // !_MSC_VER
 
-Model::Model()
+Entity::Entity()
   : ::google::protobuf::Message() {
   SharedCtor();
 }
 
-void Model::InitAsDefaultInstance() {
+void Entity::InitAsDefaultInstance() {
   position_ = const_cast< ::nde::pb::Vector3f*>(&::nde::pb::Vector3f::default_instance());
   direction_ = const_cast< ::nde::pb::Vector3f*>(&::nde::pb::Vector3f::default_instance());
 }
 
-Model::Model(const Model& from)
+Entity::Entity(const Entity& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
 }
 
-void Model::SharedCtor() {
+void Entity::SharedCtor() {
   _cached_size_ = 0;
   id_ = 0u;
   position_ = NULL;
@@ -2101,38 +2101,38 @@ void Model::SharedCtor() {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-Model::~Model() {
+Entity::~Entity() {
   SharedDtor();
 }
 
-void Model::SharedDtor() {
+void Entity::SharedDtor() {
   if (this != default_instance_) {
     delete position_;
     delete direction_;
   }
 }
 
-void Model::SetCachedSize(int size) const {
+void Entity::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* Model::descriptor() {
+const ::google::protobuf::Descriptor* Entity::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return Model_descriptor_;
+  return Entity_descriptor_;
 }
 
-const Model& Model::default_instance() {
+const Entity& Entity::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto();  return *default_instance_;
 }
 
-Model* Model::default_instance_ = NULL;
+Entity* Entity::default_instance_ = NULL;
 
-Model* Model::New() const {
-  return new Model;
+Entity* Entity::New() const {
+  return new Entity;
 }
 
-void Model::Clear() {
+void Entity::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     id_ = 0u;
     if (has_position()) {
@@ -2147,7 +2147,7 @@ void Model::Clear() {
   mutable_unknown_fields()->Clear();
 }
 
-bool Model::MergePartialFromCodedStream(
+bool Entity::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
@@ -2228,7 +2228,7 @@ bool Model::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void Model::SerializeWithCachedSizes(
+void Entity::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // required uint32 id = 1;
   if (has_id()) {
@@ -2258,7 +2258,7 @@ void Model::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* Model::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* Entity::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // required uint32 id = 1;
   if (has_id()) {
@@ -2291,7 +2291,7 @@ void Model::SerializeWithCachedSizes(
   return target;
 }
 
-int Model::ByteSize() const {
+int Entity::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -2335,10 +2335,10 @@ int Model::ByteSize() const {
   return total_size;
 }
 
-void Model::MergeFrom(const ::google::protobuf::Message& from) {
+void Entity::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const Model* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const Model*>(
+  const Entity* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Entity*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -2347,7 +2347,7 @@ void Model::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void Model::MergeFrom(const Model& from) {
+void Entity::MergeFrom(const Entity& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_id()) {
@@ -2366,19 +2366,19 @@ void Model::MergeFrom(const Model& from) {
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void Model::CopyFrom(const ::google::protobuf::Message& from) {
+void Entity::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Model::CopyFrom(const Model& from) {
+void Entity::CopyFrom(const Entity& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Model::IsInitialized() const {
+bool Entity::IsInitialized() const {
   if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
   
   if (has_position()) {
@@ -2390,7 +2390,7 @@ bool Model::IsInitialized() const {
   return true;
 }
 
-void Model::Swap(Model* other) {
+void Entity::Swap(Entity* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     std::swap(position_, other->position_);
@@ -2402,11 +2402,11 @@ void Model::Swap(Model* other) {
   }
 }
 
-::google::protobuf::Metadata Model::GetMetadata() const {
+::google::protobuf::Metadata Entity::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Model_descriptor_;
-  metadata.reflection = Model_reflection_;
+  metadata.descriptor = Entity_descriptor_;
+  metadata.reflection = Entity_reflection_;
   return metadata;
 }
 
@@ -2721,7 +2721,7 @@ void Camera::Swap(Camera* other) {
 const int Assets::kMaterialFieldNumber;
 const int Assets::kUvmapFieldNumber;
 const int Assets::kMeshFieldNumber;
-const int Assets::kModelFieldNumber;
+const int Assets::kEntityFieldNumber;
 const int Assets::kCameraFieldNumber;
 #endif  // !_MSC_VER
 
@@ -2777,7 +2777,7 @@ void Assets::Clear() {
   material_.Clear();
   uvmap_.Clear();
   mesh_.Clear();
-  model_.Clear();
+  entity_.Clear();
   camera_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -2830,21 +2830,21 @@ bool Assets::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(34)) goto parse_mesh;
-        if (input->ExpectTag(42)) goto parse_model;
+        if (input->ExpectTag(42)) goto parse_entity;
         break;
       }
       
-      // repeated .nde.pb.Model model = 5;
+      // repeated .nde.pb.Entity entity = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_model:
+         parse_entity:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_model()));
+                input, add_entity()));
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(42)) goto parse_model;
+        if (input->ExpectTag(42)) goto parse_entity;
         if (input->ExpectTag(50)) goto parse_camera;
         break;
       }
@@ -2900,10 +2900,10 @@ void Assets::SerializeWithCachedSizes(
       4, this->mesh(i), output);
   }
   
-  // repeated .nde.pb.Model model = 5;
-  for (int i = 0; i < this->model_size(); i++) {
+  // repeated .nde.pb.Entity entity = 5;
+  for (int i = 0; i < this->entity_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, this->model(i), output);
+      5, this->entity(i), output);
   }
   
   // repeated .nde.pb.Camera camera = 6;
@@ -2941,11 +2941,11 @@ void Assets::SerializeWithCachedSizes(
         4, this->mesh(i), target);
   }
   
-  // repeated .nde.pb.Model model = 5;
-  for (int i = 0; i < this->model_size(); i++) {
+  // repeated .nde.pb.Entity entity = 5;
+  for (int i = 0; i < this->entity_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        5, this->model(i), target);
+        5, this->entity(i), target);
   }
   
   // repeated .nde.pb.Camera camera = 6;
@@ -2989,12 +2989,12 @@ int Assets::ByteSize() const {
         this->mesh(i));
   }
   
-  // repeated .nde.pb.Model model = 5;
-  total_size += 1 * this->model_size();
-  for (int i = 0; i < this->model_size(); i++) {
+  // repeated .nde.pb.Entity entity = 5;
+  total_size += 1 * this->entity_size();
+  for (int i = 0; i < this->entity_size(); i++) {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->model(i));
+        this->entity(i));
   }
   
   // repeated .nde.pb.Camera camera = 6;
@@ -3033,7 +3033,7 @@ void Assets::MergeFrom(const Assets& from) {
   material_.MergeFrom(from.material_);
   uvmap_.MergeFrom(from.uvmap_);
   mesh_.MergeFrom(from.mesh_);
-  model_.MergeFrom(from.model_);
+  entity_.MergeFrom(from.entity_);
   camera_.MergeFrom(from.camera_);
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -3061,8 +3061,8 @@ bool Assets::IsInitialized() const {
   for (int i = 0; i < mesh_size(); i++) {
     if (!this->mesh(i).IsInitialized()) return false;
   }
-  for (int i = 0; i < model_size(); i++) {
-    if (!this->model(i).IsInitialized()) return false;
+  for (int i = 0; i < entity_size(); i++) {
+    if (!this->entity(i).IsInitialized()) return false;
   }
   for (int i = 0; i < camera_size(); i++) {
     if (!this->camera(i).IsInitialized()) return false;
@@ -3075,7 +3075,7 @@ void Assets::Swap(Assets* other) {
     material_.Swap(&other->material_);
     uvmap_.Swap(&other->uvmap_);
     mesh_.Swap(&other->mesh_);
-    model_.Swap(&other->model_);
+    entity_.Swap(&other->entity_);
     camera_.Swap(&other->camera_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);

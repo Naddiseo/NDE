@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include "common.hpp"
 
 namespace nde {
 

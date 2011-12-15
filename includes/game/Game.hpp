@@ -24,6 +24,9 @@ class Game {
 	SDL_Event event;
 
 	scalar fov;
+
+	std::string errstr;
+	bool haserror;
 public:
 	static Game& getInstance() {
 		static Game instance;
@@ -35,17 +38,11 @@ public:
 		return getWorld().getScene().loadScene(path);
 	}
 
-	GLuint loadAsset(const std::string& path) {
-		static int id = 0;
-		id++;
-		Material m(id, path);
-		return m.image_id;
+	Assets& getAssets() { return assets; }
 
-	}
+	World& getWorld() { return world; }
 
-	World& getWorld() {
-		return world;
-	}
+	void setError(std::string _str) { haserror = true; errstr = _str; }
 
 	void mainLoop();
 private:

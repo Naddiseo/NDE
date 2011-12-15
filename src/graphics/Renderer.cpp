@@ -4,6 +4,7 @@
  *  Created on: 2011-12-01
  *      Author: richard
  */
+#include <SDL/SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <IL/il.h>

@@ -2,15 +2,30 @@
 
 #include "resources/Assets.hpp"
 #include "resources/Material.hpp"
+#include "resources/UVMap.hpp"
+#include "game/Entity.hpp"
 
 namespace nde {
 
-Assets::Assets() : materials(), uvmaps(), models(), meshes(), cameras() {}
+Assets::Assets() : materials(), uvmaps(), entities(), meshes(), cameras() {}
 
 Assets::~Assets() {
+	for (Entity* e : entities) {
+		delete e;
+	}
+	for (Mesh* m : meshes) {
+		delete m;
+	}
 	for (Material* m : materials) {
-		glDeleteTextures(1, &m->image_id);
+		delete m;
 	}
 }
+
+GLuint
+Assets::loadMaterial(const std::string& path) {
+	Material* m = allocMaterial(path);
+	return m->image_id;
+}
+
 
 } //namespace nde

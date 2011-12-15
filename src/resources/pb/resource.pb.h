@@ -39,7 +39,7 @@ class Material;
 class Face;
 class UVMap;
 class Mesh;
-class Model;
+class Entity;
 class Camera;
 class Assets;
 
@@ -670,14 +670,14 @@ class Mesh : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class Model : public ::google::protobuf::Message {
+class Entity : public ::google::protobuf::Message {
  public:
-  Model();
-  virtual ~Model();
+  Entity();
+  virtual ~Entity();
   
-  Model(const Model& from);
+  Entity(const Entity& from);
   
-  inline Model& operator=(const Model& from) {
+  inline Entity& operator=(const Entity& from) {
     CopyFrom(from);
     return *this;
   }
@@ -691,17 +691,17 @@ class Model : public ::google::protobuf::Message {
   }
   
   static const ::google::protobuf::Descriptor* descriptor();
-  static const Model& default_instance();
+  static const Entity& default_instance();
   
-  void Swap(Model* other);
+  void Swap(Entity* other);
   
   // implements Message ----------------------------------------------
   
-  Model* New() const;
+  Entity* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Model& from);
-  void MergeFrom(const Model& from);
+  void CopyFrom(const Entity& from);
+  void MergeFrom(const Entity& from);
   void Clear();
   bool IsInitialized() const;
   
@@ -754,7 +754,7 @@ class Model : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 mesh() const;
   inline void set_mesh(::google::protobuf::uint32 value);
   
-  // @@protoc_insertion_point(class_scope:nde.pb.Model)
+  // @@protoc_insertion_point(class_scope:nde.pb.Entity)
  private:
   inline void set_has_id();
   inline void clear_has_id();
@@ -780,7 +780,7 @@ class Model : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_src_2fresources_2fpb_2fresource_2eproto();
   
   void InitAsDefaultInstance();
-  static Model* default_instance_;
+  static Entity* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -978,17 +978,17 @@ class Assets : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Mesh >*
       mutable_mesh();
   
-  // repeated .nde.pb.Model model = 5;
-  inline int model_size() const;
-  inline void clear_model();
-  static const int kModelFieldNumber = 5;
-  inline const ::nde::pb::Model& model(int index) const;
-  inline ::nde::pb::Model* mutable_model(int index);
-  inline ::nde::pb::Model* add_model();
-  inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Model >&
-      model() const;
-  inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Model >*
-      mutable_model();
+  // repeated .nde.pb.Entity entity = 5;
+  inline int entity_size() const;
+  inline void clear_entity();
+  static const int kEntityFieldNumber = 5;
+  inline const ::nde::pb::Entity& entity(int index) const;
+  inline ::nde::pb::Entity* mutable_entity(int index);
+  inline ::nde::pb::Entity* add_entity();
+  inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity >&
+      entity() const;
+  inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity >*
+      mutable_entity();
   
   // repeated .nde.pb.Camera camera = 6;
   inline int camera_size() const;
@@ -1010,7 +1010,7 @@ class Assets : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::nde::pb::Material > material_;
   ::google::protobuf::RepeatedPtrField< ::nde::pb::UVMap > uvmap_;
   ::google::protobuf::RepeatedPtrField< ::nde::pb::Mesh > mesh_;
-  ::google::protobuf::RepeatedPtrField< ::nde::pb::Model > model_;
+  ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity > entity_;
   ::google::protobuf::RepeatedPtrField< ::nde::pb::Camera > camera_;
   
   mutable int _cached_size_;
@@ -1493,53 +1493,53 @@ Mesh::mutable_face() {
 
 // -------------------------------------------------------------------
 
-// Model
+// Entity
 
 // required uint32 id = 1;
-inline bool Model::has_id() const {
+inline bool Entity::has_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Model::set_has_id() {
+inline void Entity::set_has_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Model::clear_has_id() {
+inline void Entity::clear_has_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Model::clear_id() {
+inline void Entity::clear_id() {
   id_ = 0u;
   clear_has_id();
 }
-inline ::google::protobuf::uint32 Model::id() const {
+inline ::google::protobuf::uint32 Entity::id() const {
   return id_;
 }
-inline void Model::set_id(::google::protobuf::uint32 value) {
+inline void Entity::set_id(::google::protobuf::uint32 value) {
   set_has_id();
   id_ = value;
 }
 
 // required .nde.pb.Vector3f position = 2;
-inline bool Model::has_position() const {
+inline bool Entity::has_position() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Model::set_has_position() {
+inline void Entity::set_has_position() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Model::clear_has_position() {
+inline void Entity::clear_has_position() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Model::clear_position() {
+inline void Entity::clear_position() {
   if (position_ != NULL) position_->::nde::pb::Vector3f::Clear();
   clear_has_position();
 }
-inline const ::nde::pb::Vector3f& Model::position() const {
+inline const ::nde::pb::Vector3f& Entity::position() const {
   return position_ != NULL ? *position_ : *default_instance_->position_;
 }
-inline ::nde::pb::Vector3f* Model::mutable_position() {
+inline ::nde::pb::Vector3f* Entity::mutable_position() {
   set_has_position();
   if (position_ == NULL) position_ = new ::nde::pb::Vector3f;
   return position_;
 }
-inline ::nde::pb::Vector3f* Model::release_position() {
+inline ::nde::pb::Vector3f* Entity::release_position() {
   clear_has_position();
   ::nde::pb::Vector3f* temp = position_;
   position_ = NULL;
@@ -1547,28 +1547,28 @@ inline ::nde::pb::Vector3f* Model::release_position() {
 }
 
 // required .nde.pb.Vector3f direction = 3;
-inline bool Model::has_direction() const {
+inline bool Entity::has_direction() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Model::set_has_direction() {
+inline void Entity::set_has_direction() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Model::clear_has_direction() {
+inline void Entity::clear_has_direction() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void Model::clear_direction() {
+inline void Entity::clear_direction() {
   if (direction_ != NULL) direction_->::nde::pb::Vector3f::Clear();
   clear_has_direction();
 }
-inline const ::nde::pb::Vector3f& Model::direction() const {
+inline const ::nde::pb::Vector3f& Entity::direction() const {
   return direction_ != NULL ? *direction_ : *default_instance_->direction_;
 }
-inline ::nde::pb::Vector3f* Model::mutable_direction() {
+inline ::nde::pb::Vector3f* Entity::mutable_direction() {
   set_has_direction();
   if (direction_ == NULL) direction_ = new ::nde::pb::Vector3f;
   return direction_;
 }
-inline ::nde::pb::Vector3f* Model::release_direction() {
+inline ::nde::pb::Vector3f* Entity::release_direction() {
   clear_has_direction();
   ::nde::pb::Vector3f* temp = direction_;
   direction_ = NULL;
@@ -1576,23 +1576,23 @@ inline ::nde::pb::Vector3f* Model::release_direction() {
 }
 
 // required uint32 mesh = 4;
-inline bool Model::has_mesh() const {
+inline bool Entity::has_mesh() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void Model::set_has_mesh() {
+inline void Entity::set_has_mesh() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void Model::clear_has_mesh() {
+inline void Entity::clear_has_mesh() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void Model::clear_mesh() {
+inline void Entity::clear_mesh() {
   mesh_ = 0u;
   clear_has_mesh();
 }
-inline ::google::protobuf::uint32 Model::mesh() const {
+inline ::google::protobuf::uint32 Entity::mesh() const {
   return mesh_;
 }
-inline void Model::set_mesh(::google::protobuf::uint32 value) {
+inline void Entity::set_mesh(::google::protobuf::uint32 value) {
   set_has_mesh();
   mesh_ = value;
 }
@@ -1760,29 +1760,29 @@ Assets::mutable_mesh() {
   return &mesh_;
 }
 
-// repeated .nde.pb.Model model = 5;
-inline int Assets::model_size() const {
-  return model_.size();
+// repeated .nde.pb.Entity entity = 5;
+inline int Assets::entity_size() const {
+  return entity_.size();
 }
-inline void Assets::clear_model() {
-  model_.Clear();
+inline void Assets::clear_entity() {
+  entity_.Clear();
 }
-inline const ::nde::pb::Model& Assets::model(int index) const {
-  return model_.Get(index);
+inline const ::nde::pb::Entity& Assets::entity(int index) const {
+  return entity_.Get(index);
 }
-inline ::nde::pb::Model* Assets::mutable_model(int index) {
-  return model_.Mutable(index);
+inline ::nde::pb::Entity* Assets::mutable_entity(int index) {
+  return entity_.Mutable(index);
 }
-inline ::nde::pb::Model* Assets::add_model() {
-  return model_.Add();
+inline ::nde::pb::Entity* Assets::add_entity() {
+  return entity_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Model >&
-Assets::model() const {
-  return model_;
+inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity >&
+Assets::entity() const {
+  return entity_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Model >*
-Assets::mutable_model() {
-  return &model_;
+inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity >*
+Assets::mutable_entity() {
+  return &entity_;
 }
 
 // repeated .nde.pb.Camera camera = 6;

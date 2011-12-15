@@ -9,7 +9,7 @@
 #include "resources/Assets.hpp"
 #include "resources/Material.hpp"
 #include "resources/Mesh.hpp"
-#include "resources/Model.hpp"
+#include "game/Entity.hpp"
 #include "game/Camera.hpp"
 #include "math/vector.hpp"
 #include "graphics/Face.hpp"
@@ -18,6 +18,10 @@
 
 namespace nde
 {
+
+Vector3f* V(pb::Vector3f& v) {
+	return new Vector3f(v.x(), v.y(), v.z());
+}
 
 pb::Assets*
 LoadPBAssetsFromText(const std::string& file)
@@ -41,48 +45,57 @@ ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
 {
 	for (int i = 0; i < pbassets->material_size(); ++i) {
 		pb::Material* mat = pbassets->mutable_material(i);
-		Material* xmat = new Material(mat->id(), mat->file());
-		assets->materials.push_back(xmat);
+		assets->allocMaterial(mat->id(), mat->file());
 	}
 	
 	for (int i = 0; i < pbassets->uvmap_size(); ++i) {
 		pb::Mesh* mesh = pbassets->mutable_mesh(i);
 		
-		Mesh* xmesh = new Mesh();
-		xmesh->id = mesh->id();
+		Mesh* xmesh = assets->allocMesh();
 		
 		for (int j = 0; j < mesh->vertex_size(); ++j) {
 			pb::Vector3f v = mesh->vertex(j);
 			
-			Vector3f xv;
-			xv.x = v.x();
-			xv.y = v.y();
-			xv.z = v.z();
-			
-			xmesh->vertices.push_back(xv);
+			xmesh->vertices.push_back(V(v));
 		}
 		
 		for (int j = 0; j < mesh->face_size(); ++j) {
 			pb::Face f = mesh->face(j);
 			
-			Face xf;
-			xf.vertexes.push_back(&xmesh->vertices[f.a()]);
-			xf.vertexes.push_back(&xmesh->vertices[f.b()]);
-			xf.vertexes.push_back(&xmesh->vertices[f.c()]);
+			Face* xf = new Face();
+			xf->vertexes.push_back(xmesh->vertices[f.a()]);
+			xf->vertexes.push_back(xmesh->vertices[f.b()]);
+			xf->vertexes.push_back(xmesh->vertices[f.c()]);
 			
 			xmesh->faces.push_back(xf);
 		}
 		
 		assets->meshes.push_back(xmesh);
 	}
-#if 0 // TODO implement these
-	for (int i = 0; i < pbassets->uvmap_size(); ++i) {
-		pb::Model* mod = pbassets->mutable_model(i);
+
+	for (int i = 0; i < pbassets->entity_size(); ++i) {
+		pb::Entity* mod = pbassets->mutable_entity(i);
 		
+		Entity* e = new Entity();
+
+		pb::Vector3f pos = mod->position();
+		pb::Vector3f dir = mod->direction();
 		
+		Vector3f* tmppos = V(pos);
+		Vector3f* tmpdir = V(pos);
+
+		e->setOrigin(*tmppos);
+		e->setOrientation(*tmpdir);
+
+		delete tmppos;
+		delete tmpdir;
+
+		assets->entities.push_back(e);
 	}
-	
-	for (int i = 0; i < pbassets->uvmap_size(); ++i) {
+
+
+#if 0 // TODO implement these
+	for (int i = 0; i < pbassets->camera_size(); ++i) {
 		pb::Camera* cam = pbassets->mutable_camera(i);
 		
 		
@@ -93,6 +106,7 @@ ConvertPBAssets(pb::Assets* pbassets, Assets* assets)
 		// TODO: Merge this into the Faces; texture, uv coords
 	}
 #endif
+
 }
 
 void

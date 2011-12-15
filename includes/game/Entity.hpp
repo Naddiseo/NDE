@@ -10,7 +10,7 @@ protected:
 	btRigidBody* body; // body in the physics engine
 	btScalar mass;
 	btTransform location;
-	Mesh mesh; // body in the 3d engine
+	Mesh* mesh; // body in the 3d engine
 
 	btAlignedObjectArray<btCollisionShape*> collisionShapes;
 public:
@@ -19,6 +19,7 @@ public:
 
 	void setMass(btScalar _mass) { mass = _mass; }
 	void setOrigin(Vector3f origin) { location.setOrigin(origin); }
+	void setOrientation(Vector3f origin) { }
 	void addCollisionShape(btCollisionShape* shape);
 
 	void tick();

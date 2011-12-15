@@ -16,7 +16,7 @@ namespace nde {
 
 
 
-Game::Game() : assets(), world(), renderer(), camera(), event(), fov(70) {
+Game::Game() : assets(), world(), renderer(), camera(), event(), fov(70), haserror(false), errstr() {
 
 	camera.move({
 		SGET_F("cam_x"),
@@ -47,7 +47,7 @@ Game::handleEvents() {
 		case SDL_MOUSEMOTION:
 			camera.onMouseMotion(event.motion);
 			break;
-		case SDL_MOUSEWHEEL:
+		case SDL_MOUSEBUTTONUP:
 			if (event.button.button == SDL_BUTTON_WHEELUP) {
 				fov -= 1;
 			}
@@ -116,7 +116,7 @@ Game::handleEvents() {
 					camera.rotateZ(-camera.getRotZ());
 				}
 				break;
-			case SDLK_PRINTSCREEN: {
+			case SDLK_PRINT: {
 				int width = SGET_I("WIDTH");
 				int height = SGET_I("HEIGHT");
 				unsigned char* imageData = new unsigned char[width * height * 4];
@@ -213,7 +213,7 @@ Game::mainLoop() {
 	int height = SGET_I("HEIGHT");
 	int width = SGET_I("WIDTH");
 
-	for (;;) {
+	while (!haserror) {
 
 		glMatrixMode( GL_PROJECTION );
 		glLoadIdentity();

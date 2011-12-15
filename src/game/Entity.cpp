@@ -3,12 +3,14 @@
 
 namespace nde {
 
-Entity::Entity() : body(NULL), mass(0.0),  collisionShapes() {
+Entity::Entity() : body(NULL), mass(0.0), collisionShapes() {
 
 	location.setIdentity();
 }
 
 Entity::~Entity() {
+	// mesh will be deleted in assets.cpp
+
 	for (int j=0;j<collisionShapes.size();j++) {
 		btCollisionShape* shape = collisionShapes[j];
 		collisionShapes[j] = 0;
@@ -35,7 +37,7 @@ void Entity::tick() {
 		newPos = trans.getOrigin();
 
 		predraw();
-		mesh.render(newPos);
+		mesh->render(newPos);
 		postdraw();
 	}
 }
