@@ -8,7 +8,7 @@ CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DWINDOWS -DNDEBUG=1 -std=c++0x -Wall -Werr
 
 CFLAGS=-g -I./includes
 
-GAME_FILES=Camera.cpp Entity.cpp Game.cpp Settings.cpp Scene.cpp World.cpp
+GAME_FILES=Camera.cpp Entity.cpp Game.cpp Scene.cpp Settings.cpp World.cpp
 GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 
 GRAPHICS_FILES=Color.cpp Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
