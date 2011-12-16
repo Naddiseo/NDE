@@ -4,13 +4,14 @@
 #include <vector>
 
 #include "common.hpp"
+#include "resources/Material.hpp"
+#include "resources/UVMap.hpp"
+#include "resources/Mesh.hpp"
 #include "graphics/Color.hpp"
+
 
 namespace nde {
 
-class Material;
-class UVMap;
-class Mesh;
 class Camera;
 
 class Assets {
@@ -50,6 +51,7 @@ template<typename ...Args>
 Material* Assets::allocMaterial(Args&&... params) {
 	Material* ret = new Material(std::forward<Args>(params)...);
 	materials.push_back(ret);
+	ret->setId(materials.size() - 1);
 	return ret;
 }
 
@@ -57,6 +59,7 @@ template<typename ...Args>
 UVMap* Assets::allocUVMap(Args&&... params) {
 	UVMap* ret = new UVMap(std::forward<Args>(params)...);
 	uvmaps.push_back(ret);
+	ret->setId(uvmaps.size() - 1);
 	return ret;
 }
 
@@ -66,6 +69,7 @@ template<typename ...Args>
 Mesh* Assets::allocMesh(Args&&... params) {
 	Mesh* ret = new Mesh(std::forward<Args>(params)...);
 	meshes.push_back(ret);
+	ret->setId(meshes.size() - 1);
 	return ret;
 }
 /*

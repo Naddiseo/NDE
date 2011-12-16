@@ -60,10 +60,8 @@ loadTexture(const std::string& path) {
 Material::Material() {}
 
 Material::Material(const std::string& file)
-	: index(0), image_id(loadTexture(file)), file(file) { index = getId(); }
+	: image_id(loadTexture(file)), file(file) {}
 
-Material::Material(size_t index, const std::string& file)
-	: index(index), image_id(loadTexture(file)), file(file) {}
 
 Material::~Material() {
 	if (image_id > 0) {

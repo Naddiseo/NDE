@@ -6,6 +6,5 @@
  */
 #include "HasId.hpp"
 
-size_t HasId::creationCounter = 0;
 
 

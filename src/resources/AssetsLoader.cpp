@@ -44,7 +44,7 @@ ConvertPBAssets(pb::Assets* pbassets, Assets& assets)
 	message_list_t ret;
 	for (int i = 0; i < pbassets->material_size(); ++i) {
 		pb::Material* mat = pbassets->mutable_material(i);
-		Material* m = assets.allocMaterial((size_t)mat->id(), mat->file());
+		Material* m = assets.allocMaterial(mat->file());
 		ret.push_back(m);
 	}
 	

@@ -2,11 +2,9 @@
 #include <cstddef>
 
 class HasId {
-	static size_t creationCounter ;
 	size_t id;
 public:
 
-	HasId() { id = ++creationCounter; }
-
+	void setId(size_t _id) { id = _id; }
 	size_t getId() const { return id; }
 };

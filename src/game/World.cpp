@@ -6,7 +6,7 @@ namespace nde {
 World::World()
 	: scene(), collisionShapes(), entities() {
 
-	collisionConfig = new btDefaultCollisionConfiguration();
+/*	collisionConfig = new btDefaultCollisionConfiguration();
 	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
 	dispatcher = new	btCollisionDispatcher(collisionConfig);
 
@@ -84,7 +84,7 @@ World::World()
 			dynamicsWorld->addRigidBody(body);
 	}
 
-
+*/
 
 }
 
@@ -93,7 +93,7 @@ World::~World() {
 	//cleanup in the reverse order of creation/initialization
 
 	//remove the rigidbodies from the dynamics world and delete them
-	for (int i=dynamicsWorld->getNumCollisionObjects()-1; i>=0 ;i--)
+	/*for (int i=dynamicsWorld->getNumCollisionObjects()-1; i>=0 ;i--)
 	{
 		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
 		btRigidBody* body = btRigidBody::upcast(obj);
@@ -112,20 +112,20 @@ World::~World() {
 		collisionShapes[j] = 0;
 		delete shape;
 	}
-
+*/
 	for (Entity* e : entities) {
 		delete e;
 	}
 
-	delete dynamicsWorld;
-	delete solver;
-	delete overlappingPairCache;
-	delete dispatcher;
-	delete collisionConfig;
+//	delete dynamicsWorld;
+//	delete solver;
+	//delete overlappingPairCache;
+	//delete dispatcher;
+	//delete collisionConfig;
 }
 
 void World::addRigidBody(btRigidBody* body) {
-	dynamicsWorld->addRigidBody(body);
+	//dynamicsWorld->addRigidBody(body);
 }
 
 void World::step() {
