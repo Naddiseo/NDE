@@ -44,7 +44,7 @@ public:
 	GLuint loadMaterial(const std::string& path);
 
 	Color* getColor(std::string name) { return colors[name]; }
-	Mesh* getMesh(size_t id) { return meshes[id-1]; }
+	Mesh* getMesh(size_t id) { return meshes[id]; }
 };
 
 template<typename ...Args>

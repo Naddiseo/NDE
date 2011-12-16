@@ -37,7 +37,7 @@ void Entity::tick() {
 		newPos = trans.getOrigin();
 	}
 	predraw();
-	//mesh->render(newPos);
+	mesh->render(newPos);
 	postdraw();
 
 }

@@ -21,7 +21,7 @@ OBJECTS=src/resources/pb/resource.pb.o $(SOURCES:.cpp=.o)
 
 all: clear library test01
 
-test01: tests/test01.o
+test01: libNDE.a tests/test01.o
 	$(CXX)  $^ -L ./ -lNDE $(LINKFLAGS)  $(CXXFLAGS)   -o nde.bin
 
 library: libNDE.a
