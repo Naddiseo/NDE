@@ -16,7 +16,10 @@ namespace nde {
 
 
 
-Game::Game() : assets(), world(), renderer(), camera(), event(), fov(70), haserror(false), errstr() {
+Game::Game()
+	: assets(), world(), renderer(),
+	  camera(), event(), fov(70),
+	  haserror(false), shutdown(false), errstr() {
 
 	camera.move({
 		SGET_F("cam_x"),
@@ -42,7 +45,8 @@ Game::handleEvents() {
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
-			exit(0);
+			shutdown = true;
+			return;
 			break;
 		case SDL_MOUSEMOTION:
 			camera.onMouseMotion(event.motion);
@@ -56,17 +60,18 @@ Game::handleEvents() {
 			}
 			break;
 		case SDL_KEYDOWN:
+		case SDL_KEYUP:
 			if ((event.key.keysym.mod & KMOD_LSHIFT) == KMOD_LSHIFT) {
 				speed = 15.0;
 			}
 			else {
 				speed = 1.0;
 			}
-
-			switch (event.key.keysym.sym) {
+			switch ((short)event.key.keysym.sym) {
 			case SDLK_ESCAPE:
 			case SDLK_q:
-				exit(0);
+				shutdown = true;
+				return;
 				break;
 			case SDLK_UP:
 				camera.rotateX(3);
@@ -223,7 +228,7 @@ Game::mainLoop() {
 	assets.allocColor("black", 0.f, 0.f, 0.f);
 	assets.allocColor("white", 1.f, 1.f, 1.f);
 
-	while (!haserror) {
+	while (!(haserror || shutdown)) {
 
 		glMatrixMode( GL_PROJECTION );
 		glLoadIdentity();
@@ -238,8 +243,8 @@ Game::mainLoop() {
 		glLoadIdentity();
 
 
-		camera.render();
-		world.step();
+		//camera.render();
+		//world.step();
 
 
 
@@ -261,14 +266,18 @@ Game::mainLoop() {
 		}
 		*/
 
-		for (Entity* r : world.getScene().getToRender()) {
-			r->tick();
-		}
+		//for (Entity* r : world.getScene().getToRender()) {
+		//	r->tick();
+		//}
 
-		drawAxis();
+		//drawAxis();
 
 		glFlush();
 		SDL_GL_SwapBuffers();
+	}
+
+	if (haserror) {
+		std::cerr << "Game Error: " << errstr << std::endl;
 	}
 }
 
