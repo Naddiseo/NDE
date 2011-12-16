@@ -10,7 +10,6 @@ namespace nde {
 
 class Material;
 class UVMap;
-class Entity;
 class Mesh;
 class Camera;
 
@@ -18,7 +17,6 @@ class Assets {
 
 	std::vector<Material*> materials;
 	std::vector<UVMap*> uvmaps;
-	std::vector<Entity*> entities;
 	std::vector<Mesh*> meshes;
 	std::vector<Camera*> cameras;
 	std::map<std::string, Color*> colors;
@@ -34,9 +32,6 @@ public:
 	UVMap* allocUVMap(Args&&... params);
 
 	template<typename ...Args>
-	Entity* allocEntity(Args&&... params);
-
-	template<typename ...Args>
 	Mesh* allocMesh(Args&&... params);
 
 	/*template<typename ...Args>
@@ -48,6 +43,7 @@ public:
 	GLuint loadMaterial(const std::string& path);
 
 	Color* getColor(std::string name) { return colors[name]; }
+	Mesh* getMesh(size_t id) { return meshes[id-1]; }
 };
 
 template<typename ...Args>
@@ -64,12 +60,7 @@ UVMap* Assets::allocUVMap(Args&&... params) {
 	return ret;
 }
 
-template<typename ...Args>
-Entity* Assets::allocEntity(Args&&... params) {
-	Entity* ret = new Entity(std::forward<Args>(params)...);
-	entities.push_back(ret);
-	return ret;
-}
+
 
 template<typename ...Args>
 Mesh* Assets::allocMesh(Args&&... params) {

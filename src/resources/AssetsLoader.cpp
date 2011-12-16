@@ -9,15 +9,13 @@
 #include "resources/Assets.hpp"
 #include "resources/Material.hpp"
 #include "resources/Mesh.hpp"
-#include "game/Entity.hpp"
 #include "game/Camera.hpp"
 #include "math/vector.hpp"
 #include "graphics/Face.hpp"
 
 #include "proto.hpp"
 
-namespace nde
-{
+namespace nde {
 
 Vector3f* V(pb::Vector3f& v) {
 	return new Vector3f(v.x(), v.y(), v.z());
@@ -40,12 +38,14 @@ LoadPBAssetsFromText(const std::string& file)
 }
 
 // TODO: Need a map to get Messages by id
-void
+message_list_t
 ConvertPBAssets(pb::Assets* pbassets, Assets& assets)
 {
+	message_list_t ret;
 	for (int i = 0; i < pbassets->material_size(); ++i) {
 		pb::Material* mat = pbassets->mutable_material(i);
-		assets.allocMaterial((size_t)mat->id(), mat->file());
+		Material* m = assets.allocMaterial((size_t)mat->id(), mat->file());
+		ret.push_back(m);
 	}
 	
 	for (int i = 0; i < pbassets->mesh_size(); ++i) {
@@ -68,36 +68,32 @@ ConvertPBAssets(pb::Assets* pbassets, Assets& assets)
 			xf->vertexes.push_back((Vector3f*)xmesh->vertices[f.c()]);
 			
 		}
-	}
-
-	for (int i = 0; i < pbassets->entity_size(); ++i) {
-		pb::Entity* mod = pbassets->mutable_entity(i);
 		
-		Entity* e = assets.allocEntity();
 
-		pb::Vector3f pos = mod->position();
-		pb::Vector3f dir = mod->direction();
+		pb::Vector3f pos = mesh->position();
+		pb::Vector3f dir = mesh->direction();
 		
 		Vector3f* tmppos = V(pos);
 		Vector3f* tmpdir = V(pos);
 
-		e->setOrigin(*tmppos);
-		e->setOrientation(*tmpdir);
+		xmesh->setOrigin(*tmppos);
+		xmesh->setOrientation(*tmpdir);
 
-		delete tmppos;
-		delete tmpdir;
-
+		ret.push_back(xmesh);
 	}
 
 	for (int i = 0; i < pbassets->color_size(); ++i) {
 		pb::Color* c = pbassets->mutable_color(i);
+		Color* col;
 
 		if (c->has_a()) {
-			assets.allocColor(c->name(), c->r(), c->g(), c->b(), c->a());
+			col = assets.allocColor(c->name(), c->r(), c->g(), c->b(), c->a());
 		}
 		else {
-			assets.allocColor(c->name(), c->r(), c->g(), c->b());
+			col = assets.allocColor(c->name(), c->r(), c->g(), c->b());
 		}
+
+		ret.push_back(col);
 	}
 
 
@@ -114,21 +110,24 @@ ConvertPBAssets(pb::Assets* pbassets, Assets& assets)
 	}
 #endif
 
+	return ret;
 }
 
-void
+message_list_t
 LoadAssetsFromText(const std::string& file, Assets& assets)
 {
 	pb::Assets* pbassets = LoadPBAssetsFromText(file);
+	message_list_t ret;
 	
 	if (pbassets == 0) {
 		std::cerr << "Failed to parse assets." << std::endl;
-		return;
+		return ret;
 	}
 	
-	ConvertPBAssets(pbassets, assets);
+	ret = ConvertPBAssets(pbassets, assets);
 	
 	delete pbassets;
+	return ret;
 }
 
 

@@ -14,6 +14,9 @@ class World {
 	btSequentialImpulseConstraintSolver* solver;
 	btDiscreteDynamicsWorld* dynamicsWorld;
 
+
+
+	std::vector<Entity*> entities;
 public:
 	World();
 	virtual ~World();
@@ -22,9 +25,20 @@ public:
 
 	void step();
 
+	template<typename ...Args>
+	Entity* allocEntity(Args&&... params);
+
+
 	Scene& getScene() { return scene; }
 private:
 
 };
+
+template<typename ...Args>
+Entity* World::allocEntity(Args&&... params) {
+	Entity* ret = new Entity(std::forward<Args>(params)...);
+	entities.push_back(ret);
+	return ret;
+}
 
 } // namespace nde

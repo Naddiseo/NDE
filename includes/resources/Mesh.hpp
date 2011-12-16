@@ -9,16 +9,21 @@
 namespace nde {
 
 class Mesh : public HasId {
+	Vector3f origin;
+	Vector3f orientation;
 public:
 	std::vector<Vector3f*> vertices;
 	std::vector<Face*> faces;
 
-	Mesh() : vertices(), faces() {}
+	Mesh() : origin(), orientation(), vertices(), faces() {}
 	virtual ~Mesh();
 
 	virtual void render(Vector3f& translate);
 
 	virtual Vector3f* add(scalar x, scalar y, scalar z);
+
+	void setOrigin(Vector3f _origin) { origin = _origin; }
+	void setOrientation(Vector3f _orientation) { orientation = _orientation; }
 
 	template<typename ...Args>
 	Face* allocFace(Args&&... params);

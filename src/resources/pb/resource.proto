@@ -32,15 +32,10 @@ message UVMap {
 
 message Mesh {
 	required uint32 id = 1;
-	repeated Vector3f vertex = 2;
-	repeated Face face = 3;
-}
-
-message Entity {
-	required uint32 id = 1;
 	required Vector3f position = 2;
 	required Vector3f direction = 3;
-	required uint32 mesh = 4;
+	repeated Vector3f vertex = 4;
+	repeated Face face = 5;
 }
 
 message Camera {
@@ -62,7 +57,6 @@ message Assets {
 	repeated Material material = 2;
 	repeated UVMap uvmap = 3;
 	repeated Mesh mesh = 4;
-	repeated Entity entity = 5;
-	repeated Camera camera = 6;
-	repeated Color color = 7;
+	repeated Camera camera = 5;
+	repeated Color color = 6;
 }

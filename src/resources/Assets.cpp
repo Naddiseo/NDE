@@ -7,12 +7,10 @@
 
 namespace nde {
 
-Assets::Assets() : materials(), uvmaps(), entities(), meshes(), cameras(), colors() {}
+Assets::Assets() : materials(), uvmaps(), meshes(), cameras(), colors() {}
 
 Assets::~Assets() {
-	for (Entity* e : entities) {
-		delete e;
-	}
+
 	for (Mesh* m : meshes) {
 		delete m;
 	}

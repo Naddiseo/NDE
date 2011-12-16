@@ -36,9 +36,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* Mesh_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Mesh_reflection_ = NULL;
-const ::google::protobuf::Descriptor* Entity_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  Entity_reflection_ = NULL;
 const ::google::protobuf::Descriptor* Camera_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Camera_reflection_ = NULL;
@@ -144,8 +141,10 @@ void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UVMap));
   Mesh_descriptor_ = file->message_type(5);
-  static const int Mesh_offsets_[3] = {
+  static const int Mesh_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mesh, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mesh, position_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mesh, direction_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mesh, vertex_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mesh, face_),
   };
@@ -160,25 +159,7 @@ void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Mesh));
-  Entity_descriptor_ = file->message_type(6);
-  static const int Entity_offsets_[4] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, position_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, direction_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, mesh_),
-  };
-  Entity_reflection_ =
-    new ::google::protobuf::internal::GeneratedMessageReflection(
-      Entity_descriptor_,
-      Entity::default_instance_,
-      Entity_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, _unknown_fields_),
-      -1,
-      ::google::protobuf::DescriptorPool::generated_pool(),
-      ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(Entity));
-  Camera_descriptor_ = file->message_type(7);
+  Camera_descriptor_ = file->message_type(6);
   static const int Camera_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Camera, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Camera, position_),
@@ -195,7 +176,7 @@ void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Camera));
-  Color_descriptor_ = file->message_type(8);
+  Color_descriptor_ = file->message_type(7);
   static const int Color_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Color, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Color, name_),
@@ -215,12 +196,11 @@ void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Color));
-  Assets_descriptor_ = file->message_type(9);
-  static const int Assets_offsets_[6] = {
+  Assets_descriptor_ = file->message_type(8);
+  static const int Assets_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, material_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, uvmap_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, mesh_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, entity_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, camera_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Assets, color_),
   };
@@ -260,8 +240,6 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Mesh_descriptor_, &Mesh::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    Entity_descriptor_, &Entity::default_instance());
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Camera_descriptor_, &Camera::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Color_descriptor_, &Color::default_instance());
@@ -284,8 +262,6 @@ void protobuf_ShutdownFile_src_2fresources_2fpb_2fresource_2eproto() {
   delete UVMap_reflection_;
   delete Mesh::default_instance_;
   delete Mesh_reflection_;
-  delete Entity::default_instance_;
-  delete Entity_reflection_;
   delete Camera::default_instance_;
   delete Camera_reflection_;
   delete Color::default_instance_;
@@ -308,21 +284,19 @@ void protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto() {
     "le\030\002 \001(\t\"\'\n\004Face\022\t\n\001a\030\001 \002(\r\022\t\n\001b\030\002 \002(\r\022\t"
     "\n\001c\030\003 \002(\r\"N\n\005UVMap\022\n\n\002id\030\001 \002(\r\022\020\n\010materi"
     "al\030\002 \002(\r\022\014\n\004mesh\030\003 \002(\r\022\031\n\005coord\030\004 \003(\0132\n."
-    "nde.pb.UV\"P\n\004Mesh\022\n\n\002id\030\001 \002(\r\022 \n\006vertex\030"
-    "\002 \003(\0132\020.nde.pb.Vector3f\022\032\n\004face\030\003 \003(\0132\014."
-    "nde.pb.Face\"k\n\006Entity\022\n\n\002id\030\001 \002(\r\022\"\n\010pos"
-    "ition\030\002 \002(\0132\020.nde.pb.Vector3f\022#\n\tdirecti"
-    "on\030\003 \002(\0132\020.nde.pb.Vector3f\022\014\n\004mesh\030\004 \002(\r"
-    "\"]\n\006Camera\022\n\n\002id\030\001 \002(\r\022\"\n\010position\030\002 \002(\013"
-    "2\020.nde.pb.Vector3f\022#\n\tdirection\030\003 \002(\0132\020."
-    "nde.pb.Vector3f\"M\n\005Color\022\n\n\002id\030\001 \002(\r\022\014\n\004"
-    "name\030\002 \002(\t\022\t\n\001r\030\003 \002(\002\022\t\n\001g\030\004 \002(\002\022\t\n\001b\030\005 "
-    "\002(\002\022\t\n\001a\030\006 \001(\002\"\304\001\n\006Assets\022\"\n\010material\030\002 "
-    "\003(\0132\020.nde.pb.Material\022\034\n\005uvmap\030\003 \003(\0132\r.n"
-    "de.pb.UVMap\022\032\n\004mesh\030\004 \003(\0132\014.nde.pb.Mesh\022"
-    "\036\n\006entity\030\005 \003(\0132\016.nde.pb.Entity\022\036\n\006camer"
-    "a\030\006 \003(\0132\016.nde.pb.Camera\022\034\n\005color\030\007 \003(\0132\r"
-    ".nde.pb.Color", 853);
+    "nde.pb.UV\"\231\001\n\004Mesh\022\n\n\002id\030\001 \002(\r\022\"\n\010positi"
+    "on\030\002 \002(\0132\020.nde.pb.Vector3f\022#\n\tdirection\030"
+    "\003 \002(\0132\020.nde.pb.Vector3f\022 \n\006vertex\030\004 \003(\0132"
+    "\020.nde.pb.Vector3f\022\032\n\004face\030\005 \003(\0132\014.nde.pb"
+    ".Face\"]\n\006Camera\022\n\n\002id\030\001 \002(\r\022\"\n\010position\030"
+    "\002 \002(\0132\020.nde.pb.Vector3f\022#\n\tdirection\030\003 \002"
+    "(\0132\020.nde.pb.Vector3f\"M\n\005Color\022\n\n\002id\030\001 \002("
+    "\r\022\014\n\004name\030\002 \002(\t\022\t\n\001r\030\003 \002(\002\022\t\n\001g\030\004 \002(\002\022\t\n"
+    "\001b\030\005 \002(\002\022\t\n\001a\030\006 \001(\002\"\244\001\n\006Assets\022\"\n\010materi"
+    "al\030\002 \003(\0132\020.nde.pb.Material\022\034\n\005uvmap\030\003 \003("
+    "\0132\r.nde.pb.UVMap\022\032\n\004mesh\030\004 \003(\0132\014.nde.pb."
+    "Mesh\022\036\n\006camera\030\005 \003(\0132\016.nde.pb.Camera\022\034\n\005"
+    "color\030\006 \003(\0132\r.nde.pb.Color", 786);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "src/resources/pb/resource.proto", &protobuf_RegisterTypes);
   Vector3f::default_instance_ = new Vector3f();
@@ -331,7 +305,6 @@ void protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto() {
   Face::default_instance_ = new Face();
   UVMap::default_instance_ = new UVMap();
   Mesh::default_instance_ = new Mesh();
-  Entity::default_instance_ = new Entity();
   Camera::default_instance_ = new Camera();
   Color::default_instance_ = new Color();
   Assets::default_instance_ = new Assets();
@@ -341,7 +314,6 @@ void protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto() {
   Face::default_instance_->InitAsDefaultInstance();
   UVMap::default_instance_->InitAsDefaultInstance();
   Mesh::default_instance_->InitAsDefaultInstance();
-  Entity::default_instance_->InitAsDefaultInstance();
   Camera::default_instance_->InitAsDefaultInstance();
   Color::default_instance_->InitAsDefaultInstance();
   Assets::default_instance_->InitAsDefaultInstance();
@@ -1810,6 +1782,8 @@ void UVMap::Swap(UVMap* other) {
 
 #ifndef _MSC_VER
 const int Mesh::kIdFieldNumber;
+const int Mesh::kPositionFieldNumber;
+const int Mesh::kDirectionFieldNumber;
 const int Mesh::kVertexFieldNumber;
 const int Mesh::kFaceFieldNumber;
 #endif  // !_MSC_VER
@@ -1820,6 +1794,8 @@ Mesh::Mesh()
 }
 
 void Mesh::InitAsDefaultInstance() {
+  position_ = const_cast< ::nde::pb::Vector3f*>(&::nde::pb::Vector3f::default_instance());
+  direction_ = const_cast< ::nde::pb::Vector3f*>(&::nde::pb::Vector3f::default_instance());
 }
 
 Mesh::Mesh(const Mesh& from)
@@ -1831,6 +1807,8 @@ Mesh::Mesh(const Mesh& from)
 void Mesh::SharedCtor() {
   _cached_size_ = 0;
   id_ = 0u;
+  position_ = NULL;
+  direction_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1840,6 +1818,8 @@ Mesh::~Mesh() {
 
 void Mesh::SharedDtor() {
   if (this != default_instance_) {
+    delete position_;
+    delete direction_;
   }
 }
 
@@ -1866,6 +1846,12 @@ Mesh* Mesh::New() const {
 void Mesh::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     id_ = 0u;
+    if (has_position()) {
+      if (position_ != NULL) position_->::nde::pb::Vector3f::Clear();
+    }
+    if (has_direction()) {
+      if (direction_ != NULL) direction_->::nde::pb::Vector3f::Clear();
+    }
   }
   vertex_.Clear();
   face_.Clear();
@@ -1874,313 +1860,6 @@ void Mesh::Clear() {
 }
 
 bool Mesh::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
-  ::google::protobuf::uint32 tag;
-  while ((tag = input->ReadTag()) != 0) {
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required uint32 id = 1;
-      case 1: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &id_)));
-          set_has_id();
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(18)) goto parse_vertex;
-        break;
-      }
-      
-      // repeated .nde.pb.Vector3f vertex = 2;
-      case 2: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_vertex:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_vertex()));
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(18)) goto parse_vertex;
-        if (input->ExpectTag(26)) goto parse_face;
-        break;
-      }
-      
-      // repeated .nde.pb.Face face = 3;
-      case 3: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_face:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_face()));
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(26)) goto parse_face;
-        if (input->ExpectAtEnd()) return true;
-        break;
-      }
-      
-      default: {
-      handle_uninterpreted:
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          return true;
-        }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, mutable_unknown_fields()));
-        break;
-      }
-    }
-  }
-  return true;
-#undef DO_
-}
-
-void Mesh::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // required uint32 id = 1;
-  if (has_id()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
-  }
-  
-  // repeated .nde.pb.Vector3f vertex = 2;
-  for (int i = 0; i < this->vertex_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      2, this->vertex(i), output);
-  }
-  
-  // repeated .nde.pb.Face face = 3;
-  for (int i = 0; i < this->face_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      3, this->face(i), output);
-  }
-  
-  if (!unknown_fields().empty()) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        unknown_fields(), output);
-  }
-}
-
-::google::protobuf::uint8* Mesh::SerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
-  // required uint32 id = 1;
-  if (has_id()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
-  }
-  
-  // repeated .nde.pb.Vector3f vertex = 2;
-  for (int i = 0; i < this->vertex_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        2, this->vertex(i), target);
-  }
-  
-  // repeated .nde.pb.Face face = 3;
-  for (int i = 0; i < this->face_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        3, this->face(i), target);
-  }
-  
-  if (!unknown_fields().empty()) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        unknown_fields(), target);
-  }
-  return target;
-}
-
-int Mesh::ByteSize() const {
-  int total_size = 0;
-  
-  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required uint32 id = 1;
-    if (has_id()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->id());
-    }
-    
-  }
-  // repeated .nde.pb.Vector3f vertex = 2;
-  total_size += 1 * this->vertex_size();
-  for (int i = 0; i < this->vertex_size(); i++) {
-    total_size +=
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->vertex(i));
-  }
-  
-  // repeated .nde.pb.Face face = 3;
-  total_size += 1 * this->face_size();
-  for (int i = 0; i < this->face_size(); i++) {
-    total_size +=
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->face(i));
-  }
-  
-  if (!unknown_fields().empty()) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        unknown_fields());
-  }
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = total_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void Mesh::MergeFrom(const ::google::protobuf::Message& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  const Mesh* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const Mesh*>(
-      &from);
-  if (source == NULL) {
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-    MergeFrom(*source);
-  }
-}
-
-void Mesh::MergeFrom(const Mesh& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  vertex_.MergeFrom(from.vertex_);
-  face_.MergeFrom(from.face_);
-  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_id()) {
-      set_id(from.id());
-    }
-  }
-  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
-}
-
-void Mesh::CopyFrom(const ::google::protobuf::Message& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void Mesh::CopyFrom(const Mesh& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool Mesh::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-  
-  for (int i = 0; i < vertex_size(); i++) {
-    if (!this->vertex(i).IsInitialized()) return false;
-  }
-  for (int i = 0; i < face_size(); i++) {
-    if (!this->face(i).IsInitialized()) return false;
-  }
-  return true;
-}
-
-void Mesh::Swap(Mesh* other) {
-  if (other != this) {
-    std::swap(id_, other->id_);
-    vertex_.Swap(&other->vertex_);
-    face_.Swap(&other->face_);
-    std::swap(_has_bits_[0], other->_has_bits_[0]);
-    _unknown_fields_.Swap(&other->_unknown_fields_);
-    std::swap(_cached_size_, other->_cached_size_);
-  }
-}
-
-::google::protobuf::Metadata Mesh::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Mesh_descriptor_;
-  metadata.reflection = Mesh_reflection_;
-  return metadata;
-}
-
-
-// ===================================================================
-
-#ifndef _MSC_VER
-const int Entity::kIdFieldNumber;
-const int Entity::kPositionFieldNumber;
-const int Entity::kDirectionFieldNumber;
-const int Entity::kMeshFieldNumber;
-#endif  // !_MSC_VER
-
-Entity::Entity()
-  : ::google::protobuf::Message() {
-  SharedCtor();
-}
-
-void Entity::InitAsDefaultInstance() {
-  position_ = const_cast< ::nde::pb::Vector3f*>(&::nde::pb::Vector3f::default_instance());
-  direction_ = const_cast< ::nde::pb::Vector3f*>(&::nde::pb::Vector3f::default_instance());
-}
-
-Entity::Entity(const Entity& from)
-  : ::google::protobuf::Message() {
-  SharedCtor();
-  MergeFrom(from);
-}
-
-void Entity::SharedCtor() {
-  _cached_size_ = 0;
-  id_ = 0u;
-  position_ = NULL;
-  direction_ = NULL;
-  mesh_ = 0u;
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-}
-
-Entity::~Entity() {
-  SharedDtor();
-}
-
-void Entity::SharedDtor() {
-  if (this != default_instance_) {
-    delete position_;
-    delete direction_;
-  }
-}
-
-void Entity::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ::google::protobuf::Descriptor* Entity::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return Entity_descriptor_;
-}
-
-const Entity& Entity::default_instance() {
-  if (default_instance_ == NULL) protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto();  return *default_instance_;
-}
-
-Entity* Entity::default_instance_ = NULL;
-
-Entity* Entity::New() const {
-  return new Entity;
-}
-
-void Entity::Clear() {
-  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    id_ = 0u;
-    if (has_position()) {
-      if (position_ != NULL) position_->::nde::pb::Vector3f::Clear();
-    }
-    if (has_direction()) {
-      if (direction_ != NULL) direction_->::nde::pb::Vector3f::Clear();
-    }
-    mesh_ = 0u;
-  }
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->Clear();
-}
-
-bool Entity::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
@@ -2225,22 +1904,36 @@ bool Entity::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(32)) goto parse_mesh;
+        if (input->ExpectTag(34)) goto parse_vertex;
         break;
       }
       
-      // required uint32 mesh = 4;
+      // repeated .nde.pb.Vector3f vertex = 4;
       case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
-         parse_mesh:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &mesh_)));
-          set_has_mesh();
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_vertex:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_vertex()));
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(34)) goto parse_vertex;
+        if (input->ExpectTag(42)) goto parse_face;
+        break;
+      }
+      
+      // repeated .nde.pb.Face face = 5;
+      case 5: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_face:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_face()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(42)) goto parse_face;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -2261,7 +1954,7 @@ bool Entity::MergePartialFromCodedStream(
 #undef DO_
 }
 
-void Entity::SerializeWithCachedSizes(
+void Mesh::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // required uint32 id = 1;
   if (has_id()) {
@@ -2280,9 +1973,16 @@ void Entity::SerializeWithCachedSizes(
       3, this->direction(), output);
   }
   
-  // required uint32 mesh = 4;
-  if (has_mesh()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->mesh(), output);
+  // repeated .nde.pb.Vector3f vertex = 4;
+  for (int i = 0; i < this->vertex_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, this->vertex(i), output);
+  }
+  
+  // repeated .nde.pb.Face face = 5;
+  for (int i = 0; i < this->face_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, this->face(i), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -2291,7 +1991,7 @@ void Entity::SerializeWithCachedSizes(
   }
 }
 
-::google::protobuf::uint8* Entity::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* Mesh::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // required uint32 id = 1;
   if (has_id()) {
@@ -2312,9 +2012,18 @@ void Entity::SerializeWithCachedSizes(
         3, this->direction(), target);
   }
   
-  // required uint32 mesh = 4;
-  if (has_mesh()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->mesh(), target);
+  // repeated .nde.pb.Vector3f vertex = 4;
+  for (int i = 0; i < this->vertex_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        4, this->vertex(i), target);
+  }
+  
+  // repeated .nde.pb.Face face = 5;
+  for (int i = 0; i < this->face_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, this->face(i), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -2324,7 +2033,7 @@ void Entity::SerializeWithCachedSizes(
   return target;
 }
 
-int Entity::ByteSize() const {
+int Mesh::ByteSize() const {
   int total_size = 0;
   
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -2349,14 +2058,23 @@ int Entity::ByteSize() const {
           this->direction());
     }
     
-    // required uint32 mesh = 4;
-    if (has_mesh()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->mesh());
-    }
-    
   }
+  // repeated .nde.pb.Vector3f vertex = 4;
+  total_size += 1 * this->vertex_size();
+  for (int i = 0; i < this->vertex_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->vertex(i));
+  }
+  
+  // repeated .nde.pb.Face face = 5;
+  total_size += 1 * this->face_size();
+  for (int i = 0; i < this->face_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->face(i));
+  }
+  
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -2368,10 +2086,10 @@ int Entity::ByteSize() const {
   return total_size;
 }
 
-void Entity::MergeFrom(const ::google::protobuf::Message& from) {
+void Mesh::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const Entity* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const Entity*>(
+  const Mesh* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Mesh*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -2380,8 +2098,10 @@ void Entity::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void Entity::MergeFrom(const Entity& from) {
+void Mesh::MergeFrom(const Mesh& from) {
   GOOGLE_CHECK_NE(&from, this);
+  vertex_.MergeFrom(from.vertex_);
+  face_.MergeFrom(from.face_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_id()) {
       set_id(from.id());
@@ -2392,27 +2112,24 @@ void Entity::MergeFrom(const Entity& from) {
     if (from.has_direction()) {
       mutable_direction()->::nde::pb::Vector3f::MergeFrom(from.direction());
     }
-    if (from.has_mesh()) {
-      set_mesh(from.mesh());
-    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void Entity::CopyFrom(const ::google::protobuf::Message& from) {
+void Mesh::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Entity::CopyFrom(const Entity& from) {
+void Mesh::CopyFrom(const Mesh& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Entity::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+bool Mesh::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
   
   if (has_position()) {
     if (!this->position().IsInitialized()) return false;
@@ -2420,26 +2137,33 @@ bool Entity::IsInitialized() const {
   if (has_direction()) {
     if (!this->direction().IsInitialized()) return false;
   }
+  for (int i = 0; i < vertex_size(); i++) {
+    if (!this->vertex(i).IsInitialized()) return false;
+  }
+  for (int i = 0; i < face_size(); i++) {
+    if (!this->face(i).IsInitialized()) return false;
+  }
   return true;
 }
 
-void Entity::Swap(Entity* other) {
+void Mesh::Swap(Mesh* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     std::swap(position_, other->position_);
     std::swap(direction_, other->direction_);
-    std::swap(mesh_, other->mesh_);
+    vertex_.Swap(&other->vertex_);
+    face_.Swap(&other->face_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata Entity::GetMetadata() const {
+::google::protobuf::Metadata Mesh::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Entity_descriptor_;
-  metadata.reflection = Entity_reflection_;
+  metadata.descriptor = Mesh_descriptor_;
+  metadata.reflection = Mesh_reflection_;
   return metadata;
 }
 
@@ -3171,7 +2895,6 @@ void Color::Swap(Color* other) {
 const int Assets::kMaterialFieldNumber;
 const int Assets::kUvmapFieldNumber;
 const int Assets::kMeshFieldNumber;
-const int Assets::kEntityFieldNumber;
 const int Assets::kCameraFieldNumber;
 const int Assets::kColorFieldNumber;
 #endif  // !_MSC_VER
@@ -3228,7 +2951,6 @@ void Assets::Clear() {
   material_.Clear();
   uvmap_.Clear();
   mesh_.Clear();
-  entity_.Clear();
   camera_.Clear();
   color_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -3282,27 +3004,12 @@ bool Assets::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(34)) goto parse_mesh;
-        if (input->ExpectTag(42)) goto parse_entity;
+        if (input->ExpectTag(42)) goto parse_camera;
         break;
       }
       
-      // repeated .nde.pb.Entity entity = 5;
+      // repeated .nde.pb.Camera camera = 5;
       case 5: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_entity:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_entity()));
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(42)) goto parse_entity;
-        if (input->ExpectTag(50)) goto parse_camera;
-        break;
-      }
-      
-      // repeated .nde.pb.Camera camera = 6;
-      case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_camera:
@@ -3311,13 +3018,13 @@ bool Assets::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(50)) goto parse_camera;
-        if (input->ExpectTag(58)) goto parse_color;
+        if (input->ExpectTag(42)) goto parse_camera;
+        if (input->ExpectTag(50)) goto parse_color;
         break;
       }
       
-      // repeated .nde.pb.Color color = 7;
-      case 7: {
+      // repeated .nde.pb.Color color = 6;
+      case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_color:
@@ -3326,7 +3033,7 @@ bool Assets::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(58)) goto parse_color;
+        if (input->ExpectTag(50)) goto parse_color;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -3367,22 +3074,16 @@ void Assets::SerializeWithCachedSizes(
       4, this->mesh(i), output);
   }
   
-  // repeated .nde.pb.Entity entity = 5;
-  for (int i = 0; i < this->entity_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, this->entity(i), output);
-  }
-  
-  // repeated .nde.pb.Camera camera = 6;
+  // repeated .nde.pb.Camera camera = 5;
   for (int i = 0; i < this->camera_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      6, this->camera(i), output);
+      5, this->camera(i), output);
   }
   
-  // repeated .nde.pb.Color color = 7;
+  // repeated .nde.pb.Color color = 6;
   for (int i = 0; i < this->color_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      7, this->color(i), output);
+      6, this->color(i), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -3414,25 +3115,18 @@ void Assets::SerializeWithCachedSizes(
         4, this->mesh(i), target);
   }
   
-  // repeated .nde.pb.Entity entity = 5;
-  for (int i = 0; i < this->entity_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        5, this->entity(i), target);
-  }
-  
-  // repeated .nde.pb.Camera camera = 6;
+  // repeated .nde.pb.Camera camera = 5;
   for (int i = 0; i < this->camera_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        6, this->camera(i), target);
+        5, this->camera(i), target);
   }
   
-  // repeated .nde.pb.Color color = 7;
+  // repeated .nde.pb.Color color = 6;
   for (int i = 0; i < this->color_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        7, this->color(i), target);
+        6, this->color(i), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -3469,15 +3163,7 @@ int Assets::ByteSize() const {
         this->mesh(i));
   }
   
-  // repeated .nde.pb.Entity entity = 5;
-  total_size += 1 * this->entity_size();
-  for (int i = 0; i < this->entity_size(); i++) {
-    total_size +=
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->entity(i));
-  }
-  
-  // repeated .nde.pb.Camera camera = 6;
+  // repeated .nde.pb.Camera camera = 5;
   total_size += 1 * this->camera_size();
   for (int i = 0; i < this->camera_size(); i++) {
     total_size +=
@@ -3485,7 +3171,7 @@ int Assets::ByteSize() const {
         this->camera(i));
   }
   
-  // repeated .nde.pb.Color color = 7;
+  // repeated .nde.pb.Color color = 6;
   total_size += 1 * this->color_size();
   for (int i = 0; i < this->color_size(); i++) {
     total_size +=
@@ -3521,7 +3207,6 @@ void Assets::MergeFrom(const Assets& from) {
   material_.MergeFrom(from.material_);
   uvmap_.MergeFrom(from.uvmap_);
   mesh_.MergeFrom(from.mesh_);
-  entity_.MergeFrom(from.entity_);
   camera_.MergeFrom(from.camera_);
   color_.MergeFrom(from.color_);
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -3550,9 +3235,6 @@ bool Assets::IsInitialized() const {
   for (int i = 0; i < mesh_size(); i++) {
     if (!this->mesh(i).IsInitialized()) return false;
   }
-  for (int i = 0; i < entity_size(); i++) {
-    if (!this->entity(i).IsInitialized()) return false;
-  }
   for (int i = 0; i < camera_size(); i++) {
     if (!this->camera(i).IsInitialized()) return false;
   }
@@ -3567,7 +3249,6 @@ void Assets::Swap(Assets* other) {
     material_.Swap(&other->material_);
     uvmap_.Swap(&other->uvmap_);
     mesh_.Swap(&other->mesh_);
-    entity_.Swap(&other->entity_);
     camera_.Swap(&other->camera_);
     color_.Swap(&other->color_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);

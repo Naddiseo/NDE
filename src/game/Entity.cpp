@@ -30,16 +30,16 @@ void Entity::addCollisionShape(btCollisionShape* shape) {
 }
 
 void Entity::tick() {
+	Vector3f newPos(0, 0, 0);
 	if (body && body->getMotionState()) {
-		Vector3f newPos;
 		btTransform trans;
 		body->getMotionState()->getWorldTransform(trans);
 		newPos = trans.getOrigin();
-
-		predraw();
-		mesh->render(newPos);
-		postdraw();
 	}
+	predraw();
+	mesh->render(newPos);
+	postdraw();
+
 }
 
 } //namespace nde

@@ -19,7 +19,7 @@ SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES) $(MISC_SOURCES)
 
 OBJECTS=src/resources/pb/resource.pb.o $(SOURCES:.cpp=.o)
 
-all: library test01
+all: clear library test01
 
 test01: tests/test01.o
 	$(CXX)  $^ -L ./ -lNDE $(LINKFLAGS)  $(CXXFLAGS)   -o nde.bin
@@ -45,6 +45,9 @@ src/resources/pb/resource.pb.cc: src/resources/pb/resource.proto
 
 clean:
 	-rm `find . \( -name "*.o" -o -name "*.bin" -o -name "*.so" -o -name "*.a" -o -name "*.yy.c" -o -name "*.pb.h" -o -name "*.pb.cc" -o -name "*.o" -o -name "*.output" \)  -print`
+
+clear:
+	clear
 
 run:
 	./nde.bin 

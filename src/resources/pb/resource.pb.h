@@ -39,7 +39,6 @@ class Material;
 class Face;
 class UVMap;
 class Mesh;
-class Entity;
 class Camera;
 class Color;
 class Assets;
@@ -624,114 +623,6 @@ class Mesh : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 id() const;
   inline void set_id(::google::protobuf::uint32 value);
   
-  // repeated .nde.pb.Vector3f vertex = 2;
-  inline int vertex_size() const;
-  inline void clear_vertex();
-  static const int kVertexFieldNumber = 2;
-  inline const ::nde::pb::Vector3f& vertex(int index) const;
-  inline ::nde::pb::Vector3f* mutable_vertex(int index);
-  inline ::nde::pb::Vector3f* add_vertex();
-  inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Vector3f >&
-      vertex() const;
-  inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Vector3f >*
-      mutable_vertex();
-  
-  // repeated .nde.pb.Face face = 3;
-  inline int face_size() const;
-  inline void clear_face();
-  static const int kFaceFieldNumber = 3;
-  inline const ::nde::pb::Face& face(int index) const;
-  inline ::nde::pb::Face* mutable_face(int index);
-  inline ::nde::pb::Face* add_face();
-  inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Face >&
-      face() const;
-  inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Face >*
-      mutable_face();
-  
-  // @@protoc_insertion_point(class_scope:nde.pb.Mesh)
- private:
-  inline void set_has_id();
-  inline void clear_has_id();
-  
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-  
-  ::google::protobuf::RepeatedPtrField< ::nde::pb::Vector3f > vertex_;
-  ::google::protobuf::RepeatedPtrField< ::nde::pb::Face > face_;
-  ::google::protobuf::uint32 id_;
-  
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
-  
-  friend void  protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto();
-  friend void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto();
-  friend void protobuf_ShutdownFile_src_2fresources_2fpb_2fresource_2eproto();
-  
-  void InitAsDefaultInstance();
-  static Mesh* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class Entity : public ::google::protobuf::Message {
- public:
-  Entity();
-  virtual ~Entity();
-  
-  Entity(const Entity& from);
-  
-  inline Entity& operator=(const Entity& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const Entity& default_instance();
-  
-  void Swap(Entity* other);
-  
-  // implements Message ----------------------------------------------
-  
-  Entity* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Entity& from);
-  void MergeFrom(const Entity& from);
-  void Clear();
-  bool IsInitialized() const;
-  
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  
-  ::google::protobuf::Metadata GetMetadata() const;
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // required uint32 id = 1;
-  inline bool has_id() const;
-  inline void clear_id();
-  static const int kIdFieldNumber = 1;
-  inline ::google::protobuf::uint32 id() const;
-  inline void set_id(::google::protobuf::uint32 value);
-  
   // required .nde.pb.Vector3f position = 2;
   inline bool has_position() const;
   inline void clear_position();
@@ -748,14 +639,31 @@ class Entity : public ::google::protobuf::Message {
   inline ::nde::pb::Vector3f* mutable_direction();
   inline ::nde::pb::Vector3f* release_direction();
   
-  // required uint32 mesh = 4;
-  inline bool has_mesh() const;
-  inline void clear_mesh();
-  static const int kMeshFieldNumber = 4;
-  inline ::google::protobuf::uint32 mesh() const;
-  inline void set_mesh(::google::protobuf::uint32 value);
+  // repeated .nde.pb.Vector3f vertex = 4;
+  inline int vertex_size() const;
+  inline void clear_vertex();
+  static const int kVertexFieldNumber = 4;
+  inline const ::nde::pb::Vector3f& vertex(int index) const;
+  inline ::nde::pb::Vector3f* mutable_vertex(int index);
+  inline ::nde::pb::Vector3f* add_vertex();
+  inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Vector3f >&
+      vertex() const;
+  inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Vector3f >*
+      mutable_vertex();
   
-  // @@protoc_insertion_point(class_scope:nde.pb.Entity)
+  // repeated .nde.pb.Face face = 5;
+  inline int face_size() const;
+  inline void clear_face();
+  static const int kFaceFieldNumber = 5;
+  inline const ::nde::pb::Face& face(int index) const;
+  inline ::nde::pb::Face* mutable_face(int index);
+  inline ::nde::pb::Face* add_face();
+  inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Face >&
+      face() const;
+  inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Face >*
+      mutable_face();
+  
+  // @@protoc_insertion_point(class_scope:nde.pb.Mesh)
  private:
   inline void set_has_id();
   inline void clear_has_id();
@@ -763,25 +671,24 @@ class Entity : public ::google::protobuf::Message {
   inline void clear_has_position();
   inline void set_has_direction();
   inline void clear_has_direction();
-  inline void set_has_mesh();
-  inline void clear_has_mesh();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::nde::pb::Vector3f* position_;
-  ::google::protobuf::uint32 id_;
-  ::google::protobuf::uint32 mesh_;
   ::nde::pb::Vector3f* direction_;
+  ::google::protobuf::RepeatedPtrField< ::nde::pb::Vector3f > vertex_;
+  ::google::protobuf::RepeatedPtrField< ::nde::pb::Face > face_;
+  ::google::protobuf::uint32 id_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
   
   friend void  protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto();
   friend void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto();
   friend void protobuf_ShutdownFile_src_2fresources_2fpb_2fresource_2eproto();
   
   void InitAsDefaultInstance();
-  static Entity* default_instance_;
+  static Mesh* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -1115,22 +1022,10 @@ class Assets : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Mesh >*
       mutable_mesh();
   
-  // repeated .nde.pb.Entity entity = 5;
-  inline int entity_size() const;
-  inline void clear_entity();
-  static const int kEntityFieldNumber = 5;
-  inline const ::nde::pb::Entity& entity(int index) const;
-  inline ::nde::pb::Entity* mutable_entity(int index);
-  inline ::nde::pb::Entity* add_entity();
-  inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity >&
-      entity() const;
-  inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity >*
-      mutable_entity();
-  
-  // repeated .nde.pb.Camera camera = 6;
+  // repeated .nde.pb.Camera camera = 5;
   inline int camera_size() const;
   inline void clear_camera();
-  static const int kCameraFieldNumber = 6;
+  static const int kCameraFieldNumber = 5;
   inline const ::nde::pb::Camera& camera(int index) const;
   inline ::nde::pb::Camera* mutable_camera(int index);
   inline ::nde::pb::Camera* add_camera();
@@ -1139,10 +1034,10 @@ class Assets : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Camera >*
       mutable_camera();
   
-  // repeated .nde.pb.Color color = 7;
+  // repeated .nde.pb.Color color = 6;
   inline int color_size() const;
   inline void clear_color();
-  static const int kColorFieldNumber = 7;
+  static const int kColorFieldNumber = 6;
   inline const ::nde::pb::Color& color(int index) const;
   inline ::nde::pb::Color* mutable_color(int index);
   inline ::nde::pb::Color* add_color();
@@ -1159,12 +1054,11 @@ class Assets : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::nde::pb::Material > material_;
   ::google::protobuf::RepeatedPtrField< ::nde::pb::UVMap > uvmap_;
   ::google::protobuf::RepeatedPtrField< ::nde::pb::Mesh > mesh_;
-  ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity > entity_;
   ::google::protobuf::RepeatedPtrField< ::nde::pb::Camera > camera_;
   ::google::protobuf::RepeatedPtrField< ::nde::pb::Color > color_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
   
   friend void  protobuf_AddDesc_src_2fresources_2fpb_2fresource_2eproto();
   friend void protobuf_AssignDesc_src_2fresources_2fpb_2fresource_2eproto();
@@ -1591,7 +1485,65 @@ inline void Mesh::set_id(::google::protobuf::uint32 value) {
   id_ = value;
 }
 
-// repeated .nde.pb.Vector3f vertex = 2;
+// required .nde.pb.Vector3f position = 2;
+inline bool Mesh::has_position() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Mesh::set_has_position() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Mesh::clear_has_position() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Mesh::clear_position() {
+  if (position_ != NULL) position_->::nde::pb::Vector3f::Clear();
+  clear_has_position();
+}
+inline const ::nde::pb::Vector3f& Mesh::position() const {
+  return position_ != NULL ? *position_ : *default_instance_->position_;
+}
+inline ::nde::pb::Vector3f* Mesh::mutable_position() {
+  set_has_position();
+  if (position_ == NULL) position_ = new ::nde::pb::Vector3f;
+  return position_;
+}
+inline ::nde::pb::Vector3f* Mesh::release_position() {
+  clear_has_position();
+  ::nde::pb::Vector3f* temp = position_;
+  position_ = NULL;
+  return temp;
+}
+
+// required .nde.pb.Vector3f direction = 3;
+inline bool Mesh::has_direction() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Mesh::set_has_direction() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Mesh::clear_has_direction() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Mesh::clear_direction() {
+  if (direction_ != NULL) direction_->::nde::pb::Vector3f::Clear();
+  clear_has_direction();
+}
+inline const ::nde::pb::Vector3f& Mesh::direction() const {
+  return direction_ != NULL ? *direction_ : *default_instance_->direction_;
+}
+inline ::nde::pb::Vector3f* Mesh::mutable_direction() {
+  set_has_direction();
+  if (direction_ == NULL) direction_ = new ::nde::pb::Vector3f;
+  return direction_;
+}
+inline ::nde::pb::Vector3f* Mesh::release_direction() {
+  clear_has_direction();
+  ::nde::pb::Vector3f* temp = direction_;
+  direction_ = NULL;
+  return temp;
+}
+
+// repeated .nde.pb.Vector3f vertex = 4;
 inline int Mesh::vertex_size() const {
   return vertex_.size();
 }
@@ -1616,7 +1568,7 @@ Mesh::mutable_vertex() {
   return &vertex_;
 }
 
-// repeated .nde.pb.Face face = 3;
+// repeated .nde.pb.Face face = 5;
 inline int Mesh::face_size() const {
   return face_.size();
 }
@@ -1639,112 +1591,6 @@ Mesh::face() const {
 inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Face >*
 Mesh::mutable_face() {
   return &face_;
-}
-
-// -------------------------------------------------------------------
-
-// Entity
-
-// required uint32 id = 1;
-inline bool Entity::has_id() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void Entity::set_has_id() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void Entity::clear_has_id() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void Entity::clear_id() {
-  id_ = 0u;
-  clear_has_id();
-}
-inline ::google::protobuf::uint32 Entity::id() const {
-  return id_;
-}
-inline void Entity::set_id(::google::protobuf::uint32 value) {
-  set_has_id();
-  id_ = value;
-}
-
-// required .nde.pb.Vector3f position = 2;
-inline bool Entity::has_position() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void Entity::set_has_position() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void Entity::clear_has_position() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void Entity::clear_position() {
-  if (position_ != NULL) position_->::nde::pb::Vector3f::Clear();
-  clear_has_position();
-}
-inline const ::nde::pb::Vector3f& Entity::position() const {
-  return position_ != NULL ? *position_ : *default_instance_->position_;
-}
-inline ::nde::pb::Vector3f* Entity::mutable_position() {
-  set_has_position();
-  if (position_ == NULL) position_ = new ::nde::pb::Vector3f;
-  return position_;
-}
-inline ::nde::pb::Vector3f* Entity::release_position() {
-  clear_has_position();
-  ::nde::pb::Vector3f* temp = position_;
-  position_ = NULL;
-  return temp;
-}
-
-// required .nde.pb.Vector3f direction = 3;
-inline bool Entity::has_direction() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void Entity::set_has_direction() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void Entity::clear_has_direction() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void Entity::clear_direction() {
-  if (direction_ != NULL) direction_->::nde::pb::Vector3f::Clear();
-  clear_has_direction();
-}
-inline const ::nde::pb::Vector3f& Entity::direction() const {
-  return direction_ != NULL ? *direction_ : *default_instance_->direction_;
-}
-inline ::nde::pb::Vector3f* Entity::mutable_direction() {
-  set_has_direction();
-  if (direction_ == NULL) direction_ = new ::nde::pb::Vector3f;
-  return direction_;
-}
-inline ::nde::pb::Vector3f* Entity::release_direction() {
-  clear_has_direction();
-  ::nde::pb::Vector3f* temp = direction_;
-  direction_ = NULL;
-  return temp;
-}
-
-// required uint32 mesh = 4;
-inline bool Entity::has_mesh() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void Entity::set_has_mesh() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void Entity::clear_has_mesh() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void Entity::clear_mesh() {
-  mesh_ = 0u;
-  clear_has_mesh();
-}
-inline ::google::protobuf::uint32 Entity::mesh() const {
-  return mesh_;
-}
-inline void Entity::set_mesh(::google::protobuf::uint32 value) {
-  set_has_mesh();
-  mesh_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -2082,32 +1928,7 @@ Assets::mutable_mesh() {
   return &mesh_;
 }
 
-// repeated .nde.pb.Entity entity = 5;
-inline int Assets::entity_size() const {
-  return entity_.size();
-}
-inline void Assets::clear_entity() {
-  entity_.Clear();
-}
-inline const ::nde::pb::Entity& Assets::entity(int index) const {
-  return entity_.Get(index);
-}
-inline ::nde::pb::Entity* Assets::mutable_entity(int index) {
-  return entity_.Mutable(index);
-}
-inline ::nde::pb::Entity* Assets::add_entity() {
-  return entity_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity >&
-Assets::entity() const {
-  return entity_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::nde::pb::Entity >*
-Assets::mutable_entity() {
-  return &entity_;
-}
-
-// repeated .nde.pb.Camera camera = 6;
+// repeated .nde.pb.Camera camera = 5;
 inline int Assets::camera_size() const {
   return camera_.size();
 }
@@ -2132,7 +1953,7 @@ Assets::mutable_camera() {
   return &camera_;
 }
 
-// repeated .nde.pb.Color color = 7;
+// repeated .nde.pb.Color color = 6;
 inline int Assets::color_size() const {
   return color_.size();
 }

@@ -19,7 +19,6 @@ public:
 	virtual void predraw();
 	virtual void postdraw();
 
-	std::string id() { return "skybox"; }
 };
 
 } /* namespace nde */

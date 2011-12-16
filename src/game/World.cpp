@@ -4,7 +4,7 @@
 namespace nde {
 
 World::World()
-	: scene(), collisionShapes() {
+	: scene(), collisionShapes(), entities() {
 
 	collisionConfig = new btDefaultCollisionConfiguration();
 	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
@@ -112,6 +112,11 @@ World::~World() {
 		collisionShapes[j] = 0;
 		delete shape;
 	}
+
+	for (Entity* e : entities) {
+		delete e;
+	}
+
 	delete dynamicsWorld;
 	delete solver;
 	delete overlappingPairCache;
