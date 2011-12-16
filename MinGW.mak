@@ -1,7 +1,9 @@
 MINGWDIR=C:/MinGW
+MINGWINC=$(MINGWDIR)/include
 CXX=$(MINGWDIR)/bin/g++
-INCFLAGS=-I$(WINGWDIR)/include -I. -I./includes 
-LINKFLAGS=-lopengl32 -lSDL -lglu32 -lILU -lIL -static-libgcc -static-libstdc++ -pthread -lprotobuf -lz -lpthread 
+BULLETLIBS=-lBulletDynamics -lBulletSoftBody -lBulletCollision -lLinearMath
+INCFLAGS=-I$(MINGWINC) -I$(MINGWINC)/bullet -I. -I./includes
+LINKFLAGS=-lopengl32 -lSDL -lglu32 -lILU -lDevIL $(BULLETLIBS) -static-libgcc -static-libstdc++ -lprotobuf -lz
 CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DWINDOWS -DNDEBUG=1 -std=c++0x -Wall -Werror -Wfatal-errors
 
 CFLAGS=-g -I./includes
