@@ -21,10 +21,11 @@ namespace nde {
 
 
 
-Game::Game()
-	: assets(), world(), renderer(),
-	  camera(), event(), fov(70),
-	  haserror(false), shutdown(false), errstr() {
+Game::Game()  {
+	fov = 70;
+	haserror = false;
+	shutdown = false;
+	errstr = "";
 
 	camera.move({
 		SGET_F("cam_x"),
@@ -151,7 +152,12 @@ Game::handleEvents() {
 }
 
 void Game::drawAxis() {
-	scalar fvViewMatrix[16];
+	scalar fvViewMatrix[16] = {
+		0.f, 0.f, 0.f, 0.f,
+		0.f, 0.f, 0.f, 0.f,
+		0.f, 0.f, 0.f, 0.f,
+		0.f, 0.f, 0.f, 0.f,
+	};
 	scalar cx = 0, cy = 0, l = 1000;
 	scalar xx, xy, yx, yy, zx, zy;
 	static Color* red = assets.getColor("red");
@@ -184,15 +190,15 @@ void Game::drawAxis() {
 	glRotatef (camera.getRotX(), 1,0,0);
 
 	glBegin(GL_LINES);
-	red->set(); // x axis
-	glVertex2d(cx, cy);
-	glVertex2d(cx + xx, cy + xy);
-	green->set(); //y axis
-	glVertex2d(cx, cy);
-	glVertex2d(cx + yx, cy + yy);
-	blue->set();  // z axis
-	glVertex2d(cx, cy);
-	glVertex2d(cx + zx, cy + zy);
+		red->set(); // x axis
+		glVertex2d(cx, cy);
+		glVertex2d(cx + xx, cy + xy);
+		green->set(); //y axis
+		glVertex2d(cx, cy);
+		glVertex2d(cx + yx, cy + yy);
+		blue->set();  // z axis
+		glVertex2d(cx, cy);
+		glVertex2d(cx + zx, cy + zy);
 	glEnd();
 	glColor4f(1,1,1,1);
 	glPopMatrix();
@@ -248,8 +254,8 @@ Game::mainLoop() {
 		glLoadIdentity();
 
 
-		//camera.render();
-		//world.step();
+		camera.render();
+		world.step();
 
 
 
@@ -271,12 +277,11 @@ Game::mainLoop() {
 		}
 		*/
 
-		//for (Entity* r : world.getScene().getToRender()) {
-		//	r->tick();
-		//}
+		for (Entity* r : world.getScene().getToRender()) {
+			r->tick();
+		}
 
-		//drawAxis();
-
+		drawAxis();
 		glFlush();
 		SDL_GL_SwapBuffers();
 	}

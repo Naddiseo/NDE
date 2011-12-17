@@ -7,7 +7,7 @@
 
 namespace nde {
 
-Assets::Assets() : materials(), uvmaps(), meshes(), cameras(), colors() {}
+Assets::Assets() {}
 
 Assets::~Assets() {
 

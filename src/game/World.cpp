@@ -3,8 +3,7 @@
 
 namespace nde {
 
-World::World()
-	: scene(), collisionShapes(), entities() {
+World::World() {
 
 /*	collisionConfig = new btDefaultCollisionConfiguration();
 	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
@@ -89,7 +88,6 @@ World::World()
 }
 
 World::~World() {
-	std::cout << "~World" <<std::endl;
 	//cleanup in the reverse order of creation/initialization
 
 	//remove the rigidbodies from the dynamics world and delete them

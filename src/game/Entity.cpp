@@ -3,7 +3,9 @@
 
 namespace nde {
 
-Entity::Entity() : body(NULL), mass(0.0), collisionShapes() {
+Entity::Entity() {
+	body = NULL;
+	mass = 0.0;
 
 	location.setIdentity();
 }

@@ -2,7 +2,7 @@
 
 namespace nde {
 
-Scene::Scene() : sceneMin(1e10f, 1e10f, 1e10f), sceneMax(-1e10f,-1e10f,-1e10f), sceneCenter(), to_render() {
+Scene::Scene() : sceneMin(1e10f, 1e10f, 1e10f), sceneMax(-1e10f,-1e10f,-1e10f), sceneCenter() {
 }
 
 Scene::~Scene() {

@@ -15,11 +15,14 @@
 #define PIdiv180 3.1415265359/180.0
 
 namespace nde {
-Camera::Camera()
-	:position(0,0,0), direction(0,0,-1),
-	 rot_x(0), rot_y(0), rot_z(0),
-	 phi(0), theta(0),
-	 speed(0.01), sensitivity(0.2) {
+Camera::Camera() : position(0,0,0), direction(0,0,-1) {
+	rot_x = 0.f;
+	rot_y = 0.f;
+	rot_z = 0.f;
+	phi = 0.f;
+	theta = 0.f;
+	speed = 0.01;
+	sensitivity = 0.2;
 	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
 	//SDL_ShowCursor(SDL_DISABLE);
 
@@ -41,9 +44,9 @@ void Camera::render() {
 
 	Vector3f s1, s2;
 
-	s1.x = cos((rot_y + 90) * PIdiv180);
-	s1.z = -sin((rot_y + 90) * PIdiv180);
-	scalar cosX = cos(rot_x * PIdiv180);
+	s1.x = std::cos((rot_y + 90) * PIdiv180);
+	s1.z = -std::sin((rot_y + 90) * PIdiv180);
+	scalar cosX = std::cos(rot_x * PIdiv180);
 
 	s2.x = s1.x * cosX;
 	s2.z = s1.z * cosX;

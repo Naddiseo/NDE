@@ -3,7 +3,7 @@
 
 namespace nde {
 
-Settings::Settings() : settings() {
+Settings::Settings() {
 	settings["HEIGHT"] = "600";
 	settings["WIDTH"] = "800";
 

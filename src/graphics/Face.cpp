@@ -10,7 +10,7 @@
 namespace nde {
 
 Face::Face()
-	: textureid(0), vertexes(), tex_points(), mode(GL_TRIANGLES), col() {}
+	: textureid(0), mode(GL_TRIANGLES), col() {}
 
 Face::~Face() {
 	// Mesh will delete vertexes

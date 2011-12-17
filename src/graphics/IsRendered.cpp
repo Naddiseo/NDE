@@ -4,7 +4,7 @@
 
 namespace nde {
 
-IsRendered::IsRendered() : faces() {}
+IsRendered::IsRendered() {}
 
 IsRendered::~IsRendered() {
 	for (Face* f : faces) {
