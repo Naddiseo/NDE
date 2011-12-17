@@ -19,8 +19,6 @@
 
 namespace nde {
 
-
-
 Game::Game() : fov(70), haserror(false), shutdown(false)  {
 	fov = 70;
 	haserror = false;
@@ -203,7 +201,6 @@ void Game::drawAxis() {
 	glEnd();
 	glColor4f(1,1,1,1);
 	glPopMatrix();
-
 }
 
 void
@@ -241,11 +238,10 @@ Game::mainLoop() {
 	assets.allocColor("white", 1.f, 1.f, 1.f);
 
 	while (!(haserror || shutdown)) {
-
-		glMatrixMode( GL_PROJECTION );
+		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		gluPerspective(fov, width/height, 1, 500);
-		glViewport     (0, 0, width, height);
+		glViewport(0, 0, width, height);
 
 		handleEvents();
 		handleMouse();
@@ -253,8 +249,7 @@ Game::mainLoop() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-
-
+		
 		glBegin(GL_LINES);
 		glColor4f(1, 0, 0, 1);
 			glVertex2d(0, 0);
@@ -269,24 +264,21 @@ Game::mainLoop() {
 
 		camera.render();
 		world.step();
-
-
-
-		/*{
-
-
-				//print positions of all objects
-				for (int j=world.dynamicsWorld->getNumCollisionObjects()-1; j>=0 ;j--)
+		
+		/*
+		{
+			//print positions of all objects
+			for (int j=world.dynamicsWorld->getNumCollisionObjects()-1; j>=0 ;j--)
+			{
+				btCollisionObject* obj = world.dynamicsWorld->getCollisionObjectArray()[j];
+				btRigidBody* body = btRigidBody::upcast(obj);
+				if (body && body->getMotionState())
 				{
-					btCollisionObject* obj = world.dynamicsWorld->getCollisionObjectArray()[j];
-					btRigidBody* body = btRigidBody::upcast(obj);
-					if (body && body->getMotionState())
-					{
-						btTransform trans;
-						body->getMotionState()->getWorldTransform(trans);
-						printf("world pos = %f,%f,%f\n",float(trans.getOrigin().getX()),float(trans.getOrigin().getY()),float(trans.getOrigin().getZ()));
-					}
+					btTransform trans;
+					body->getMotionState()->getWorldTransform(trans);
+					printf("world pos = %f,%f,%f\n",float(trans.getOrigin().getX()),float(trans.getOrigin().getY()),float(trans.getOrigin().getZ()));
 				}
+			}
 		}
 		*/
 

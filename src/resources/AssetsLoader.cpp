@@ -66,10 +66,8 @@ ConvertPBAssets(pb::Assets* pbassets, Assets& assets)
 			xf->vertexes.push_back((Vector3f*)xmesh->vertices[f.a()]);
 			xf->vertexes.push_back((Vector3f*)xmesh->vertices[f.b()]);
 			xf->vertexes.push_back((Vector3f*)xmesh->vertices[f.c()]);
-			
 		}
 		
-
 		pb::Vector3f pos = mesh->position();
 		pb::Vector3f dir = mesh->direction();
 		

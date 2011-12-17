@@ -16,7 +16,8 @@ Mesh::~Mesh() {
 void Mesh::render(Vector3f& translate) {
 	glPushMatrix();
 		glTranslatef(translate.x, translate.y, translate.z);
-
+		glTranslatef(origin.x, origin.y, origin.z);
+		
 		for (Face* face : faces) {
 			face->draw();
 		}
