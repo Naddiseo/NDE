@@ -30,7 +30,7 @@ EXE=test01.exe
 all: library test01
 
 test01: tests/test01.o
-	$(CXX)  $^ -L ./ -lNDE  $(CXXFLAGS) -o $(EXE)
+	$(CXX) $^ -L. -lNDE  $(CXXFLAGS) -o $(EXE)
 
 library: libNDE.a
 
