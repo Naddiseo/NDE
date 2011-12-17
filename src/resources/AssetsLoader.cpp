@@ -114,8 +114,7 @@ ConvertPBAssets(pb::Assets* pbassets, Assets& assets)
 }
 
 message_list_t
-LoadAssetsFromText(const std::string& file, Assets& assets)
-{
+LoadAssetsFromText(const std::string& file, Assets& assets) {
 	pb::Assets* pbassets = LoadPBAssetsFromText(file);
 	message_list_t ret;
 	
@@ -127,6 +126,8 @@ LoadAssetsFromText(const std::string& file, Assets& assets)
 	ret = ConvertPBAssets(pbassets, assets);
 	
 	delete pbassets;
+	google::protobuf::ShutdownProtobufLibrary();
+
 	return ret;
 }
 
