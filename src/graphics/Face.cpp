@@ -77,8 +77,7 @@ void
 Face::hasTexBox() {
 	tex(0, 0);
 	tex(1, 0);
-	tex(1, 1);
-	tex(0, 1);
+	tex(1, 0.5);
 }
 
 } /* namespace nde */

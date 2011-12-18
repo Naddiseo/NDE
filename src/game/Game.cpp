@@ -26,10 +26,9 @@ Game::Game() : fov(70), haserror(false), shutdown(false)  {
 	errorstring = NULL;
 
 	camera.move({
-		0,0,0
-		//SGET_F("cam_x"),
-		//SGET_F("cam_y"),
-		//SGET_F("cam_z")
+		SGET_F("cam_x"),
+		SGET_F("cam_y"),
+		SGET_F("cam_z")
 	});
 
 	camera.rotateX(SGET_F("cam_rot_x"));
@@ -46,7 +45,7 @@ Game::~Game() {}
 
 void
 Game::handleEvents() {
-	//static int speed = 1.0;
+	static int speed = 1.0;
 	while (SDL_PollEvent(&event)) {
 		switch ((short)event.type) {
 		case SDL_QUIT:
@@ -67,12 +66,12 @@ Game::handleEvents() {
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
 			if ((event.key.keysym.mod & KMOD_LSHIFT) == KMOD_LSHIFT) {
-				//speed = 15.0;
+				speed = 15.0;
 			}
 			else {
-				//speed = 1.0;
+				speed = 1.0;
 			}
-			switch ((short)event.key.keysym.sym) {
+			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
 			case SDLK_q:
 				shutdown = true;
@@ -92,27 +91,27 @@ Game::handleEvents() {
 				break;
 			case SDLK_w:
 				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
-					//Vector3f tmp(0, 0.3 * speed, 0);
-					//camera.move(tmp);
+					Vector3f tmp(0, 0.3 * speed, 0);
+					camera.move(tmp);
 				}
 				else {
-					//camera.moveForwards(-0.3 * speed);
+					camera.moveForwards(-0.3 * speed);
 				}
 				break;
 			case SDLK_s:
 				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
-					//Vector3f tmp(0, -0.3 * speed, 0);
-					//camera.move(tmp);
+					Vector3f tmp(0, -0.3 * speed, 0);
+					camera.move(tmp);
 				}
 				else {
-					//camera.moveForwards(0.3 * speed);
+					camera.moveForwards(0.3 * speed);
 				}
 				break;
 			case SDLK_a:
-				//camera.strafeRight(0.1 * speed);
+				camera.strafeRight(0.1 * speed);
 				break;
 			case SDLK_d:
-				//camera.strafeRight(-0.1 * speed);
+				camera.strafeRight(-0.1 * speed);
 				break;
 
 			case SDLK_KP0:
@@ -162,15 +161,7 @@ void Game::drawAxis() {
 	static Color* red = assets.getColor("red");
 	static Color* green = assets.getColor("green");
 	static Color* blue = assets.getColor("blue");
-	glGetFloatv(GL_MODELVIEW_MATRIX, fvViewMatrix);
 
-
-	xx = l * fvViewMatrix[0]+1;
-	xy = l * fvViewMatrix[1]+1;
-	yx = l * fvViewMatrix[4]+1;
-	yy = l * fvViewMatrix[5]+1;
-	zx = l * fvViewMatrix[8]+1;
-	zy = l * fvViewMatrix[9]+1;
 
 	glPushMatrix();
 	glLineWidth(20);
@@ -187,6 +178,16 @@ void Game::drawAxis() {
 	glRotatef (camera.getRotZ(), 0,0,1);   // Viewing rotations.
 	glRotatef (camera.getRotY(), 0,1,0);
 	glRotatef (camera.getRotX(), 1,0,0);
+
+	glGetFloatv(GL_MODELVIEW_MATRIX, fvViewMatrix);
+
+
+	xx = l * fvViewMatrix[0];
+	xy = l * fvViewMatrix[1];
+	yx = l * fvViewMatrix[4];
+	yy = l * fvViewMatrix[5];
+	zx = l * fvViewMatrix[8];
+	zy = l * fvViewMatrix[9];
 
 	glBegin(GL_LINES);
 		red->set(); // x axis
@@ -249,18 +250,6 @@ Game::mainLoop() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		
-		glBegin(GL_LINES);
-		glColor4f(1, 0, 0, 1);
-			glVertex2d(0, 0);
-			glVertex2d(50, 50);
-			glColor4f(0, 1, 0, 1);
-			glVertex2d(50, 50);
-			glVertex2d(100, 200);
-			glColor4f(0, 0, 1, 1);
-			glVertex2d(100, 200);
-			glVertex2d(0, 0);
-		glEnd();
 
 		camera.render();
 		world.step();

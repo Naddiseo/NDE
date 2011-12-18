@@ -27,6 +27,31 @@ SkyBox::SkyBox() {
 		}
 	}
 
+	for (Face* face : mesh->faces) {
+		face->textureid = Game::getInstance().getAssets().loadMaterial("assets/sky.tga");
+		face->tex(.33, 0);
+		face->tex(.66, 0);
+		face->tex(.66, .33);
+
+		face->tex(.33, 0);
+		face->tex(.66, .33);
+		face->tex(.33, .33);
+
+
+		face->tex(.33, .33);
+		face->tex(.66, .66);
+		face->tex(.66, .33);
+
+		face->tex(.33, .33);
+		face->tex(.66, .66);
+		face->tex(.33, .66);
+
+
+		face->tex(.33, .33);
+		face->tex(.66, .66);
+		face->tex(.33, .66);
+	}
+
 	mass = 0.f; // We're a static body
 
 }

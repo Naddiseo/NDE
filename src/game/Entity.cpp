@@ -13,7 +13,7 @@ Entity::Entity() {
 Entity::~Entity() {
 	// mesh will be deleted in assets.cpp
 
-	for (int j=0;j<collisionShapes.size();j++) {
+	for (int j = 0; j < collisionShapes.size(); j++) {
 		btCollisionShape* shape = collisionShapes[j];
 		collisionShapes[j] = 0;
 		delete shape;
@@ -24,7 +24,7 @@ void Entity::addCollisionShape(btCollisionShape* shape) {
 	collisionShapes.push_back(shape);
 
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(location);
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,shape, {0,0,0});
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, {0,0,0});
 	body = new btRigidBody(rbInfo);
 
 	Game::getInstance().getWorld().addRigidBody(body);

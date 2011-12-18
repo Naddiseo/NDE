@@ -11,7 +11,7 @@
 struct Color {
 	std::string name; // If no English name, use HTML hex code.
 	float r, g, b, a;
-	Color() : name("black"), r(.7), g(.7), b(.7), a(1) {}
+	Color() : name("black"), r(.7), g(.6), b(.9), a(1) {}
 	Color(std::string _name) : name(_name), r(0), g(0), b(0), a(1) {}
 	Color(std::string _name, float _r, float _g, float _b)
 		: name(_name), r(_r), g(_g), b(_b), a(1) {}

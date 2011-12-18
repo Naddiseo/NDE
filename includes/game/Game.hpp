@@ -27,7 +27,7 @@ class Game {
 
 	bool haserror;
 	bool shutdown;
-	char* errorstring;
+	const char* errorstring;
 public:
 	static Game& getInstance() {
 		static Game instance;
@@ -43,7 +43,7 @@ public:
 
 	World& getWorld() { return world; }
 
-	void setError(char* errstr) { haserror = true; errorstring = errstr; }
+	void setError(const char* errstr) { haserror = true; errorstring = errstr; }
 
 	void mainLoop();
 private:

@@ -20,6 +20,7 @@
 BEGIN_MAIN {
 	nde::Assets& assets = nde::Game::getInstance().getAssets();
 	assets.loadMaterial("assets/grass.tga"); // preload this
+	assets.loadMaterial("assets/sky.tga"); // preload this
 
 	//nde::Terrain* t = new nde::Terrain(); // Scene will delete this
 	nde::SkyBox* s = new nde::SkyBox();
