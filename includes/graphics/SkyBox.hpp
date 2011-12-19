@@ -13,7 +13,7 @@ namespace nde {
 
 class SkyBox : public Entity {
 public:
-	SkyBox();
+	SkyBox(World* _world);
 	virtual ~SkyBox();
 
 	virtual void predraw();

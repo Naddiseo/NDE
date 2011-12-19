@@ -11,7 +11,7 @@
 
 namespace nde {
 
-SkyBox::SkyBox() {
+SkyBox::SkyBox(World* _world) : Entity(_world) {
 	// top face
 	message_list_t message_list = LoadAssetsFromText("tests/skybox.txt", Game::getInstance().getAssets());
 
@@ -28,28 +28,8 @@ SkyBox::SkyBox() {
 	}
 
 	for (Face* face : mesh->faces) {
-		face->textureid = Game::getInstance().getAssets().loadMaterial("assets/sky.tga");
-		face->tex(.33, 0);
-		face->tex(.66, 0);
-		face->tex(.66, .33);
-
-		face->tex(.33, 0);
-		face->tex(.66, .33);
-		face->tex(.33, .33);
-
-
-		face->tex(.33, .33);
-		face->tex(.66, .66);
-		face->tex(.66, .33);
-
-		face->tex(.33, .33);
-		face->tex(.66, .66);
-		face->tex(.33, .66);
-
-
-		face->tex(.33, .33);
-		face->tex(.66, .66);
-		face->tex(.33, .66);
+		//face->textureid = Game::getInstance().getAssets().loadMaterial("assets/sky.tga");
+		face->col = Color("a", ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX));
 	}
 
 	mass = 0.f; // We're a static body
@@ -60,7 +40,7 @@ SkyBox::~SkyBox() {}
 
 void SkyBox::predraw() {
 	glPushMatrix();
-	glScalef(50, 50, 50);
+	glScalef(100, 100, 100);
 	glTranslated(0, 0, 0);
 }
 void SkyBox::postdraw() {

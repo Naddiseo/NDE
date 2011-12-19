@@ -63,6 +63,9 @@ Game::handleEvents() {
 				fov += 1;
 			}
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			camera.onMouseClick(event.button);
+			break;
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
 			if ((event.key.keysym.mod & KMOD_LSHIFT) == KMOD_LSHIFT) {
@@ -254,8 +257,8 @@ Game::mainLoop() {
 		camera.render();
 		world.step();
 		
-		/*
-		{
+
+		/*{
 			//print positions of all objects
 			for (int j=world.dynamicsWorld->getNumCollisionObjects()-1; j>=0 ;j--)
 			{
@@ -268,8 +271,8 @@ Game::mainLoop() {
 					printf("world pos = %f,%f,%f\n",float(trans.getOrigin().getX()),float(trans.getOrigin().getY()),float(trans.getOrigin().getZ()));
 				}
 			}
-		}
-		*/
+		}*/
+
 
 		for (Entity* r : world.getScene().getToRender()) {
 			r->tick();

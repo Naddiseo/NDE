@@ -22,11 +22,14 @@ public:
 	virtual ~World();
 
 	void addRigidBody(btRigidBody* body);
+	void addCollisionShape(btCollisionShape* shape);
 
 	void step();
 
 	template<typename ...Args>
 	Entity* allocEntity(Args&&... params);
+
+	void shootBox(Vector3f from, Vector3f to);
 
 
 	Scene& getScene() { return scene; }

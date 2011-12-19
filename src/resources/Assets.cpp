@@ -1,3 +1,5 @@
+#include <cstdlib>
+
 #include <GL/gl.h>
 
 #include "resources/Assets.hpp"
@@ -27,6 +29,5 @@ Assets::loadMaterial(const std::string& path) {
 	Material* m = allocMaterial(path);
 	return m->image_id;
 }
-
 
 } //namespace nde

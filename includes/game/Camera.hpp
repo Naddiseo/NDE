@@ -14,6 +14,8 @@ namespace nde {
 class Camera {
 	Vector3f position;
 	Vector3f direction;
+	Vector3f target;
+	int x, y;
 	scalar rot_x, rot_y, rot_z;
 	scalar phi, theta;
 	scalar speed, sensitivity;
@@ -28,6 +30,7 @@ public:
 	void move(Vector3f dir);
 
 	void onMouseMotion(const SDL_MouseMotionEvent& event);
+	void onMouseClick(const SDL_MouseButtonEvent& event);
 
 
 	void rotateX(scalar angle);
@@ -39,6 +42,8 @@ public:
 	float getRotX() const { return rot_x; }
 	float getRotY() const { return rot_y; }
 	float getRotZ() const { return rot_z; }
+
+	Vector3f getRayTo(size_t x, size_t y);
 
 	const Vector3f& getPos() const { return position; }
 

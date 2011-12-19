@@ -8,6 +8,7 @@
 
 #include <cstdlib>
 #include <ctime>
+#include <BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h>
 #include "game/Game.hpp"
 #include "graphics/Face.hpp"
 #include "resources/Terrain.hpp"
@@ -16,105 +17,61 @@ scalar frand(scalar a, scalar b) {
 	return ((b-a) * ((scalar)rand())/RAND_MAX) + a;
 }
 
+char crand(size_t a, size_t b) {
+	return (a + ((b-a) * rand()))%b;
+}
+
 namespace nde {
 
-void createPeak(int x, int y, int w, int h, scalar seed, scalar avg, std::vector<vec_list_t>& points) {
-	w--;
-	h--;
+Terrain::Terrain(World* _world) : Entity(_world), height(1<<5), width(1<<5){
+	heightmap = new scalar[height * width];
+	colormap = new _col[height * width * sizeof(_col)];
 
-	if (x >= w || y >= h) {
-		return;
-	}
-
-	int cx = (w-x)>>1;
-	int cy = (h-y)>>1;
-
-	for (int i = x+1; i < w-1; i++) {
-		for (int j = y+1; j < h-1; j++) {
-			Vector3f* ct = points[i][j];
-			Vector3f* a = points[i-1][j-1];
-			Vector3f* b = points[i-1][j+1];
-			Vector3f* c = points[i+1][j+1];
-			Vector3f* d = points[i+1][j-1];
-			ct->y += 1+ ((a->y + b->y + c->y + d->y)/ 4)*seed*avg;
-		}
-	}
-
-	Vector3f* a = points[x][y];
-	Vector3f* b = points[x][h];
-	Vector3f* c = points[w][h];
-	Vector3f* d = points[w][y];
-
-	//a->y += frand(-seed, +seed) + avg;
-	//b->y += frand(-seed, +seed) + avg;
-	//c->y += frand(-seed, +seed) + avg;
-	//d->y += frand(-seed, +seed) + avg;
-
-	Vector3f* center = points[cx][cy];
-	avg = 1+(a->y + b->y + c->y + d->y)/ 4 * seed * avg;
-	center->y += avg;
-
-	seed /= 2;
-	createPeak(x, y, cx, cy, seed, avg, points);
-	createPeak(cx, cy, w, cy, seed, avg, points);
-	createPeak(x, cy, x, h, seed, avg, points);
-	createPeak(cx, cy, w, h, seed, avg, points);
-
-
-}
-
-Terrain::Terrain() {
-#if 0 // TODO: rewrite to use triangles and Mesh
-	std::vector<vec_list_t> points;
-	const int n_faces = (1<<5);
 	srand(time(NULL));
 
-	std::cout << "Starting Terrain Generation..." << std::flush;
+	for (size_t i = 0; i < height*width; i++) {
+		heightmap[i] = frand(-1.0, 1.0);
+		colormap[i].r = crand(80, 255);
+		colormap[i].g = crand(80, 255);
+		colormap[i].b = crand(80, 255);
 
-	for (int i = 0; i < n_faces; i++) {
-		vec_list_t row;
-		for (int j = 0; j < n_faces; j++) {
-			row.push_back(new Vector3f(i, 0, j));
-		}
-		points.push_back(row);
+		std::cout << (int)colormap[i].r << ", "<< (int)colormap[i].g << ", "<< (int)colormap[i].b << std::endl;
 	}
 
-	//createPeak(0, 0, n_faces>>1, n_faces>>1, 0.1f, 1.5, points);
+	heightfieldShape = new btHeightfieldTerrainShape(
+		width, height, heightmap,
+		5.0,
+		-1.0, 1.0,
+		1,
+		PHY_FLOAT,
+		false
+	);
 
+	addCollisionShape(heightfieldShape);
 
-	for (int i = 0; i < n_faces - 1; i++) {
-		for (int j = 0; j < n_faces - 1; j++) {
-			Face* face = new Face();
-
-			face->vertexes.push_back(points[i][j]);
-			face->vertexes.push_back(points[i+1][j]);
-			face->vertexes.push_back(points[i+1][j+1]);
-			face->vertexes.push_back(points[i][j+1]);
-
-#if 1
-			face->tex_points.push_back(new Vector2f(0,0));
-			face->tex_points.push_back(new Vector2f(0,1));
-			face->tex_points.push_back(new Vector2f(1,1));
-			face->tex_points.push_back(new Vector2f(1,0));
-
-			float avg = face->avgHeight();
-			if (avg < 5) {
-				face->textureid = Game::getInstance().getAssets().loadMaterial("assets/grass.tga");
-			}
-			else if (avg >= 5) {
-				face->textureid = Game::getInstance().getAssets().loadMaterial("assets/snow.tga");
-			}
-#else
-			face->col = Color((rand()%255), (rand()%255), (rand()%255));
-#endif
-			faces.push_back(face);
-		}
-	}
-
-	std::cout << "done." << std::endl;
-#endif
+	mass = 0.0;
 }
 
-Terrain::~Terrain() { }
+void Terrain::tick() {
+	glBegin(GL_QUADS);
+	for (size_t i = 0; i < height-1; i++) {
+		for (size_t j = 0; j < width-1; j++) {
+			_col c = colormap[i * height + j];
+			glColor3b(c.r, c.b, c.g);
+			glVertex3f((float)i,  heightmap[i * height + j], j);
+			glVertex3f((float)i,  heightmap[(i) * height + j+1], j+1);
+			glVertex3f((float)i+1,  heightmap[(i+1) * height + j+1], j+1);
+			glVertex3f((float)i+1,  heightmap[(i+1) * height + j], j);
+		}
+
+	}
+	glEnd();
+}
+
+Terrain::~Terrain() {
+	delete heightfieldShape;
+	delete[] heightmap;
+	delete[] colormap;
+}
 
 } /* namespace nde */

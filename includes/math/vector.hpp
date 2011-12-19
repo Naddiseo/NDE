@@ -209,14 +209,14 @@ public:
 		return *this;
 	}
 
-	Vector3& operator*=(const T other) {
+	Vector3& operator*=(T other) {
 		x *= other;
 		y *= other;
 		z *= other;
 		return *this;
 	}
 
-	Vector3& operator/=(const T other) {
+	Vector3& operator/=(T other) {
 		x /= other;
 		y /= other;
 		z /= other;
@@ -254,10 +254,18 @@ public:
 	T normalise() {
 		T len = length();
 		if (len > 1e-08) {
-			T inverse_len = 1 / length;
-			this *= inverse_len;
+			T inverse_len = (T)1 / (T)len;
+			*this *= inverse_len;
 		}
 		return len;
+	}
+
+	Vector3 cross(const Vector3& other) {
+		return {
+			((y * other.z) - (z * other.y)),
+			((z * other.x) - (x * other.z)),
+			((x * other.y) - (y * other.x))
+		};
 	}
 
 
