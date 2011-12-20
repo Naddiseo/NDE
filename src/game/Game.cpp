@@ -22,21 +22,12 @@
 
 namespace nde {
 
-Game::Game() : fov(70), haserror(false), shutdown(false)  {
-	fov = 70;
-	haserror = false;
-	shutdown = false;
-	errorstring = NULL;
-
-	camera.move({
-		SGET_F("cam_x"),
-		SGET_F("cam_y"),
-		SGET_F("cam_z")
-	});
-
-	camera.rotateX(SGET_F("cam_rot_x"));
-	camera.rotateY(SGET_F("cam_rot_y"));
-	camera.rotateZ(SGET_F("cam_rot_z"));
+Game::Game()
+	: fov(70), haserror(false), shutdown(false), errorstring(0)
+{
+	camera.setPosition(SGET_V("cam_pos"));
+	camera.setUpwardDir(SGET_V("cam_up"));
+	camera.setForwardDir(SGET_V("cam_forward"));
 
 #ifdef WINDOWS
 	HWND hWnd = GetConsoleWindow();
@@ -162,13 +153,13 @@ void Game::drawAxis() {
 		0.f, 0.f, 0.f, 0.f,
 		0.f, 0.f, 0.f, 0.f,
 	};
+	
 	scalar cx = 0, cy = 0, l = 1000;
 	scalar xx, xy, yx, yy, zx, zy;
 	static Color* red = assets.getColor("red");
 	static Color* green = assets.getColor("green");
 	static Color* blue = assets.getColor("blue");
-
-
+	
 	glPushMatrix();
 	glLineWidth(20);
 
@@ -186,8 +177,7 @@ void Game::drawAxis() {
 	glRotatef (camera.getRotX(), 1,0,0);
 
 	glGetFloatv(GL_MODELVIEW_MATRIX, fvViewMatrix);
-
-
+	
 	xx = l * fvViewMatrix[0];
 	xy = l * fvViewMatrix[1];
 	yx = l * fvViewMatrix[4];

@@ -7,15 +7,9 @@ Settings::Settings() {
 	settings["HEIGHT"] = "600";
 	settings["WIDTH"] = "800";
 
-	settings["cam_x"] = "20";
-	settings["cam_y"] = "5";
-	settings["cam_z"] = "20";
-
-	settings["cam_rot_x"] = "45";
-	settings["cam_rot_y"] = "0";
-	settings["cam_rot_z"] = "0";
-
-
+	settings["cam_pos"] = "20 5 20";
+	settings["cam_forward"] = "1 0 1";
+	settings["cam_upward"] = "0 1 0";
 }
 
 Settings::~Settings() {}
@@ -36,6 +30,11 @@ std::string& Settings::get_str(const std::string& key) {
 	return settings[key];
 }
 
-
+Vector3f Settings::get_v3f(const std::string& key) {
+	Vector3f ret;
+	std::istringstream stream(settings[key]);
+	stream >> ret.x >> ret.y >> ret.z;
+	return ret;
+}
 
 } //namespace nde

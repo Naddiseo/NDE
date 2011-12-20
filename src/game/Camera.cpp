@@ -17,28 +17,33 @@
 #define PIdiv180 (PI/180.0)
 
 namespace nde {
-Camera::Camera() : position(0,0,0), direction(0,0,-1) {
+Camera::Camera() : position(0,0,0), forward(0,0,-1) {
 	rot_x = 0.f;
 	rot_y = 0.f;
 	rot_z = 0.f;
-	phi = 0.f;
-	theta = 0.f;
+	
 	speed = 0.01;
 	sensitivity = 0.2;
 	
-	SDL_ShowCursor(SDL_DISABLE);
+	//#ifdef WINDOWS
+		SDL_ShowCursor(SDL_DISABLE);
+	//#endif
+	
 	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
 }
 
 Camera::~Camera() {
-	SDL_ShowCursor(SDL_ENABLE);
+	//#ifdef WINDOWS
+		SDL_ShowCursor(SDL_ENABLE);
+	//#endif
+	
 	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
 }
 
 void Camera::print() {
 	std::cout
 		<< position << " "
-		<< direction << " "
+		<< forward << " "
 		<< "(" << rot_x << "," << rot_y << "," << rot_z << ")" << std::endl;
 }
 
@@ -54,7 +59,7 @@ void Camera::render() {
 	s2.z = s1.z * cosX;
 	s2.y = sin(rot_x * PIdiv180);
 
-	direction = s2;
+	forward = s2;
 
 	glRotatef(-rot_x, 1, 0, 0);
 	glRotatef(-rot_y, 0, 1, 0);
@@ -63,13 +68,13 @@ void Camera::render() {
 }
 
 void Camera::moveForwards(scalar distance) {
-	Vector3f move(direction.x * -distance, direction.y * -distance, direction.z * -distance);
+	Vector3f move(forward.x * -distance, forward.y * -distance, forward.z * -distance);
 
 	position += move;
 }
 
 void Camera::strafeRight(scalar distance) {
-	Vector3f move(direction.z*distance, 0, direction.x * -distance);
+	Vector3f move(forward.z*distance, 0, forward.x * -distance);
 
 	position += move;
 }
@@ -82,26 +87,30 @@ void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
 	scalar dx = event.xrel;
 	scalar dy = event.yrel;
 	
-	rot_y -= event.xrel * sensitivity;
-	rot_x -= event.yrel * sensitivity;
-
-	Vector3f hor = getRayTo(0, 0) - getRayTo(1, 0);
-	Vector3f ver = getRayTo(0, 0) - getRayTo(0, 1);
-	target += hor * dx * 0.001;
-	target += ver * dy * 0.001;
-	
-	//x = event.x;
-	//y = event.y;
+	rot_y -= dx * sensitivity;
+	rot_x -= dy * sensitivity;
 }
-
 
 void Camera::onMouseClick(const SDL_MouseButtonEvent& event) {
 	switch (event.button) {
 	case SDL_BUTTON_RIGHT:
 		Game::getInstance().getWorld().shootBox(position, getRayToFromCenter());
 		break;
-	default:break;
+	default:
+		break;
 	}
+}
+
+void Camera::setPosition(const Vector3f& position) {
+	this->position = position;
+}
+
+void Camera::setUpwardDir(const Vector3f& upward) {
+	this->up = upward;
+}
+
+void Camera::setForwardDir(const Vector3f& forward) {
+	this->forward = forward;
 }
 
 void Camera::rotateX(scalar angle) {
@@ -121,6 +130,8 @@ Vector3f Camera::getRayToFromCenter() {
 }
 
 Vector3f Camera::getRayTo(size_t x, size_t y) {
+	return forward;
+	
 	GLfloat winX, winY, winZ;
 	GLdouble posX, posY, posZ;
 
