@@ -26,12 +26,12 @@ Camera::Camera() : position(0,0,0), direction(0,0,-1) {
 	speed = 0.01;
 	sensitivity = 0.2;
 	
-	SDL_ShowCursor(SDL_DISABLE);
+	//SDL_ShowCursor(SDL_DISABLE);
 	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
 }
 
 Camera::~Camera() {
-	SDL_ShowCursor(SDL_ENABLE);
+	//SDL_ShowCursor(SDL_ENABLE);
 	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
 }
 
@@ -115,49 +115,24 @@ void Camera::rotateZ(scalar angle) {
 }
 
 Vector3f Camera::getRayTo(size_t x, size_t y) {
-	static int width = SGET_I("WIDTH");
-	static int height = SGET_I("HEIGHT");
-	scalar top = 1.f;
-	scalar bottom = -1.f;
-	scalar near = 1.f;
-	scalar tanFov = (top - bottom)* 0.5f / near;
-	scalar fov = 2.0f * std::atan(tanFov);
+	GLfloat winX, winY, winZ;
+	GLdouble posX, posY, posZ;
 
-	Vector3f rayFrom = position;
-	Vector3f rayForward  = target - position;
-	rayForward.normalise();
+	GLint viewport[4];
+	GLdouble modelview[16];
+	GLdouble projection[16];
 
-	float farPlane = 10000.f;
-	rayForward *= farPlane;
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+	glGetDoublev(GL_PROJECTION_MATRIX, projection);
 
-	Vector3f rightOffset;
-	Vector3f vertical(0, 1, 0);
+	winX = (float)x;
+	winY = (float)viewport[3] - (float)y;
+	glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
 
-	Vector3f horizontal = rayForward.cross(vertical);
-	horizontal.normalise();
+	gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
 
-	vertical = horizontal.cross(rayForward);
-	vertical.normalise();
-
-	float tanfov = std::tan(0.5f * fov);
-
-	horizontal *= 2.f * farPlane * tanfov;
-	vertical *= 2.f * farPlane * tanfov;
-
-	scalar aspect = width / (scalar)height;
-
-	horizontal *= aspect;
-
-	Vector3f rayToCenter = rayFrom + rayForward;
-	Vector3f dHorizontal = horizontal /(scalar)width;
-	Vector3f dVertical   = vertical / (scalar)height;
-
-	Vector3f rayTo = rayToCenter;
-	rayTo += (-0.5f * horizontal);// + (0.5f *vertical);
-	rayTo += dHorizontal * (scalar)x;
-	rayTo += dVertical * (scalar)y;
-
-	return rayTo;
+	return Vector3f(posX, posY, posZ);
 }
 
 } /* namespace nde */

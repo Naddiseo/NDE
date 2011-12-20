@@ -75,10 +75,11 @@ World::shootBox(Vector3f from, Vector3f to) {
 	scalar mass = 1.f;
 	btTransform startTransform;
 
+	std::cout << "From " << from << " to " << to << std::endl;
+
 	shape->initializePolyhedralFeatures();
 
 	startTransform.setIdentity();
-	startTransform.setOrigin(from);
 	startTransform.setRotation(btQuaternion(0, 0, 0, 1));
 
 	Entity* box = new Entity(this);
@@ -89,7 +90,7 @@ World::shootBox(Vector3f from, Vector3f to) {
 	box->getWorldTransform().setRotation(btQuaternion(0, 0, 0, 1));
 	Vector3f linVel(to.x-from.x, to.y-from.y, to.z-from.z);
 	linVel.normalise();
-	linVel *= 10.f;
+	linVel *= 25.f;
 	box->createBox(linVel);
 
 	getScene().addRenderObjects(box);

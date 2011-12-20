@@ -212,12 +212,13 @@ void Game::drawAxis() {
 
 void
 Game::handleMouse() {
-	//static int width = SGET_I("WIDTH");
-	//static int height = SGET_I("HEIGHT");
-	//int mouseX = 0, mouseY = 0;
-	//SDL_GetMouseState(&mouseX, &mouseY);
+#ifndef WINDOWS
+	static int width = SGET_I("WIDTH");
+	static int height = SGET_I("HEIGHT");
+	int mouseX = 0, mouseY = 0;
+	SDL_GetMouseState(&mouseX, &mouseY);
 
-	/*if (mouseX < 30) {
+	if (mouseX < 30) {
 		camera.rotateY(1);
 	}
 	else if (mouseX > (width-30)) {
@@ -229,7 +230,8 @@ Game::handleMouse() {
 	}
 	else if (mouseY > (height - 30)) {
 		camera.rotateX(-1);
-	}*/
+	}
+#endif
 }
 
 void
