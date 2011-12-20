@@ -9,7 +9,7 @@
 #include <GL/gl.h>
 
 #include "common.hpp"
-#include "graphics/Color.hpp"
+#include "resources/Color.hpp"
 namespace nde {
 
 class Face {

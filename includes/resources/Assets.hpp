@@ -7,7 +7,7 @@
 #include "resources/Material.hpp"
 #include "resources/UVMap.hpp"
 #include "resources/Mesh.hpp"
-#include "graphics/Color.hpp"
+#include "resources/Color.hpp"
 
 
 namespace nde {
