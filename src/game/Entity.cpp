@@ -1,4 +1,6 @@
 #include "game/Entity.hpp"
+
+#include "game/World.hpp"
 #include "game/Game.hpp"
 #include "resources/AssetsLoader.hpp"
 

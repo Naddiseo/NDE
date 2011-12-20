@@ -2,7 +2,6 @@
 #include <btBulletDynamicsCommon.h>
 #include "common.hpp"
 #include "resources/Mesh.hpp"
-#include "game/World.hpp"
 
 namespace nde {
 

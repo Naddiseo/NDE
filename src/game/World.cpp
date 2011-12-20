@@ -1,7 +1,9 @@
-#include <btBulletDynamicsCommon.h>
 #include "game/World.hpp"
 
+#include <btBulletDynamicsCommon.h>
 
+#include "game/Entity.hpp"
+#include "game/Scene.hpp"
 
 namespace nde {
 
