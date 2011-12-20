@@ -12,6 +12,7 @@
 #include "game/Entity.hpp"
 #include "graphics/IsRendered.hpp"
 #include "graphics/Face.hpp"
+#include "game/Entity.hpp"
 
 #ifdef WINDOWS
 	#define WIN32_LEAN_AND_MEAN
