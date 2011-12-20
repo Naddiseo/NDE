@@ -39,6 +39,7 @@ public:
 	float getRotY() const { return rot_y; }
 
 	Vector3f getRayTo(size_t x, size_t y);
+	Vector3f getRayToFromCenter();
 	
 	void setPosition(const Vector3f& position);
 	void setForwardDir(const Vector3f& forward);

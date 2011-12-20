@@ -79,8 +79,6 @@ World::shootBox(Vector3f from, Vector3f to) {
 	scalar mass = 1.f;
 	btTransform startTransform;
 
-	std::cout << "From " << from << " to " << to << std::endl;
-
 	shape->initializePolyhedralFeatures();
 
 	startTransform.setIdentity();

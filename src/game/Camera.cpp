@@ -25,17 +25,17 @@ Camera::Camera() : position(0,0,0), forward(0,0,1), up(0,1,0) {
 	speed = 0.01;
 	sensitivity = 0.2;
 	
-	#ifdef WINDOWS
+	//#ifdef WINDOWS
 		SDL_ShowCursor(SDL_DISABLE);
-	#endif
+	//#endif
 	
 	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
 }
 
 Camera::~Camera() {
-	#ifdef WINDOWS
+	//#ifdef WINDOWS
 		SDL_ShowCursor(SDL_ENABLE);
-	#endif
+	//#endif
 	
 	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
 }
@@ -75,7 +75,7 @@ void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
 void Camera::onMouseClick(const SDL_MouseButtonEvent& event) {
 	switch (event.button) {
 	case SDL_BUTTON_RIGHT:
-		Game::getInstance().getWorld().shootBox(position, getRayTo(event.x, event.y));
+		Game::getInstance().getWorld().shootBox(position, getRayToFromCenter());
 		break;
 	default:
 		break;
@@ -101,6 +101,12 @@ void Camera::rotate(scalar phi, scalar theta) {
 	
 	
 	// TODO: Rotate UP, FORWARD around CROSS by theta
+}
+
+Vector3f Camera::getRayToFromCenter() {
+	static size_t width = SGET_I("WIDTH");
+	static size_t height = SGET_I("HEIGHT");
+	return getRayTo(width/2, height/2);
 }
 
 Vector3f Camera::getRayTo(size_t x, size_t y) {
