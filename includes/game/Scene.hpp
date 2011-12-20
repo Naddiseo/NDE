@@ -29,6 +29,8 @@ public:
 	template<typename H = Entity*, typename... T>
 	void addRenderObjects(const H& obj, const T&... tail);
 
+	void removeRenderObject(const Entity* obj);
+
 private:
 	void getBoundingBox();
 };

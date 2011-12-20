@@ -41,6 +41,10 @@ void Entity::tick() {
 	mesh->render(newPos);
 	postdraw();
 
+	if (newPos.y < -100.f) {
+		onDie(); // TODO: send a message that we died
+	}
+
 }
 
 void Entity::createBox(Vector3f linVel) {
@@ -77,7 +81,10 @@ void Entity::createBox(Vector3f linVel) {
 	face->add(mesh->add(0, 0, 0));
 	face->add(mesh->add(.33*5, 1*5, .33*5));
 	face->add(mesh->add(1*5, 0, 0));
+}
 
+void Entity::onDie() {
+	world->getScene().removeRenderObject(this);
 }
 
 } //namespace nde

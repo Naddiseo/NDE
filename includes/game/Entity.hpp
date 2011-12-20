@@ -39,6 +39,9 @@ public:
 	virtual void postdraw() {}
 
 
+	virtual void onDie();
+
+
 	void createBox(Vector3f linvel);
 
 };

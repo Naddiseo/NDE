@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "game/Scene.hpp"
 
 namespace nde {
@@ -22,6 +23,12 @@ Scene::loadScene(const std::string& path) {
 
 void
 Scene::getBoundingBox() {}
+
+void
+Scene::removeRenderObject(const Entity* obj) {
+	rendered_list_t::iterator it = std::find_if(to_render.begin(), to_render.end(), [&obj](Entity* other){ return other == obj; });
+	to_render.erase(it);
+}
 
 
 

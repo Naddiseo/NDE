@@ -23,7 +23,7 @@ char crand(size_t a, size_t b) {
 
 namespace nde {
 
-Terrain::Terrain(World* _world) : Entity(_world), height(1<<5), width(1<<5){
+Terrain::Terrain(World* _world) : Entity(_world), height(1<<7), width(1<<7){
 	heightmap = new scalar[height * width];
 	colormap = new _col[height * width * sizeof(_col)];
 

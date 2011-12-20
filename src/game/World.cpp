@@ -65,6 +65,10 @@ void World::addCollisionShape(btCollisionShape* shape) {
 	collisionShapes.push_back(shape);
 }
 
+void World::removeRidigBody(btRigidBody* body) {
+	dynamicsWorld->removeRigidBody(body);
+}
+
 void World::step() {
 	dynamicsWorld->stepSimulation(1.f/60.f,10);
 }

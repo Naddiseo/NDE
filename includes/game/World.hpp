@@ -24,6 +24,8 @@ public:
 	void addRigidBody(btRigidBody* body);
 	void addCollisionShape(btCollisionShape* shape);
 
+	void removeRidigBody(btRigidBody* body);
+
 	void step();
 
 	template<typename ...Args>
