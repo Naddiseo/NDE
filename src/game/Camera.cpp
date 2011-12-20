@@ -14,7 +14,7 @@
 #include "game/Game.hpp"
 
 #define PI 3.1415265359
-#define PIdiv180 3.1415265359/180.0
+#define PIdiv180 (PI/180.0)
 
 namespace nde {
 Camera::Camera() : position(0,0,0), direction(0,0,-1) {
@@ -25,14 +25,14 @@ Camera::Camera() : position(0,0,0), direction(0,0,-1) {
 	theta = 0.f;
 	speed = 0.01;
 	sensitivity = 0.2;
-	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
-	//SDL_ShowCursor(SDL_DISABLE);
-
+	
+	SDL_ShowCursor(SDL_DISABLE);
+	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
 }
 
 Camera::~Camera() {
-	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
-	//SDL_ShowCursor(SDL_ENABLE);
+	SDL_ShowCursor(SDL_ENABLE);
+	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
 }
 
 void Camera::print() {
@@ -79,11 +79,8 @@ void Camera::move(Vector3f dir) {
 }
 
 void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
-	scalar dx = event.x - x;
-	scalar dy = event.y - y;
-	
-	dx = event.xrel;
-	dy = event.yrel;
+	scalar dx = event.xrel;
+	scalar dy = event.yrel;
 	
 	rot_y -= event.xrel * sensitivity;
 	rot_x -= event.yrel * sensitivity;
@@ -92,9 +89,9 @@ void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
 	Vector3f ver = getRayTo(0, 0) - getRayTo(0, 1);
 	target += hor * dx * 0.001;
 	target += ver * dy * 0.001;
-
-	x = event.x;
-	y = event.y;
+	
+	//x = event.x;
+	//y = event.y;
 }
 
 
