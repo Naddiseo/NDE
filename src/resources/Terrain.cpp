@@ -34,8 +34,6 @@ Terrain::Terrain(World* _world) : Entity(_world), height(1<<5), width(1<<5){
 		colormap[i].r = crand(80, 255);
 		colormap[i].g = crand(80, 255);
 		colormap[i].b = crand(80, 255);
-
-		std::cout << (int)colormap[i].r << ", "<< (int)colormap[i].g << ", "<< (int)colormap[i].b << std::endl;
 	}
 
 	heightfieldShape = new btHeightfieldTerrainShape(
@@ -53,15 +51,22 @@ Terrain::Terrain(World* _world) : Entity(_world), height(1<<5), width(1<<5){
 }
 
 void Terrain::tick() {
+	int x, y;
+	size_t hh = height >> 1;
+	size_t hw = width >> 1;
 	glBegin(GL_QUADS);
 	for (size_t i = 0; i < height-1; i++) {
 		for (size_t j = 0; j < width-1; j++) {
 			_col c = colormap[i * height + j];
 			glColor3b(c.r, c.b, c.g);
-			glVertex3f((float)i,  heightmap[i * height + j], j);
-			glVertex3f((float)i,  heightmap[(i) * height + j+1], j+1);
-			glVertex3f((float)i+1,  heightmap[(i+1) * height + j+1], j+1);
-			glVertex3f((float)i+1,  heightmap[(i+1) * height + j], j);
+
+			x = i - hh;
+			y = j - hw;
+
+			glVertex3f((float)x,  heightmap[i * height + j], y);
+			glVertex3f((float)x,  heightmap[(i) * height + j+1], y+1);
+			glVertex3f((float)x+1,  heightmap[(i+1) * height + j+1], y+1);
+			glVertex3f((float)x+1,  heightmap[(i+1) * height + j], y);
 		}
 
 	}
