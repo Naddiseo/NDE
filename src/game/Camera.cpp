@@ -98,7 +98,7 @@ void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
 void Camera::onMouseClick(const SDL_MouseButtonEvent& event) {
 	switch (event.button) {
 	case SDL_BUTTON_RIGHT:
-		Game::getInstance().getWorld().shootBox(position, getRayTo(event.x, event.y));
+		Game::getInstance().getWorld().shootBox(position, getRayToFromCenter());
 		break;
 	default:break;
 	}
@@ -112,6 +112,12 @@ void Camera::rotateY(scalar angle) {
 }
 void Camera::rotateZ(scalar angle) {
 	rot_z += angle;
+}
+
+Vector3f Camera::getRayToFromCenter() {
+	static size_t width = SGET_I("WIDTH");
+	static size_t height = SGET_I("HEIGHT");
+	return getRayTo(width/2, height/2);
 }
 
 Vector3f Camera::getRayTo(size_t x, size_t y) {

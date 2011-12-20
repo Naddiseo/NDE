@@ -44,6 +44,7 @@ public:
 	float getRotZ() const { return rot_z; }
 
 	Vector3f getRayTo(size_t x, size_t y);
+	Vector3f getRayToFromCenter();
 
 	const Vector3f& getPos() const { return position; }
 
