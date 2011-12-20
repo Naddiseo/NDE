@@ -3,9 +3,10 @@
 
 #include "common.hpp"
 #include "math/vector.hpp"
-#include "game/Entity.hpp"
 
 namespace nde {
+
+class Entity;
 
 class Scene {
 	Vector3f sceneMin, sceneMax, sceneCenter;

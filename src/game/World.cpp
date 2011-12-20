@@ -1,6 +1,6 @@
 #include <btBulletDynamicsCommon.h>
 #include "game/World.hpp"
-
+#include "game/Entity.hpp"
 
 
 namespace nde {

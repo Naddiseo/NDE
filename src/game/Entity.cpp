@@ -36,7 +36,6 @@ void Entity::tick() {
 		newPos = trans.getOrigin();
 	}
 	predraw();
-	std::cout << "Entity @" << newPos << std::endl;
 	mesh->render(newPos);
 	postdraw();
 
