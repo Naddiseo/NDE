@@ -16,7 +16,7 @@ class Camera {
 	Vector3f forward;
 	Vector3f up;
 	
-	scalar rot_x, rot_y, rot_z;
+	scalar rot_x, rot_y;
 	scalar speed, sensitivity;
 public:
 	Camera();
@@ -31,15 +31,12 @@ public:
 	void onMouseMotion(const SDL_MouseMotionEvent& event);
 	void onMouseClick(const SDL_MouseButtonEvent& event);
 
-	void rotateX(scalar angle);
-	void rotateY(scalar angle);
-	void rotateZ(scalar angle);
-
+	void rotate(scalar phi, scalar theta);
+	
 	void print();
 
 	float getRotX() const { return rot_x; }
 	float getRotY() const { return rot_y; }
-	float getRotZ() const { return rot_z; }
 
 	Vector3f getRayTo(size_t x, size_t y);
 	

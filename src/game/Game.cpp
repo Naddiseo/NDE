@@ -26,12 +26,12 @@ Game::Game()
 	: fov(70), haserror(false), shutdown(false), errorstring(0)
 {
 	camera.setPosition(SGET_V("cam_pos"));
-	camera.setUpwardDir(SGET_V("cam_up"));
+	camera.setUpwardDir(SGET_V("cam_upward"));
 	camera.setForwardDir(SGET_V("cam_forward"));
 
 #ifdef WINDOWS
-	HWND hWnd = GetConsoleWindow();
-	ShowWindow(hWnd, SW_HIDE);
+	//HWND hWnd = GetConsoleWindow();
+	//ShowWindow(hWnd, SW_HIDE);
 #endif
 }
 
@@ -75,16 +75,16 @@ Game::handleEvents() {
 				return;
 				break;
 			case SDLK_UP:
-				camera.rotateX(3);
+				camera.rotate(0, 3);
 				break;
 			case SDLK_DOWN:
-				camera.rotateX(-3);
+				camera.rotate(0, -3);
 				break;
 			case SDLK_RIGHT:
-				camera.rotateY(-1);
+				camera.rotate(-1, 0);
 				break;
 			case SDLK_LEFT:
-				camera.rotateY(1);
+				camera.rotate(1, 0);
 				break;
 			case SDLK_w:
 				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
@@ -117,9 +117,8 @@ Game::handleEvents() {
 					camera.move(tmp);
 				}
 				else {
-					camera.rotateX(-camera.getRotX());
-					camera.rotateY(-camera.getRotY());
-					camera.rotateZ(-camera.getRotZ());
+					// TODO: Reset rotation?
+					camera.setForwardDir({ 1, 0, 1 });
 				}
 				break;
 			case SDLK_PRINT: {
@@ -170,9 +169,10 @@ void Game::drawAxis() {
 	glMatrixMode   (GL_MODELVIEW);
 	glLoadIdentity ();
 
-	glTranslatef (0, 0, -2);   // Place small triad between clipping planes.
-
-	glRotatef (camera.getRotZ(), 0,0,1);   // Viewing rotations.
+	// Place small triad between clipping planes.
+	glTranslatef (0, 0, -2);
+	
+	// Viewing rotations.
 	glRotatef (camera.getRotY(), 0,1,0);
 	glRotatef (camera.getRotX(), 1,0,0);
 
@@ -209,17 +209,17 @@ Game::handleMouse() {
 	SDL_GetMouseState(&mouseX, &mouseY);
 
 	if (mouseX < 30) {
-		camera.rotateY(1);
+		camera.rotate(0, 1);
 	}
 	else if (mouseX > (width-30)) {
-		camera.rotateY(-1);
+		camera.rotate(0, -1);
 	}
 
 	if (mouseY < 30) {
-		camera.rotateX(1);
+		camera.rotate(1, 0);
 	}
 	else if (mouseY > (height - 30)) {
-		camera.rotateX(-1);
+		camera.rotate(-1, 0);
 	}
 #endif
 }

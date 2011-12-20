@@ -26,17 +26,22 @@ SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES)
 OBJECTS=src/resources/pb/resource.pb.o $(SOURCES:.cpp=.o)
 
 EXE=test01.exe
+LIBNDE=libNDE.a
 
-rebuild: clean all
+rebuild: rebuild_clean all
+
+rebuild_clean:
+	-rm $(EXE)
+	-rm $(LIBNDE)
 
 all: library test01
 
 test01: tests/test01.o
 	$(CXX) $^ -L. -lNDE  $(CXXFLAGS) -o $(EXE)
 
-library: libNDE.a
+library: $(LIBNDE)
 
-libNDE.a: $(OBJECTS)
+$(LIBNDE): $(OBJECTS)
 	$(AR) rs $@ $^ 
 
 .cpp.o:
