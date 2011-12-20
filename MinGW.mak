@@ -27,6 +27,8 @@ OBJECTS=src/resources/pb/resource.pb.o $(SOURCES:.cpp=.o)
 
 EXE=test01.exe
 
+rebuild: clean all
+
 all: library test01
 
 test01: tests/test01.o
