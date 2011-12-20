@@ -81,6 +81,10 @@ void Camera::move(Vector3f dir) {
 void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
 	scalar dx = event.x - x;
 	scalar dy = event.y - y;
+	
+	dx = event.xrel;
+	dy = event.yrel;
+	
 	rot_y -= event.xrel * sensitivity;
 	rot_x -= event.yrel * sensitivity;
 

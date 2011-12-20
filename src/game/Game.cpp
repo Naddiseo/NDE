@@ -6,8 +6,10 @@
  */
 #include <SDL/SDL.h>
 #include <IL/ilu.h>
+
 #include "game/Game.hpp"
 #include "game/Settings.hpp"
+#include "game/Entity.hpp"
 #include "graphics/IsRendered.hpp"
 #include "graphics/Face.hpp"
 
