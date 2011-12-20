@@ -62,7 +62,7 @@ Game::handleEvents() {
 			if (event.button.button == SDL_BUTTON_WHEELUP) {
 				fov -= 1;
 			}
-			else {
+			else if (event.button.button == SDL_BUTTON_WHEELDOWN) {
 				fov += 1;
 			}
 			break;
@@ -212,7 +212,7 @@ void Game::drawAxis() {
 
 void
 Game::handleMouse() {
-#ifndef WINDOWS
+#if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION >= 3
 	static int width = SGET_I("WIDTH");
 	static int height = SGET_I("HEIGHT");
 	int mouseX = 0, mouseY = 0;

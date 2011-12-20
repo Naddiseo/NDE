@@ -26,12 +26,12 @@ Camera::Camera() : position(0,0,0), direction(0,0,-1) {
 	speed = 0.01;
 	sensitivity = 0.2;
 	
-	//SDL_ShowCursor(SDL_DISABLE);
+	SDL_ShowCursor(SDL_DISABLE);
 	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
 }
 
 Camera::~Camera() {
-	//SDL_ShowCursor(SDL_ENABLE);
+	SDL_ShowCursor(SDL_ENABLE);
 	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
 }
 
