@@ -15,13 +15,19 @@ CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DWINDOWS -DNDEBUG=1 -std=c++0x -Wall -Werr
 GAME_FILES=Camera.cpp Entity.cpp Game.cpp Scene.cpp Settings.cpp World.cpp
 GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 
+MATH_FILES=util.cpp
+MATH_SOURCES=$(addprefix src/math/, $(MATH_FILES))
+
 GRAPHICS_FILES=Color.cpp Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
 GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 
 RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Material.cpp Mesh.cpp Terrain.cpp
 RESOURCES_SOURCES=$(addprefix src/resources/, $(RESOURCES_FILES))
 
-SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES)
+MISC_FILES=HasId.cpp
+MISC_SOURCES=$(addprefix src/misc/, $(MISC_FILES))
+
+SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES) $(MATH_SOURCES) $(MISC_SOURCES)
 
 OBJECTS=src/resources/pb/resource.pb.o $(SOURCES:.cpp=.o)
 
@@ -31,8 +37,8 @@ LIBNDE=libNDE.a
 rebuild: rebuild_clean all
 
 rebuild_clean:
-	-rm $(EXE)
-	-rm $(LIBNDE)
+	-@rm $(EXE)
+	-@rm $(LIBNDE)
 
 all: library test01
 

@@ -13,9 +13,7 @@
 #include "game/Camera.hpp"
 #include "game/Settings.hpp"
 #include "game/Game.hpp"
-
-#define PI 3.1415265359
-#define PIdiv180 (PI/180.0)
+#include "math/util.hpp"
 
 namespace nde {
 Camera::Camera() : position(0,0,0), forward(0,0,1), up(0,1,0) {
@@ -23,7 +21,7 @@ Camera::Camera() : position(0,0,0), forward(0,0,1), up(0,1,0) {
 	rot_y = 0.f;
 	
 	speed = 0.01;
-	sensitivity = 0.2;
+	sensitivity = 0.004;
 	
 	//#ifdef WINDOWS
 		SDL_ShowCursor(SDL_DISABLE);
@@ -95,12 +93,19 @@ void Camera::setForwardDir(const Vector3f& forward) {
 }
 
 void Camera::rotate(scalar phi, scalar theta) {
+	RotateAround(theta, up, forward);
+	
 	Vector3f cross = forward.cross(up);
+	cross.normalise();
 	
-	// TODO: Rotate FORWARD around UP by phi
+	RotateAround(phi, cross, up);
+	RotateAround(phi, cross, forward);
 	
+	up.normalise();
+	forward.normalise();
 	
-	// TODO: Rotate UP, FORWARD around CROSS by theta
+	rot_x -= RAD2DEG(theta);
+	rot_y -= RAD2DEG(phi);
 }
 
 Vector3f Camera::getRayToFromCenter() {

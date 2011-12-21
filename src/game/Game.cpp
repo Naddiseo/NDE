@@ -209,17 +209,17 @@ Game::handleMouse() {
 	SDL_GetMouseState(&mouseX, &mouseY);
 
 	if (mouseX < 30) {
-		camera.rotate(0, 1);
+		camera.rotate(0, 0.1);
 	}
 	else if (mouseX > (width-30)) {
-		camera.rotate(0, -1);
+		camera.rotate(0, -0.1);
 	}
 
 	if (mouseY < 30) {
-		camera.rotate(1, 0);
+		camera.rotate(0.1, 0);
 	}
 	else if (mouseY > (height - 30)) {
-		camera.rotate(-1, 0);
+		camera.rotate(-0.1, 0);
 	}
 #endif
 }
