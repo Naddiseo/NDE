@@ -76,7 +76,7 @@ void World::step() {
 void
 World::shootBox(Vector3f from, Vector3f to) {
 	btBoxShape* shape = new btBoxShape(btVector3(.5f,.5f,.5f));
-	scalar mass = 1.f;
+	scalar mass = 3.f;
 	btTransform startTransform;
 
 	shape->initializePolyhedralFeatures();
@@ -94,7 +94,7 @@ World::shootBox(Vector3f from, Vector3f to) {
 	box->getWorldTransform().setRotation(btQuaternion(0, 0, 0, 1));
 	Vector3f linVel(to.x-from.x, to.y-from.y, to.z-from.z);
 	linVel.normalise();
-	linVel *= 25.f;
+	linVel *= 33.f;
 	box->createBox(linVel);
 
 	getScene().addRenderObjects(box);

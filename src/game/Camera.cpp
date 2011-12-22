@@ -18,52 +18,49 @@
 
 namespace nde {
 Camera::Camera() : position(0,0,0), forward(0,0,-1) {
-	rot_x = 0.f;
-	rot_y = 0.f;
-	rot_z = 0.f;
 	
 	speed = 0.01;
 	sensitivity = 0.2;
 	
-	//#ifdef WINDOWS
+	#ifdef WINDOWS
 		SDL_ShowCursor(SDL_DISABLE);
-	//#endif
+	#endif
 	
-	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
+	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
 }
 
 Camera::~Camera() {
-	//#ifdef WINDOWS
+	#ifdef WINDOWS
 		SDL_ShowCursor(SDL_ENABLE);
-	//#endif
+	#endif
 	
-	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
+	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
 }
 
 void Camera::print() {
 	std::cout
 		<< position << " "
 		<< forward << " "
-		<< "(" << rot_x << "," << rot_y << "," << rot_z << ")" << std::endl;
+		<< direction << std::endl;
 }
 
 void Camera::render() {
 
 	Vector3f s1, s2;
 
-	s1.x = std::cos((rot_y + 90) * PIdiv180);
-	s1.z = -std::sin((rot_y + 90) * PIdiv180);
-	scalar cosX = std::cos(rot_x * PIdiv180);
+	s1.x = std::cos((direction.y + 90) * PIdiv180);
+	s1.z = -std::sin((direction.y + 90) * PIdiv180);
+	scalar cosX = std::cos(direction.x * PIdiv180);
 
 	s2.x = s1.x * cosX;
 	s2.z = s1.z * cosX;
-	s2.y = sin(rot_x * PIdiv180);
+	s2.y = sin(direction.x * PIdiv180);
 
 	forward = s2;
 
-	glRotatef(-rot_x, 1, 0, 0);
-	glRotatef(-rot_y, 0, 1, 0);
-	glRotatef(-rot_z, 0, 0, 1);
+	glRotatef(-direction.x, 1, 0, 0);
+	glRotatef(-direction.y, 0, 1, 0);
+	glRotatef(-direction.z, 0, 0, 1);
 	glTranslatef(-position.x, -position.y, -position.z);
 }
 
@@ -84,11 +81,7 @@ void Camera::move(Vector3f dir) {
 }
 
 void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
-	scalar dx = event.xrel;
-	scalar dy = event.yrel;
-	
-	rot_y -= dx * sensitivity;
-	rot_x -= dy * sensitivity;
+	direction -= Vector3f(event.yrel, event.xrel, 0) * sensitivity;
 }
 
 void Camera::onMouseClick(const SDL_MouseButtonEvent& event) {
@@ -105,6 +98,11 @@ void Camera::setPosition(const Vector3f& position) {
 	this->position = position;
 }
 
+
+void Camera::setDirection(const Vector3f& direction) {
+	this->direction = direction;
+}
+
 void Camera::setUpwardDir(const Vector3f& upward) {
 	this->up = upward;
 }
@@ -114,13 +112,13 @@ void Camera::setForwardDir(const Vector3f& forward) {
 }
 
 void Camera::rotateX(scalar angle) {
-	rot_x += angle;
+	direction.x += angle;
 }
 void Camera::rotateY(scalar angle) {
-	rot_y += angle;
+	direction.y += angle;
 }
 void Camera::rotateZ(scalar angle) {
-	rot_z += angle;
+	direction.z += angle;
 }
 
 Vector3f Camera::getRayToFromCenter() {
@@ -130,8 +128,6 @@ Vector3f Camera::getRayToFromCenter() {
 }
 
 Vector3f Camera::getRayTo(size_t x, size_t y) {
-	return forward;
-	
 	GLfloat winX, winY, winZ;
 	GLdouble posX, posY, posZ;
 

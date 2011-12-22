@@ -12,6 +12,8 @@
  */
 typedef float scalar;
 
+#pragma pack(push, 1)
+
 template<class T>
 class Vector2 {
 public:
@@ -270,6 +272,9 @@ public:
 
 
 };
+
+
+#pragma pack(pop)
 
 typedef Vector3<scalar> Vector3f;
 

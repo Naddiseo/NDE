@@ -13,10 +13,10 @@ namespace nde {
 
 class Camera {
 	Vector3f position;
+	Vector3f direction;
 	Vector3f forward;
 	Vector3f up;
 	
-	scalar rot_x, rot_y, rot_z;
 	scalar speed, sensitivity;
 public:
 	Camera();
@@ -37,14 +37,15 @@ public:
 
 	void print();
 
-	float getRotX() const { return rot_x; }
-	float getRotY() const { return rot_y; }
-	float getRotZ() const { return rot_z; }
+	float getRotX() const { return direction.x; }
+	float getRotY() const { return direction.y; }
+	float getRotZ() const { return direction.z; }
 
 	Vector3f getRayTo(size_t x, size_t y);
 	Vector3f getRayToFromCenter();
 	
 	void setPosition(const Vector3f& position);
+	void setDirection(const Vector3f& direction);
 	void setForwardDir(const Vector3f& forward);
 	void setUpwardDir(const Vector3f& upward);
 	

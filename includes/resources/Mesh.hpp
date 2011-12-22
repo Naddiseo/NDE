@@ -8,9 +8,16 @@
 
 namespace nde {
 
+
 class Mesh : public HasId {
+protected:
 	Vector3f origin;
 	Vector3f orientation;
+
+	size_t array_count;
+	size_t color_count;
+	GLuint vboId;
+
 public:
 	std::vector<Vector3f*> vertices;
 	std::vector<Face*> faces;
@@ -19,6 +26,10 @@ public:
 	virtual ~Mesh();
 
 	virtual void render(Vector3f& translate);
+
+	GLuint reserve(size_t elements);
+	//char*   reserveColors(size_t elements);
+	virtual void flush();
 
 	virtual Vector3f* add(scalar x, scalar y, scalar z);
 
@@ -33,6 +44,8 @@ public:
 
 	template<typename H = Face*, typename... T>
 	void addFaces(const H& f, const T&... tail);
+
+	friend class Entity;
 };
 
 template<typename ...Args>

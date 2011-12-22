@@ -26,6 +26,7 @@ Game::Game()
 	: fov(70), haserror(false), shutdown(false), errorstring(0)
 {
 	camera.setPosition(SGET_V("cam_pos"));
+	camera.setDirection(SGET_V("cam_dir"));
 	camera.setUpwardDir(SGET_V("cam_up"));
 	camera.setForwardDir(SGET_V("cam_forward"));
 
@@ -201,28 +202,7 @@ void Game::drawAxis() {
 }
 
 void
-Game::handleMouse() {
-#if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION >= 3
-	static int width = SGET_I("WIDTH");
-	static int height = SGET_I("HEIGHT");
-	int mouseX = 0, mouseY = 0;
-	SDL_GetMouseState(&mouseX, &mouseY);
-
-	if (mouseX < 30) {
-		camera.rotateY(1);
-	}
-	else if (mouseX > (width-30)) {
-		camera.rotateY(-1);
-	}
-
-	if (mouseY < 30) {
-		camera.rotateX(1);
-	}
-	else if (mouseY > (height - 30)) {
-		camera.rotateX(-1);
-	}
-#endif
-}
+Game::handleMouse() {}
 
 void
 Game::mainLoop() {
@@ -236,12 +216,16 @@ Game::mainLoop() {
 	assets.allocColor("black", 0.f, 0.f, 0.f);
 	assets.allocColor("white", 1.f, 1.f, 1.f);
 
+
+
+
 	while (!(haserror || shutdown)) {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		gluPerspective(fov, width/height, 1, 500);
 		glViewport(0, 0, width, height);
 
+		input.pollEvents();
 		handleEvents();
 		handleMouse();
 
@@ -251,23 +235,6 @@ Game::mainLoop() {
 
 		camera.render();
 		world.step();
-		
-
-		/*{
-			//print positions of all objects
-			for (int j=world.dynamicsWorld->getNumCollisionObjects()-1; j>=0 ;j--)
-			{
-				btCollisionObject* obj = world.dynamicsWorld->getCollisionObjectArray()[j];
-				btRigidBody* body = btRigidBody::upcast(obj);
-				if (body && body->getMotionState())
-				{
-					btTransform trans;
-					body->getMotionState()->getWorldTransform(trans);
-					printf("world pos = %f,%f,%f\n",float(trans.getOrigin().getX()),float(trans.getOrigin().getY()),float(trans.getOrigin().getZ()));
-				}
-			}
-		}*/
-
 
 		for (Entity* r : world.getScene().getToRender()) {
 			r->tick();
