@@ -6,7 +6,7 @@ CFLAGS=-g -I./includes
 GAME_FILES=Camera.cpp Entity.cpp Game.cpp Input.cpp KeyboardMap.cpp Scene.cpp Settings.cpp World.cpp
 GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 
-GRAPHICS_FILES=Face.cpp GLAPI.cpp IsRendered.cpp OpenGL.cpp Renderer.cpp SkyBox.cpp
+GRAPHICS_FILES=Face.cpp iGraphicsLibrary.cpp IsRendered.cpp OpenGL.cpp Renderer.cpp SkyBox.cpp
 GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 
 MISC_FILES=HasId.cpp

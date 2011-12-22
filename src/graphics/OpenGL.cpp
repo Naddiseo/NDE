@@ -48,7 +48,7 @@ void OpenGL::drawQuad(VBOVertex a, VBOVertex b, VBOVertex c, VBOVertex d) {
 void OpenGL::drawSphere(VBOVertex center, scalar radius){}
 void OpenGL::drawBox(VBOVertex min, VBOVertex max){}
 
-VBOVertex* OpenGL::allocBuffer(size_t element_count){}
+VBOVertex* OpenGL::allocBuffer(size_t element_count){ return NULL; }
 void OpenGL::addToBuffer(VBOVertex v){}
 void OpenGL::flushBuffer(){}
 

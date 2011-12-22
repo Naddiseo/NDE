@@ -1,9 +1,19 @@
 #pragma once
 #include <string>
+#include "math/vector.hpp"
 
 namespace nde {
 
-class VBOVertex;
+#pragma pack(push, 1)
+struct VBOVertex {
+	Vector3f pos;
+	Vector3f normal;
+	Vector2f tex1;
+	Vector2f tex2;
+	Vector2f tex3;
+	scalar r, g, b, a; // Color, if any
+};
+#pragma pack(pop)
 
 class iGraphicsLibrary {
 public:
@@ -31,16 +41,6 @@ public:
 };
 
 
-#pragma pack(push, 1)
-class VBOVertex {
-	Vector3f pos;
-	Vector3f normal;
-	Vector2f tex1;
-	Vector2f tex2;
-	Vector2f tex3;
-	scalar r, g, b, a; // Color, if any
-};
-#pragma pack(pop)
 }
 
 
