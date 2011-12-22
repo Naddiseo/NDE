@@ -23,7 +23,7 @@ char crand(size_t a, size_t b) {
 
 namespace nde {
 
-Terrain::Terrain(World* _world) : Entity(_world), height(1<<7), width(1<<7){
+Terrain::Terrain(World* _world) : Entity(_world), scale(50), height(1<<7), width(1<<7){
 	heightmap = new scalar[height * width];
 	colormap = new _col[height * width * sizeof(_col)];
 
@@ -45,6 +45,8 @@ Terrain::Terrain(World* _world) : Entity(_world), height(1<<7), width(1<<7){
 		false
 	);
 
+	heightfieldShape->setLocalScaling({scale, 1, scale});
+
 	addCollisionShape(heightfieldShape);
 
 	mass = 0.0;
@@ -52,6 +54,7 @@ Terrain::Terrain(World* _world) : Entity(_world), height(1<<7), width(1<<7){
 
 void Terrain::tick() {
 	int x, y;
+	float x1, x2, y1, y2;
 	size_t hh = height >> 1;
 	size_t hw = width >> 1;
 	glBegin(GL_QUADS);
@@ -63,10 +66,15 @@ void Terrain::tick() {
 			x = i - hh;
 			y = j - hw;
 
-			glVertex3f((float)x,  heightmap[i * height + j], y);
-			glVertex3f((float)x,  heightmap[(i) * height + j+1], y+1);
-			glVertex3f((float)x+1,  heightmap[(i+1) * height + j+1], y+1);
-			glVertex3f((float)x+1,  heightmap[(i+1) * height + j], y);
+			x1 = ((float)x)*scale;
+			x2 = ((float)x+1)*scale;
+			y1 = ((float)y)*scale;
+			y2 = ((float)y+1)*scale;
+
+			glVertex3f(x1,  heightmap[i * height + j], y1);
+			glVertex3f(x1,  heightmap[(i) * height + j+1], y2);
+			glVertex3f(x2,  heightmap[(i+1) * height + j+1], y2);
+			glVertex3f(x2,  heightmap[(i+1) * height + j], y1);
 		}
 
 	}

@@ -81,6 +81,8 @@ World::shootBox(Vector3f from, Vector3f to) {
 
 	shape->initializePolyhedralFeatures();
 
+	//std::cout << "From " << from << " to " << to <<std::endl;
+
 	startTransform.setIdentity();
 	startTransform.setRotation(btQuaternion(0, 0, 0, 1));
 

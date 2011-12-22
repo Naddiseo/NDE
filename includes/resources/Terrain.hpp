@@ -23,6 +23,7 @@ struct _col{
 
 class Terrain : public Entity {
 	scalar* heightmap;
+	scalar scale;
 	_col* colormap;
 	size_t height, width;
 

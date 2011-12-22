@@ -47,7 +47,7 @@ void Camera::print() {
 
 void Camera::render() {
 	glRotatef(-rot_x, 1, 0, 0);
-	glRotatef(-rot_y, 0, 1, 0);
+	glRotatef( rot_y, 0, 1, 0);
 	
 	glTranslatef(-position.x, -position.y, -position.z);
 }
@@ -66,7 +66,7 @@ void Camera::move(Vector3f dir) {
 
 void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
 	scalar phi = event.xrel * sensitivity;
-	scalar theta = event.yrel * sensitivity;
+	scalar theta = -event.yrel * sensitivity;
 	this->rotate(phi, theta);
 }
 
@@ -93,13 +93,16 @@ void Camera::setForwardDir(const Vector3f& forward) {
 }
 
 void Camera::rotate(scalar phi, scalar theta) {
-	RotateAround(theta, up, forward);
+	theta = -theta;
+	phi = -phi;
+
+	RotateAround(phi, up, forward);
 	
 	Vector3f cross = forward.cross(up);
 	cross.normalise();
 	
-	RotateAround(phi, cross, up);
-	RotateAround(phi, cross, forward);
+	RotateAround(theta, cross, up);
+	RotateAround(theta, cross, forward);
 	
 	up.normalise();
 	forward.normalise();

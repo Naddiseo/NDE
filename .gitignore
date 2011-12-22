@@ -38,3 +38,4 @@ _$*
 .project
 *.lib
 *.dll
+.settings

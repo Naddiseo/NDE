@@ -75,16 +75,16 @@ Game::handleEvents() {
 				return;
 				break;
 			case SDLK_UP:
-				camera.rotate(0, 3);
+				camera.rotate(0, 0.01);
 				break;
 			case SDLK_DOWN:
-				camera.rotate(0, -3);
+				camera.rotate(0, -0.01);
 				break;
 			case SDLK_RIGHT:
-				camera.rotate(-1, 0);
+				camera.rotate(0.01, 0);
 				break;
 			case SDLK_LEFT:
-				camera.rotate(1, 0);
+				camera.rotate(-0.01, 0);
 				break;
 			case SDLK_w:
 				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
