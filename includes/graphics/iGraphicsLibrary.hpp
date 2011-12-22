@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "math/vector.hpp"
+#include "resources/Color.hpp"
 
 namespace nde {
 
@@ -15,12 +16,40 @@ struct VBOVertex {
 };
 #pragma pack(pop)
 
+enum class VertexFlags : char {
+	NONE   = 0,
+	COLOR  = 1,
+	TEX1   = 2,
+	TEX2   = 4,
+	TEX3   = 8,
+	NORMAL = 16,
+};
+
+enum class DrawMode : char {
+	TRIANGLES = 0, // default
+	LINES,
+	QUADS,
+	TRIANGLE_STRIP,
+	TRIANGLE_FAN
+};
+
+enum class VBOHint : char {
+	SYSTEM_MEM, // stored in the computer's ram. opengl = Dynamic, directx = D3DPOOL_SCRATCH
+	VRAM,       // store in video card ram. opengl = Static, directx = D3DPOOL_MANAGED
+
+	GUESS,      // Let the driver decide. opengl = dynamic?, directx = D3DPOOL_DEFAULT
+};
+
 class iGraphicsLibrary {
+	Color clearColor;
 public:
 	iGraphicsLibrary();
 	virtual ~iGraphicsLibrary();
 
+	virtual void init() = 0;
 	virtual void clearScreen() = 0;
+
+	virtual void setClearColor(Color c) { clearColor = c; }
 
 	// Primatives
 	virtual void drawCircle(VBOVertex center, scalar radius) = 0;
