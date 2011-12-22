@@ -1,9 +1,9 @@
 #pragma once
-#include "graphics/GLAPI.hpp"
+#include "graphics/iGraphicsLibrary.hpp"
 
 namespace nde {
 
-class OpenGL : public GLAPI {
+class OpenGL : public iGraphicsLibrary {
 public:
 	OpenGL();
 	virtual ~OpenGL();

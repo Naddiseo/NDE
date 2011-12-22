@@ -5,10 +5,10 @@ namespace nde {
 
 class VBOVertex;
 
-class GLAPI {
+class iGraphicsLibrary {
 public:
-	GLAPI();
-	virtual ~GLAPI();
+	iGraphicsLibrary();
+	virtual ~iGraphicsLibrary();
 
 	virtual void clearScreen() = 0;
 
