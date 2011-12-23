@@ -29,7 +29,8 @@ class Game {
 
 	bool haserror;
 	bool shutdown;
-	const char* errorstring;
+	std::string errorstring;
+
 public:
 	static Game& getInstance() {
 		static Game instance;
@@ -47,7 +48,8 @@ public:
 
 
 
-	void setError(const char* errstr) { haserror = true; errorstring = errstr; }
+	void setError(const std::string error);
+	void stopGame();
 
 	void mainLoop();
 private:
