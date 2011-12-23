@@ -1,19 +1,32 @@
 #include "graphics/OpenGL.hpp"
 
-#ifndef WINDOWS
-
 #include <cstring>
 
-#include <GL/glx.h>
-#include "graphics/OpenGL.hpp"
-
 #ifdef WINDOWS
+#	include <GL/gl.h>
+#	include <GL/glext.h>
+typedef void (APIENTRYP PFNGLBINDBUFFERARBPROC) (GLenum target, GLuint buffer);
+typedef void (APIENTRYP PFNGLDELETEBUFFERSARBPROC) (GLsizei n, const GLuint *buffers);
+typedef void (APIENTRYP PFNGLGENBUFFERSARBPROC) (GLsizei n, GLuint *buffers);
+typedef GLboolean (APIENTRYP PFNGLISBUFFERARBPROC) (GLuint buffer);
+typedef void (APIENTRYP PFNGLBUFFERDATAARBPROC) (GLenum target, GLsizeiptrARB size, const GLvoid *data, GLenum usage);
+typedef void (APIENTRYP PFNGLBUFFERSUBDATAARBPROC) (GLenum target, GLintptrARB offset, GLsizeiptrARB size, const GLvoid *data);
+typedef void (APIENTRYP PFNGLGETBUFFERSUBDATAARBPROC) (GLenum target, GLintptrARB offset, GLsizeiptrARB size, GLvoid *data);
+typedef GLvoid* (APIENTRYP PFNGLMAPBUFFERARBPROC) (GLenum target, GLenum access);
+typedef GLboolean (APIENTRYP PFNGLUNMAPBUFFERARBPROC) (GLenum target);
+typedef void (APIENTRYP PFNGLGETBUFFERPARAMETERIVARBPROC) (GLenum target, GLenum pname, GLint *params);
+typedef void (APIENTRYP PFNGLGETBUFFERPOINTERVARBPROC) (GLenum target, GLenum pname, GLvoid* *params);
+
 #	define glGetProcAddress(a) wglGetProcAddress(reinterpret_cast<const unsigned char*>(a))
 #elif defined(__linux__)
+#	include <GL/glx.h>
 #	define glGetProcAddress(a) glXGetProcAddress(reinterpret_cast<const unsigned char*>(a))
 #else
 #	error "Your platform is currently not supported"
 #endif
+
+
+#include "graphics/OpenGL.hpp"
 
 /*
  * VBO from:
@@ -140,5 +153,3 @@ void scale(Vector3f amount) {
 void OpenGL::takeScreenshot(std::string path){}
 
 }
-
-#endif

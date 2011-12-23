@@ -15,9 +15,7 @@
 
 #include "math/vector.hpp"
 
-#ifdef NDEBUG
-	#include "debug.hpp"
-#endif
+#include "debug.hpp"
 
 namespace nde {
 

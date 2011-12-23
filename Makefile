@@ -12,7 +12,7 @@ GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 MATH_FILES=util.cpp
 MATH_SOURCES=$(addprefix src/math/, $(MATH_FILES))
 
-MISC_FILES=HasId.cpp
+MISC_FILES=HasId.cpp debug.cpp
 MISC_SOURCES=$(addprefix src/misc/, $(MISC_FILES))
 
 RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Color.cpp Material.cpp Mesh.cpp Terrain.cpp

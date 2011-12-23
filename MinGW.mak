@@ -24,7 +24,7 @@ GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Color.cpp Material.cpp Mesh.cpp Terrain.cpp
 RESOURCES_SOURCES=$(addprefix src/resources/, $(RESOURCES_FILES))
 
-MISC_FILES=HasId.cpp
+MISC_FILES=HasId.cpp debug.cpp
 MISC_SOURCES=$(addprefix src/misc/, $(MISC_FILES))
 
 SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES) $(MATH_SOURCES) $(MISC_SOURCES)
