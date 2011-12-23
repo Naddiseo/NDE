@@ -28,7 +28,9 @@ void screenshot(size_t mods) {}
 KeyboardMapSetup::KeyboardMapSetup() {
 	nde::KeyboardMap& keymap = nde::Game::getInstance().getInput().getKeyMap();
 
-	keymap.installCallback((SDLKey)SGET_I("key_quit"), &quit);
+	size_t k = SGET_I("key_quit");
+
+	keymap.installCallback((SDLKey)k, &quit);
 
 	keymap.installCallback((SDLKey)SGET_I("key_look_up"), &look_up);
 	keymap.installCallback((SDLKey)SGET_I("key_look_down"), &look_down);
@@ -40,7 +42,7 @@ KeyboardMapSetup::KeyboardMapSetup() {
 	keymap.installCallback((SDLKey)SGET_I("key_move_left"), &move_left);
 	keymap.installCallback((SDLKey)SGET_I("key_move_right"), &move_right);
 
-	keymap.installCallback((SDLKey)SGET_I("key_reset_camera"), &reset_camera);
+	keymap.installCallback((SDLKey)SGET_I("key_camera_reset"), &reset_camera);
 	keymap.installCallback((SDLKey)SGET_I("key_screenshot"), &screenshot);
 }
 

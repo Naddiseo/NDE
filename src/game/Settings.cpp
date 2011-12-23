@@ -12,20 +12,20 @@ Settings::Settings() {
 	set("cam_theta", 0.0f);
 	set("cam_rho", 0.0f);
 
-	set("key_quit", SDLK_q);
+	set("key_quit", (int)SDLK_q);
 
-	set("key_look_up", SDLK_UP);
-	set("key_look_down", SDLK_DOWN);
-	set("key_look_left", SDLK_LEFT);
-	set("key_look_right", SDLK_RIGHT);
+	set("key_look_up", (int)SDLK_UP);
+	set("key_look_down", (int)SDLK_DOWN);
+	set("key_look_left", (int)SDLK_LEFT);
+	set("key_look_right", (int)SDLK_RIGHT);
 
-	set("key_move_up", SDLK_w);
-	set("key_move_down", SDLK_s);
-	set("key_move_left", SDLK_a);
-	set("key_move_right", SDLK_d);
+	set("key_move_up", (int)SDLK_w);
+	set("key_move_down", (int)SDLK_s);
+	set("key_move_left", (int)SDLK_a);
+	set("key_move_right", (int)SDLK_d);
 
-	set("key_camera_reset", SDLK_KP0);
-	set("key_screenshot", SDLK_PRINT);
+	set("key_camera_reset", (int)SDLK_KP0);
+	set("key_screenshot", (int)SDLK_PRINT);
 }
 
 Settings::~Settings() {}
