@@ -29,6 +29,7 @@ public:
 	SettingsValue(const Vector3f& value): type(Type::VECTOR), v3f_val(value) {}
 	SettingsValue(): type(Type::INT), int_val(0) {}
 	
+	// TODO: Add error checking that type == expected
 	operator const std::string&() const { return str_val; }
 	operator scalar() const { return flt_val; }
 	operator int() const { return int_val; }

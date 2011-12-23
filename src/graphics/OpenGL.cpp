@@ -1,4 +1,9 @@
+#include "graphics/OpenGL.hpp"
+
+#ifndef WINDOWS
+
 #include <cstring>
+
 #include <GL/glx.h>
 #include "graphics/OpenGL.hpp"
 
@@ -9,7 +14,6 @@
 #else
 #	error "Your platform is currently not supported"
 #endif
-
 
 /*
  * VBO from:
@@ -137,3 +141,4 @@ void OpenGL::takeScreenshot(std::string path){}
 
 }
 
+#endif
