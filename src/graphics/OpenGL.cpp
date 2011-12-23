@@ -1,12 +1,83 @@
-#include <GL/gl.h>
+#include <cstring>
+#include <GL/glx.h>
 #include "graphics/OpenGL.hpp"
 
+#ifdef WINDOWS
+#	define glGetProcAddress(a) wglGetProcAddress(reinterpret_cast<const unsigned char*>(a))
+#elif defined(__linux__)
+#	define glGetProcAddress(a) glXGetProcAddress(reinterpret_cast<const unsigned char*>(a))
+#else
+#	error "Your platform is currently not supported"
+#endif
+
+
+/*
+ * VBO from:
+ * http://nehe.gamedev.net/tutorial/vertex_buffer_objects/22002/
+ * http://stackoverflow.com/questions/4317062/opengl-how-to-check-if-the-user-supports-glgenbuffers
+ */
+
+PFNGLGENBUFFERSARBPROC glGenBuffersARB = NULL;                  // VBO Name Generation Procedure
+PFNGLBINDBUFFERARBPROC glBindBufferARB = NULL;                  // VBO Bind Procedure
+PFNGLBUFFERDATAARBPROC glBufferDataARB = NULL;                  // VBO Data Loading Procedure
+PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB = NULL;            // VBO Deletion Procedure
 
 namespace nde {
+
+static bool isSupported(const char* extension) {
+	/* TODO: use GLEW */
+	const unsigned char* extensions = NULL;
+	const unsigned char* start;
+	unsigned char* where;
+	unsigned char* terminator;
+
+	where = (unsigned char*)strchr(extension, ' ');
+
+	if (where || *extension == 0) {
+		return false;
+	}
+
+	extensions = glGetString(GL_EXTENSIONS);
+
+	start = extensions;
+
+	for (;;) {
+		where = (unsigned char*)strstr((const char*)start, extension);
+		if (!where) {
+			break;
+		}
+		terminator = where + strlen(extension);
+
+		if (where == start || *(where - 1) == ' ') {
+			if (*terminator == ' ' || *terminator == 0) {
+				return true;
+			}
+		}
+		start = terminator;
+	}
+
+	return false;
+}
 
 OpenGL::OpenGL() {}
 
 OpenGL::~OpenGL() {}
+
+bool OpenGL::init() {
+
+	if (!isSupported("GL_ARB_vertex_buffer_object")) {
+		std::cerr << "Vertex Buffer Objects not supported" << std::endl;
+		return false;
+	}
+
+	glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) glGetProcAddress("glGenBuffersARB");
+	glBindBufferARB = (PFNGLBINDBUFFERARBPROC) glGetProcAddress("glBindBufferARB");
+	glBufferDataARB = (PFNGLBUFFERDATAARBPROC) glGetProcAddress("glBufferDataARB");
+	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glGetProcAddress("glDeleteBuffersARB");
+
+
+	return true;
+}
 
 // Primatives
 void OpenGL::drawCircle(VBOVertex center, scalar radius) {}
@@ -51,6 +122,15 @@ void OpenGL::drawBox(VBOVertex min, VBOVertex max){}
 VBOVertex* OpenGL::allocBuffer(size_t element_count){ return NULL; }
 void OpenGL::addToBuffer(VBOVertex v){}
 void OpenGL::flushBuffer(){}
+
+void OpenGL::translate(Vector3f position) {
+	glTranslatef(position.x, position.y, position.z);
+}
+
+
+void scale(Vector3f amount) {
+	glScalef(amount.x, amount.y, amount.z);
+}
 
 // Utilities
 void OpenGL::takeScreenshot(std::string path){}

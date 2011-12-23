@@ -1,5 +1,4 @@
-#include <GL/glew.h>
-#include <GL/glext.h>
+
 #include "resources/Mesh.hpp"
 
 
@@ -38,8 +37,6 @@ void Mesh::flush() {
 GLuint Mesh::reserve(size_t elements) {
 	array_count = elements;
 	//vertex_array = new scalar[elements * 3];
-	glGenBuffersARB(1, &vboId);
-	glBindBufferARB(GL_ARRAY_BUFFER, vboId);
 
 	return vboId;
 }

@@ -5,7 +5,6 @@
  *      Author: richard
  */
 #include <SDL/SDL.h>
-#include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <IL/il.h>
@@ -22,11 +21,6 @@ bool Renderer::Init() {
 	int height = Settings::getInstance().get_int("HEIGHT");
 	int width = Settings::getInstance().get_int("WIDTH");
 
-
-	GLenum err = glewInit();
-
-
-
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) == -1) {
 		Game::getInstance().setError(SDL_GetError());
 		return false;
@@ -38,14 +32,6 @@ bool Renderer::Init() {
 		return false;
 	}
 
-	if (err != GLEW_OK) {
-		Game::getInstance().setError((char*)glewGetErrorString(err));
-		return false;
-	}
-
-	if (glewGetExtension("GL_ARB_vertex_buffer_object")) {
-		std::cerr << "Vertex Buffer Object available" << std::endl;
-	}
 
 	SDL_Flip(screen);
 	glEnable(GL_DEPTH_TEST);

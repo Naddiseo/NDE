@@ -18,11 +18,12 @@ struct VBOVertex {
 
 enum class VertexFlags : char {
 	NONE   = 0,
-	COLOR  = 1,
-	TEX1   = 2,
-	TEX2   = 4,
-	TEX3   = 8,
-	NORMAL = 16,
+	VERTEX = 1,
+	COLOR  = 2,
+	TEX1   = 4,
+	TEX2   = 8,
+	TEX3   = 16,
+	NORMAL = 32,
 };
 
 enum class DrawMode : char {
@@ -42,16 +43,19 @@ enum class VBOHint : char {
 
 class iGraphicsLibrary {
 	Color clearColor;
+	char  vertexFlags;
 public:
 	iGraphicsLibrary();
 	virtual ~iGraphicsLibrary();
 
-	virtual void init() = 0;
+	virtual bool init() = 0;
 	virtual void clearScreen() = 0;
 
 	virtual void setClearColor(Color c) { clearColor = c; }
+	virtual void setVertexFlag(char mask) { vertexFlags |= mask; }
 
 	// Primatives
+	virtual void setLineWidth(scalar width) = 0;
 	virtual void drawCircle(VBOVertex center, scalar radius) = 0;
 	virtual void drawLine(VBOVertex a, VBOVertex b) = 0;
 	virtual void drawTriangle(VBOVertex a, VBOVertex b, VBOVertex c) = 0;
@@ -64,6 +68,10 @@ public:
 	virtual VBOVertex* allocBuffer(size_t element_count) = 0;
 	virtual void addToBuffer(VBOVertex v) = 0;
 	virtual void flushBuffer() = 0;
+
+
+	virtual void translate(Vector3f position) = 0;
+	virtual void scale(Vector3f amount) = 0;
 
 	// Utilities
 	virtual void takeScreenshot(std::string path) = 0;

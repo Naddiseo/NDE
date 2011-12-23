@@ -8,6 +8,8 @@ public:
 	OpenGL();
 	virtual ~OpenGL();
 
+	bool init();
+
 	void clearScreen();
 
 	// Primatives
@@ -23,6 +25,10 @@ public:
 	VBOVertex* allocBuffer(size_t element_count);
 	void addToBuffer(VBOVertex v);
 	void flushBuffer();
+
+
+	void translate(Vector3f position);
+	void scale(Vector3f amount);
 
 	// Utilities
 	void takeScreenshot(std::string path);

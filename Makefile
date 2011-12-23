@@ -1,5 +1,5 @@
 INCFLAGS=-I./includes -I.
-LINKFLAGS=`pkg-config sdl gl glu glew ILU bullet protobuf --cflags --libs`
+LINKFLAGS=`pkg-config sdl gl glu ILU bullet protobuf --cflags --libs`
 CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DNDEBUG=1  -std=c++0x -Wall -Werror -Wfatal-errors 
 CFLAGS=-g -I./includes 
 
