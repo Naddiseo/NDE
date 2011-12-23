@@ -16,7 +16,12 @@
 #include "math/util.hpp"
 
 namespace nde {
-Camera::Camera() : position(0,0,0), forward0(0,0,-1), up0(0,1,0), forward(forward0), up(up0) {
+
+Camera::Camera()
+	: position(0,0,0),
+		forward0(0,0,-1), forward(forward0),
+		up0(0,1,0), up(up0)
+{
 	phi = 0.f;
 	theta = 0.f;
 	rho = 0.f;
@@ -24,19 +29,19 @@ Camera::Camera() : position(0,0,0), forward0(0,0,-1), up0(0,1,0), forward(forwar
 	speed = 0.01;
 	sensitivity = 0.004;
 	
-	//#ifdef WINDOWS
+	#ifdef WINDOWS
 		SDL_ShowCursor(SDL_DISABLE);
-	//#endif
+	#endif
 	
-	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
+	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_ON);
 }
 
 Camera::~Camera() {
-	//#ifdef WINDOWS
+	#ifdef WINDOWS
 		SDL_ShowCursor(SDL_ENABLE);
-	//#endif
+	#endif
 	
-	SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
+	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
 }
 
 void Camera::updateVectors() {
@@ -53,8 +58,6 @@ void Camera::updateVectors() {
 	
 	up.normalise();
 	forward.normalise();
-	
-	//this->print();
 }
 
 void Camera::print() {
@@ -69,18 +72,15 @@ void Camera::render() {
 	glRotatef(RAD2DEG(theta), 1, 0, 0);
 	glRotatef(RAD2DEG(-phi ), 0, 1, 0);
 	glRotatef(RAD2DEG(rho  ), 0, 0, 1);
-	
 	glTranslatef(-position.x, -position.y, -position.z);
 }
 
 void Camera::moveForwards(scalar distance) {
 	position += distance * forward;
-	//this->print();
 }
 
 void Camera::strafeRight(scalar distance) {
 	position += distance * up.cross(forward);
-	//this->print();
 }
 
 void Camera::move(Vector3f dir) {
@@ -125,8 +125,6 @@ Vector3f Camera::getRayToFromCenter() {
 }
 
 Vector3f Camera::getRayTo(size_t x, size_t y) {
-	return forward;
-	
 	GLfloat winX, winY, winZ;
 	GLdouble posX, posY, posZ;
 

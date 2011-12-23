@@ -1,12 +1,12 @@
 INCFLAGS=-I./includes -I.
-LINKFLAGS=`pkg-config sdl gl glu ILU bullet protobuf --cflags --libs`
+LINKFLAGS=`pkg-config sdl gl glu glew ILU bullet protobuf --cflags --libs`
 CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DNDEBUG=1  -std=c++0x -Wall -Werror -Wfatal-errors 
 CFLAGS=-g -I./includes 
 
-GAME_FILES=Camera.cpp Entity.cpp Game.cpp Scene.cpp Settings.cpp World.cpp
+GAME_FILES=Camera.cpp Entity.cpp Game.cpp Input.cpp KeyboardMap.cpp Scene.cpp Settings.cpp World.cpp
 GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 
-GRAPHICS_FILES=Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
+GRAPHICS_FILES=Face.cpp iGraphicsLibrary.cpp IsRendered.cpp OpenGL.cpp Renderer.cpp SkyBox.cpp
 GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 
 MATH_FILES=util.cpp
@@ -24,7 +24,7 @@ OBJECTS=src/resources/pb/resource.pb.o $(SOURCES:.cpp=.o)
 
 all: clear library test01
 
-test01: libNDE.a tests/test01.o
+test01: libNDE.a tests/test01.o tests/KeyboardMapSetup.o
 	$(CXX)  $^ -L ./ -lNDE $(LINKFLAGS)  $(CXXFLAGS)   -o nde.bin
 
 library: libNDE.a
@@ -41,7 +41,7 @@ libNDE.a:  $(OBJECTS)
 proto: src/resources/pb/resource.pb.o
 
 src/resources/pb/resource.pb.o: src/resources/pb/resource.pb.cc
-	$(CXX) -c $< $(CXXFLAGS) -Wno-error -Wno-effc++ -Wno-all -Wno-fatal-errors -o $@
+	$(CXX) -c $< $(CXXFLAGS) -Wno-error -Wno-all -Wno-fatal-errors -o $@
 
 src/resources/pb/resource.pb.cc: src/resources/pb/resource.proto
 	protoc --cpp_out=. $^

@@ -6,19 +6,21 @@
  *      Author: richard
  */
 
-#include "resources/Assets.hpp"
+#include "game/Camera.hpp"
+#include "game/Input.hpp"
 #include "game/World.hpp"
 #include "graphics/Renderer.hpp"
-#include "game/Camera.hpp"
+#include "resources/Assets.hpp"
 #include "resources/Material.hpp"
 
 namespace nde {
 
 class Game {
 	Assets assets;
-	World world;
-	Renderer renderer;
 	Camera camera;
+	Input input;
+	Renderer renderer;
+	World world;
 
 
 	SDL_Event event;
@@ -40,8 +42,10 @@ public:
 	}
 
 	Assets& getAssets() { return assets; }
+	Input& getInput() { return input; }
+ 	World& getWorld() { return world; }
 
-	World& getWorld() { return world; }
+
 
 	void setError(const char* errstr) { haserror = true; errorstring = errstr; }
 

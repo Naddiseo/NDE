@@ -14,13 +14,11 @@ namespace nde {
 class Camera {
 	Vector3f position;
 	
-	Vector3f forward0;
-	Vector3f up0;
-	
-	Vector3f forward;
-	Vector3f up;
+	Vector3f forward0, forward;
+	Vector3f up0, up;
 	
 	scalar phi, theta, rho;
+	
 	scalar speed, sensitivity;
 	
 	void updateVectors();
@@ -41,7 +39,7 @@ public:
 	void rotate(scalar dphi, scalar dtheta);
 	
 	void print();
-
+	
 	float getPhi() const { return phi; }
 	float getTheta() const { return theta; }
 	float getRho() const { return rho; }

@@ -1,5 +1,7 @@
+#include <GL/glew.h>
+#include <GL/glext.h>
 #include "resources/Mesh.hpp"
-#include <GL/gl.h>
+
 
 namespace nde {
 
@@ -11,6 +13,7 @@ Mesh::~Mesh() {
 	for (Face* f : faces) {
 		delete f;
 	}
+
 }
 
 void Mesh::render(Vector3f& translate) {
@@ -25,6 +28,27 @@ void Mesh::render(Vector3f& translate) {
 
 	glPopMatrix();
 }
+
+void Mesh::flush() {
+	//glVertexPointer(3, GL_FLOAT, sizeof(float)*3, vertex_array);
+	//glColorPointer(3, GL_UNSIGNED_BYTE, sizeof(char)*3, color_array);
+	glDrawArrays(GL_TRIANGLES, 0, array_count);
+}
+
+GLuint Mesh::reserve(size_t elements) {
+	array_count = elements;
+	//vertex_array = new scalar[elements * 3];
+	glGenBuffersARB(1, &vboId);
+	glBindBufferARB(GL_ARRAY_BUFFER, vboId);
+
+	return vboId;
+}
+
+
+/*char* Mesh::reserveColors(size_t elements) {
+	color_count = elements;
+	return NULL;
+}*/
 
 Vector3f*
 Mesh::add(scalar x, scalar y, scalar z) {
