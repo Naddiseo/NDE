@@ -219,7 +219,8 @@ Game::mainLoop() {
 	int height = SGET_I("HEIGHT");
 	int width = SGET_I("WIDTH");
 
-	if (!renderer.Init()) {
+	if (!renderer.init()) {
+		ERROR("Couldn't init renderer");
 		std::cerr << "Couldn't init renderer" << std::endl;
 		haserror = true;
 	}

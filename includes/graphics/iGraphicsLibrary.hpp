@@ -44,6 +44,9 @@ enum class VBOHint : char {
 class iGraphicsLibrary {
 	Color clearColor;
 	char  vertexFlags;
+protected:
+	size_t height;
+	size_t width;
 public:
 	iGraphicsLibrary();
 	virtual ~iGraphicsLibrary();

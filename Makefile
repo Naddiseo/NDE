@@ -1,6 +1,6 @@
 INCFLAGS=-I./includes -I.
 LINKFLAGS=`pkg-config sdl gl glu ILU bullet protobuf --cflags --libs`
-CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DNDEBUG=1  -std=c++0x -Wall -Werror -Wfatal-errors 
+CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DUSE_OPENGL=1 -DNDEBUG=1  -std=c++0x -Wall -Werror -Wfatal-errors 
 CFLAGS=-g -I./includes 
 
 GAME_FILES=Camera.cpp Entity.cpp Game.cpp Input.cpp KeyboardMap.cpp Scene.cpp Settings.cpp World.cpp

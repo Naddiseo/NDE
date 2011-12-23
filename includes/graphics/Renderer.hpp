@@ -6,16 +6,24 @@
  *      Author: richard
  */
 #include <SDL/SDL.h>
-
+#include "graphics/iGraphicsLibrary.hpp"
 namespace nde {
+
+enum class GLibrary : char {
+	OPENGL,
+	//DIRECTX
+};
 
 class Renderer {
 	SDL_Surface* screen;
+	iGraphicsLibrary* graphics;
 public:
 	Renderer();
 	virtual ~Renderer();
 
-	bool Init();
+	bool init(GLibrary gl = GLibrary::OPENGL);
+
+	iGraphicsLibrary* getGraphics() const { return graphics; }
 
 	Renderer(const Renderer &other);
 	Renderer& operator=(const Renderer &other);

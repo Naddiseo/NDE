@@ -14,7 +14,7 @@
 #else
 #	error "Your platform is currently not supported"
 #endif
-
+#include <GL/glu.h>
 
 #include "graphics/OpenGL.hpp"
 
@@ -81,10 +81,23 @@ bool OpenGL::init() {
 	glBufferDataARB = (PFNGLBUFFERDATAARBPROC)glGetProcAddress("glBufferDataARB");
 	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC)glGetProcAddress("glDeleteBuffersARB");
 	
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity();
+	gluPerspective(70, width/height, 1, 35);
+
+
 	return true;
 }
 
+void OpenGL::clearScreen() {}
+
 // Primitives
+void OpenGL::setLineWidth(scalar width) {
+	glLineWidth(width);
+}
 void OpenGL::drawCircle(VBOVertex center, scalar radius) {}
 
 void OpenGL::drawLine(VBOVertex a, VBOVertex b) {
@@ -133,7 +146,7 @@ void OpenGL::translate(Vector3f position) {
 }
 
 
-void scale(Vector3f amount) {
+void OpenGL::scale(Vector3f amount) {
 	glScalef(amount.x, amount.y, amount.z);
 }
 

@@ -14,6 +14,7 @@ public:
 	void clearScreen();
 
 	// Primatives
+	void setLineWidth(scalar width);
 	void drawCircle(VBOVertex center, scalar radius);
 	void drawLine(VBOVertex a, VBOVertex b);
 	void drawTriangle(VBOVertex a, VBOVertex b, VBOVertex c);
