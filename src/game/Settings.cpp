@@ -1,4 +1,8 @@
 #include "game/Settings.hpp"
+
+#include "math/vector.hpp"
+
+#include <string>
 #include <sstream>
 
 namespace nde {
@@ -30,16 +34,7 @@ Settings::Settings() {
 
 Settings::~Settings() {}
 
-void Settings::set(const std::string& key, const std::string& val) {
-	settings[key] = val;
-}
-void Settings::set(const std::string& key, scalar val) {
-	settings[key] = val;
-}
-void Settings::set(const std::string& key, int val) {
-	settings[key] = val;
-}
-void Settings::set(const std::string& key, const Vector3f& val) {
+void Settings::set(const std::string& key, const SettingsValue& val) {
 	settings[key] = val;
 }
 
@@ -56,6 +51,10 @@ const std::string& Settings::get_str(const std::string& key) {
 }
 
 const Vector3f& Settings::get_v3f(const std::string& key) {
+	return settings[key];
+}
+
+SettingsValue& Settings::operator[](const std::string& key) {
 	return settings[key];
 }
 

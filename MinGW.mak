@@ -37,8 +37,8 @@ LIBNDE=libNDE.a
 rebuild: rebuild_clean all
 
 rebuild_clean:
-	-@rm $(EXE)
-	-@rm $(LIBNDE)
+	-@rm -f $(EXE)
+	-@rm -f $(LIBNDE)
 
 all: library test01
 

@@ -1,7 +1,8 @@
 #pragma once
+
 #include <map>
 #include <string>
-#include <sstream>
+
 #include "common.hpp"
 
 namespace nde {
@@ -21,19 +22,25 @@ class SettingsValue
 		int       int_val;
 	};
 	Vector3f    v3f_val;
-
+	
+	void check(Type type) const {
+		if (this->type != type) {
+			// TODO: Throw exception
+		}
+	}
+	
 public:
 	SettingsValue(const std::string& value): type(Type::STRING), str_val(value) {}
 	SettingsValue(scalar value): type(Type::SCALAR), flt_val(value) {}
 	SettingsValue(int value): type(Type::INT), int_val(value) {}
 	SettingsValue(const Vector3f& value): type(Type::VECTOR), v3f_val(value) {}
+	SettingsValue(const char * value): type(Type::STRING), str_val(value) {}
 	SettingsValue(): type(Type::INT), int_val(0) {}
 	
-	// TODO: Add error checking that type == expected
-	operator const std::string&() const { return str_val; }
-	operator scalar() const { return flt_val; }
-	operator int() const { return int_val; }
-	operator const Vector3f&() const { return v3f_val; }
+	operator const std::string&() const { this->check(Type::STRING); return str_val; }
+	operator scalar            () const { this->check(Type::SCALAR); return flt_val; }
+	operator int               () const { this->check(Type::INT   ); return int_val; }
+	operator const Vector3f&   () const { this->check(Type::VECTOR); return v3f_val; }
 };
 
 class Settings {
@@ -46,11 +53,8 @@ public:
 		return instance;
 	}
 	virtual ~Settings();
-
-	void set(const std::string& key, const std::string& val);
-	void set(const std::string& key, scalar val);
-	void set(const std::string& key, int val);
-	void set(const std::string& key, const Vector3f& val);
+	
+	void set(const std::string& key, const SettingsValue& val);
 
 	int get_int(const std::string& key);
 	scalar get_flt(const std::string& key);
@@ -58,7 +62,6 @@ public:
 	const Vector3f& get_v3f(const std::string& key);
 	
 	SettingsValue& operator[](const std::string& key);
-	const SettingsValue& operator[](const std::string& key) const;
 	
 private:
 	Settings();
