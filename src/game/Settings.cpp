@@ -35,7 +35,14 @@ Settings::Settings() {
 Settings::~Settings() {}
 
 void Settings::set(const std::string& key, const SettingsValue& val) {
-	settings[key] = val;
+	settings_t::iterator iter = settings.find(key);
+	
+	if (iter != settings.end()) {
+		iter->second = val;
+	} else {
+		settings_t::value_type setting(key, val);
+		settings.insert(setting);
+	}
 }
 
 int Settings::get_int(const std::string& key) {
