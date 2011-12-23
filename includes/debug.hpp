@@ -1,10 +1,10 @@
 #pragma once
+#include <iostream>
+#include <cstdlib>
+#include <cassert>
+
 namespace nde {
 #ifdef NDEBUG
-#	include <iostream>
-#	include <cstdlib>
-#	include <cassert>
-#	include "game/Game.hpp"
 
 #	define _PRINT(T, x) std::cerr << T " [" << __FILE__ << ":" << __LINE__ << "]" << x << std::endl
 
@@ -12,7 +12,9 @@ namespace nde {
 
 #	define LOG(x) _PRINT("LOG", x)
 #	define WARN(x) _PRINT("Warning", x)
-#	define ERROR(x) { _PRINT("Error", x); Game::getInstance().setError(msg); }
+
+void ERROR(std::string msg);
+
 
 #else
 #	define D(x)
@@ -22,6 +24,6 @@ namespace nde {
 
 #endif
 
-void FATAL_ERROR(std::string msg);
+void FATAL_ERROR(std::ostream msg);
 
 }

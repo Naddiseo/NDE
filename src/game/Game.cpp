@@ -34,7 +34,7 @@ void Game::stopGame() {
 }
 
 Game::Game()
-	: fov(70), haserror(false), shutdown(false), errorstring(0)
+	: fov(70), haserror(false), shutdown(false)
 {
 	camera.setPosition(SGET_V("cam_pos"));
 	camera.rotate(SGET_F("cam_phi"), SGET_F("cam_theta"));
