@@ -25,14 +25,7 @@ bool Renderer::Init() {
 
 	GLenum err = glewInit();
 
-	if (err != GLEW_OK) {
-		Game::getInstance().setError((char*)glewGetErrorString(err));
-		return false;
-	}
 
-	if (glewGetExtension("GL_ARB_vertex_buffer_object")) {
-		std::cerr << "Vertex Buffer Object available" << std::endl;
-	}
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) == -1) {
 		Game::getInstance().setError(SDL_GetError());
@@ -43,6 +36,15 @@ bool Renderer::Init() {
 	if (screen == NULL) {
 		Game::getInstance().setError(SDL_GetError());
 		return false;
+	}
+
+	if (err != GLEW_OK) {
+		Game::getInstance().setError((char*)glewGetErrorString(err));
+		return false;
+	}
+
+	if (glewGetExtension("GL_ARB_vertex_buffer_object")) {
+		std::cerr << "Vertex Buffer Object available" << std::endl;
 	}
 
 	SDL_Flip(screen);

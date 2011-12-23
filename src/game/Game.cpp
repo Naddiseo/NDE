@@ -208,7 +208,10 @@ Game::mainLoop() {
 	int height = SGET_I("HEIGHT");
 	int width = SGET_I("WIDTH");
 
-	renderer.Init();
+	if (!renderer.Init()) {
+		std::cerr << "Couldn't init renderer" << std::endl;
+		haserror = true;
+	}
 
 	//set up basic colors
 	assets.allocColor("red", 1.f, 0.3f, 0.3f);
