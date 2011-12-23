@@ -7,7 +7,7 @@ Settings::Settings() {
 	set("HEIGHT", "600");
 	set("WIDTH", "800");
 	
-	set("cam_pos", { 20, 5, 20 });
+	set("cam_pos", Vector3f { 20, 5, 20 });
 	set("cam_phi", 45.f);
 	set("cam_theta", 0.0f);
 	set("cam_rho", 0.0f);
@@ -30,49 +30,33 @@ Settings::Settings() {
 
 Settings::~Settings() {}
 
-void Settings::set(const std::string key, std::string val) {
-	SettingsValue value;
-	value.type = SettingsValue::_type::STRING;
-	value.str_val = val;
-
-	settings[key] = value;
+void Settings::set(const std::string& key, const std::string& val) {
+	settings[key] = val;
 }
-void Settings::set(const std::string key, scalar val) {
-	SettingsValue value;
-	value.type = SettingsValue::_type::FLOAT;
-	value.flt_val = val;
-
-	settings[key] = value;
+void Settings::set(const std::string& key, scalar val) {
+	settings[key] = val;
 }
-void Settings::set(const std::string key, int val) {
-	SettingsValue value;
-	value.type = SettingsValue::_type::INT;
-	value.int_val = val;
-
-	settings[key] = value;
+void Settings::set(const std::string& key, int val) {
+	settings[key] = val;
 }
-void Settings::set(const std::string key, Vector3f& val) {
-	SettingsValue value;
-	value.type = SettingsValue::_type::VECTOR;
-	value.v3f_val = val;
-
-	settings[key] = value;
+void Settings::set(const std::string& key, const Vector3f& val) {
+	settings[key] = val;
 }
 
 int Settings::get_int(const std::string& key) {
-	return settings[key].int_val;
+	return settings[key];
 }
 
 scalar Settings::get_flt(const std::string& key) {
-	return settings[key].flt_val;
+	return settings[key];
 }
 
-std::string& Settings::get_str(const std::string& key) {
-	return settings[key].str_val;
+const std::string& Settings::get_str(const std::string& key) {
+	return settings[key];
 }
 
-Vector3f Settings::get_v3f(const std::string& key) {
-	return settings[key].v3f_val;
+const Vector3f& Settings::get_v3f(const std::string& key) {
+	return settings[key];
 }
 
 } //namespace nde
