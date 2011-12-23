@@ -52,35 +52,48 @@ void Entity::createBox(Vector3f linVel) {
 	body->setLinearFactor({1, 1, 1});
 
 	body->setLinearVelocity(linVel);
-	body->setAngularVelocity({0,0,0});
-	body->setCcdMotionThreshold(0.5);
+	body->setAngularVelocity({25,15,10});
+	body->setCcdMotionThreshold(0.3);
 	body->setCcdSweptSphereRadius(0.9f);
 
 	mesh = Game::getInstance().getAssets().allocMesh();
+	scalar box_size = world->box_size;
 
-	face = mesh->allocFace();
-	face->col = Color("a", ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX));
-	face->add(mesh->add(0, 0, 0));
-	face->add(mesh->add(0, 0, 5));
-	face->add(mesh->add(5, 0, 0));
+	Vector3f* vertexes[] = {
+		mesh->add(-box_size, box_size, -box_size),
+		mesh->add(box_size, box_size, -box_size),
+		mesh->add(-box_size, -box_size, -box_size),
+		mesh->add(box_size, -box_size, -box_size),
+		mesh->add(-box_size, box_size, box_size),
+		mesh->add(box_size, box_size, box_size),
+		mesh->add(-box_size, -box_size, box_size),
+		mesh->add(box_size, -box_size, box_size),
+	};
 
-	face = mesh->allocFace();
-	face->col = Color("a", ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX));
-	face->add(mesh->add(0, 0, 5));
-	face->add(mesh->add(.33*5, 1*5, .33*5));
-	face->add(mesh->add(5, 0, 0));
+	short indices[][3] =
+	{
+	    {0, 1, 2},    // side 1
+	    {2, 1, 3},
+	    {4, 0, 6},    // side 2
+	    {6, 0, 2},
+	    {7, 5, 6},    // side 3
+	    {6, 5, 4},
+	    {3, 1, 7},    // side 4
+	    {7, 1, 5},
+	    {4, 5, 0},    // side 5
+	    {0, 5, 1},
+	    {3, 7, 2},    // side 6
+	    {2, 7, 6},
+	};
 
-	face = mesh->allocFace();
-	face->col = Color("a", ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX));
-	face->add(mesh->add(1*5, 0, 0));
-	face->add(mesh->add(.33*5, 1*5, .33*5));
-	face->add(mesh->add(0, 0, 0));
+	for (short* v : indices) {
+		face = mesh->allocFace();
+		face->col = Color("a", ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX));
+		face->add(vertexes[v[0]]);
+		face->add(vertexes[v[1]]);
+		face->add(vertexes[v[2]]);
+	}
 
-	face = mesh->allocFace();
-	face->col = Color("a", ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX));
-	face->add(mesh->add(0, 0, 0));
-	face->add(mesh->add(.33*5, 1*5, .33*5));
-	face->add(mesh->add(1*5, 0, 0));
 }
 
 void Entity::onDie() {

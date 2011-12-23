@@ -23,6 +23,9 @@ World::World() {
 
 	dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
 
+	box_size = 1;
+	box_speed = 25;
+
 }
 
 World::~World() {
@@ -75,26 +78,31 @@ void World::step() {
 
 void
 World::shootBox(Vector3f from, Vector3f to) {
-	btBoxShape* shape = new btBoxShape(btVector3(.5f,.5f,.5f));
-	scalar mass = 1.f;
+	float actual_box_size = box_size * 2.f;
+	btBoxShape* shape = new btBoxShape(btVector3(actual_box_size,actual_box_size,actual_box_size));
+	scalar mass = actual_box_size*actual_box_size*actual_box_size;
 	btTransform startTransform;
+	Vector3f linVel(to.x-from.x, to.y-from.y, to.z-from.z);
+	linVel.normalise();
+
+	// move the box infront of the camera
+	from += linVel * box_size *2;
 
 	shape->initializePolyhedralFeatures();
 
 	//std::cout << "From " << from << " to " << to <<std::endl;
 
 	startTransform.setIdentity();
-	startTransform.setRotation(btQuaternion(0, 0, 0, 1));
+	startTransform.setRotation(btQuaternion(0, 1, 0, 1));
 
 	Entity* box = new Entity(this);
 	box->setMass(mass);
 	box->setTransform(startTransform);
 	box->addCollisionShape(shape);
 	box->getWorldTransform().setOrigin(from);
-	box->getWorldTransform().setRotation(btQuaternion(0, 0, 0, 1));
-	Vector3f linVel(to.x-from.x, to.y-from.y, to.z-from.z);
-	linVel.normalise();
-	linVel *= 25.f;
+	box->getWorldTransform().setRotation(btQuaternion(0, 2, 0, 1));
+
+	linVel *= box_speed;
 	box->createBox(linVel);
 
 	getScene().addRenderObjects(box);

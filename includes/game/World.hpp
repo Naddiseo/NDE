@@ -35,6 +35,10 @@ public:
 
 
 	Scene& getScene() { return scene; }
+
+
+	scalar box_size;
+	scalar box_speed;
 private:
 
 };

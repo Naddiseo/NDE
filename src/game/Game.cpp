@@ -74,6 +74,25 @@ Game::handleEvents() {
 				shutdown = true;
 				return;
 				break;
+
+			case SDLK_LEFTBRACKET:
+				world.box_size -= 0.4;
+				world.box_size = std::max(.5f, world.box_size);
+				break;
+			case SDLK_RIGHTBRACKET:
+				world.box_size += 0.4;
+				world.box_size = std::min(30.f, world.box_size);
+				break;
+
+			case SDLK_SEMICOLON:
+				world.box_speed -= 5.f;
+				world.box_speed = std::max(5.f, world.box_speed);
+				break;
+			case SDLK_COMMA:
+				world.box_speed += 5.f;
+				world.box_speed = std::min(100.f, world.box_speed);
+				break;
+
 			case SDLK_UP:
 				camera.rotateX(3);
 				break;

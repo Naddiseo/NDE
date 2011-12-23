@@ -130,7 +130,7 @@ Vector3f Camera::getRayToFromCenter() {
 }
 
 Vector3f Camera::getRayTo(size_t x, size_t y) {
-	return forward;
+	//return forward;
 	
 	GLfloat winX, winY, winZ;
 	GLdouble posX, posY, posZ;

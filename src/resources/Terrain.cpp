@@ -23,14 +23,16 @@ char crand(size_t a, size_t b) {
 
 namespace nde {
 
-Terrain::Terrain(World* _world) : Entity(_world), scale(50), height(1<<7), width(1<<7){
+Terrain::Terrain(World* _world) : Entity(_world), scale(20), height(1<<7), width(1<<7){
 	heightmap = new scalar[height * width];
 	colormap = new _col[height * width * sizeof(_col)];
+
+	float heightt = 5*scale/10;
 
 	srand(time(NULL));
 
 	for (size_t i = 0; i < height*width; i++) {
-		heightmap[i] = frand(-1.0, 1.0);
+		heightmap[i] = frand(-heightt, heightt);
 		colormap[i].r = crand(80, 255);
 		colormap[i].g = crand(80, 255);
 		colormap[i].b = crand(80, 255);
@@ -39,7 +41,7 @@ Terrain::Terrain(World* _world) : Entity(_world), scale(50), height(1<<7), width
 	heightfieldShape = new btHeightfieldTerrainShape(
 		width, height, heightmap,
 		5.0,
-		-1.0, 1.0,
+		-heightt, heightt,
 		1,
 		PHY_FLOAT,
 		false
@@ -77,6 +79,15 @@ void Terrain::tick() {
 			glVertex3f(x2,  heightmap[(i+1) * height + j], y1);
 		}
 
+	}
+
+	glEnd();
+	glBegin(GL_LINES);
+	glLineWidth(100);
+	{
+		glColor4b(255, 78, 78, 255);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 100, 0);
 	}
 	glEnd();
 }
