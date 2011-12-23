@@ -1,4 +1,5 @@
 #include "graphics/OpenGL.hpp"
+#include "debug.hpp"
 
 #include <cstring>
 
@@ -83,7 +84,7 @@ OpenGL::~OpenGL() {}
 bool OpenGL::init() {
 
 	if (!isSupported("GL_ARB_vertex_buffer_object")) {
-		std::cerr << "Vertex Buffer Objects not supported" << std::endl;
+		ERROR("Vertex Buffer Objects not supported");
 		return false;
 	}
 

@@ -22,6 +22,17 @@
 
 namespace nde {
 
+
+void Game::setError(const std::string error) {
+	errorstring = error;
+	stopGame();
+}
+
+void Game::stopGame() {
+	shutdown = true;
+	haserror = true;
+}
+
 Game::Game()
 	: fov(70), haserror(false), shutdown(false), errorstring(0)
 {
