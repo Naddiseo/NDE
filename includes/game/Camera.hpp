@@ -13,11 +13,16 @@ namespace nde {
 
 class Camera {
 	Vector3f position;
-	Vector3f direction;
-	Vector3f forward;
-	Vector3f up;
+	
+	Vector3f forward0, forward;
+	Vector3f up0, up;
+	
+	scalar phi, theta, rho;
 	
 	scalar speed, sensitivity;
+	
+	void updateVectors();
+	
 public:
 	Camera();
 	virtual ~Camera();
@@ -31,23 +36,18 @@ public:
 	void onMouseMotion(const SDL_MouseMotionEvent& event);
 	void onMouseClick(const SDL_MouseButtonEvent& event);
 
-	void rotateX(scalar angle);
-	void rotateY(scalar angle);
-	void rotateZ(scalar angle);
-
+	void rotate(scalar dphi, scalar dtheta);
+	
 	void print();
-
-	float getRotX() const { return direction.x; }
-	float getRotY() const { return direction.y; }
-	float getRotZ() const { return direction.z; }
-
-	Vector3f getRayTo(size_t x, size_t y);
-	Vector3f getRayToFromCenter();
+	
+	float getPhi() const { return phi; }
+	float getTheta() const { return theta; }
+	float getRho() const { return rho; }
 	
 	void setPosition(const Vector3f& position);
-	void setDirection(const Vector3f& direction);
-	void setForwardDir(const Vector3f& forward);
-	void setUpwardDir(const Vector3f& upward);
+	
+	Vector3f getRayTo(size_t x, size_t y);
+	Vector3f getRayToFromCenter();
 	
 	const Vector3f& getPos() const { return position; }
 };

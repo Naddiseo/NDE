@@ -25,7 +25,9 @@ namespace nde {
 
 #define WH (1<<7)
 
-Terrain::Terrain(World* _world) : Entity(_world), scale(1), height(WH), width(WH){
+Terrain::Terrain(World* _world)
+	: Entity(_world), scale(1), height(WH), width(WH)
+{
 	scalar min = -1, max = 1;
 	heightmap = new scalar[height * width];
 	colormap = new _col[height * width * sizeof(_col)];

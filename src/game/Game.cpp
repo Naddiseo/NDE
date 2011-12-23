@@ -26,13 +26,11 @@ Game::Game()
 	: fov(70), haserror(false), shutdown(false), errorstring(0)
 {
 	camera.setPosition(SGET_V("cam_pos"));
-	camera.setDirection(SGET_V("cam_dir"));
-	camera.setUpwardDir(SGET_V("cam_up"));
-	camera.setForwardDir(SGET_V("cam_forward"));
-
+	camera.rotate(SGET_F("cam_phi"), SGET_F("cam_theta"));
+	
 #ifdef WINDOWS
-	HWND hWnd = GetConsoleWindow();
-	ShowWindow(hWnd, SW_HIDE);
+	//HWND hWnd = GetConsoleWindow();
+	//ShowWindow(hWnd, SW_HIDE);
 #endif
 }
 
@@ -40,9 +38,10 @@ Game::~Game() {}
 
 void
 Game::handleEvents() {
-	static int speed = 1.0;
+	static scalar speed = 1.0;
+	
 	while (SDL_PollEvent(&event)) {
-		switch ((short)event.type) {
+		switch (event.type) {
 		case SDL_QUIT:
 			shutdown = true;
 			return;
@@ -76,40 +75,40 @@ Game::handleEvents() {
 				return;
 				break;
 			case SDLK_UP:
-				camera.rotateX(3);
+				camera.rotate(0, 0.015625);
 				break;
 			case SDLK_DOWN:
-				camera.rotateX(-3);
+				camera.rotate(0, -0.015625);
 				break;
 			case SDLK_RIGHT:
-				camera.rotateY(-1);
+				camera.rotate(0.015625, 0);
 				break;
 			case SDLK_LEFT:
-				camera.rotateY(1);
+				camera.rotate(-0.015625, 0);
 				break;
 			case SDLK_w:
 				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
-					Vector3f tmp(0, 0.3 * speed, 0);
+					Vector3f tmp(0, 0.375 * speed, 0);
 					camera.move(tmp);
 				}
 				else {
-					camera.moveForwards(-0.3 * speed);
+					camera.moveForwards(0.375 * speed);
 				}
 				break;
 			case SDLK_s:
 				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
-					Vector3f tmp(0, -0.3 * speed, 0);
+					Vector3f tmp(0, -0.375 * speed, 0);
 					camera.move(tmp);
 				}
 				else {
-					camera.moveForwards(0.3 * speed);
+					camera.moveForwards(-0.375 * speed);
 				}
 				break;
 			case SDLK_a:
-				camera.strafeRight(0.1 * speed);
+				camera.strafeRight(0.125 * speed);
 				break;
 			case SDLK_d:
-				camera.strafeRight(-0.1 * speed);
+				camera.strafeRight(-0.125 * speed);
 				break;
 
 			case SDLK_KP0:
@@ -118,9 +117,7 @@ Game::handleEvents() {
 					camera.move(tmp);
 				}
 				else {
-					camera.rotateX(-camera.getRotX());
-					camera.rotateY(-camera.getRotY());
-					camera.rotateZ(-camera.getRotZ());
+					camera.rotate(-camera.getPhi(), -camera.getTheta());
 				}
 				break;
 			case SDLK_PRINT: {
@@ -171,11 +168,12 @@ void Game::drawAxis() {
 	glMatrixMode   (GL_MODELVIEW);
 	glLoadIdentity ();
 
-	glTranslatef (0, 0, -2);   // Place small triad between clipping planes.
-
-	glRotatef (camera.getRotZ(), 0,0,1);   // Viewing rotations.
-	glRotatef (camera.getRotY(), 0,1,0);
-	glRotatef (camera.getRotX(), 1,0,0);
+	// Place small triad between clipping planes.
+	glTranslatef (0, 0, -2);
+	
+	// Viewing rotations.
+	glRotatef(camera.getTheta(), 0, 1, 0);
+	glRotatef(camera.getPhi()  , 1, 0, 0);
 
 	glGetFloatv(GL_MODELVIEW_MATRIX, fvViewMatrix);
 	
@@ -215,10 +213,7 @@ Game::mainLoop() {
 	assets.allocColor("blue", 0.3f, 0.3f, 1.f);
 	assets.allocColor("black", 0.f, 0.f, 0.f);
 	assets.allocColor("white", 1.f, 1.f, 1.f);
-
-
-
-
+	
 	while (!(haserror || shutdown)) {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();

@@ -6,21 +6,28 @@
  */
 
 #include <cmath>
+#include <iostream>
 #include <GL/gl.h>
 #include <SDL/SDL.h>
 
 #include "game/Camera.hpp"
 #include "game/Settings.hpp"
 #include "game/Game.hpp"
-
-#define PI 3.1415265359
-#define PIdiv180 (PI/180.0)
+#include "math/util.hpp"
 
 namespace nde {
-Camera::Camera() : position(0,0,0), forward(0,0,-1) {
+
+Camera::Camera()
+	: position(0,0,0),
+		forward0(0,0,-1), forward(forward0),
+		up0(0,1,0), up(up0)
+{
+	phi = 0.f;
+	theta = 0.f;
+	rho = 0.f;
 	
 	speed = 0.01;
-	sensitivity = 0.2;
+	sensitivity = 0.004;
 	
 	#ifdef WINDOWS
 		SDL_ShowCursor(SDL_DISABLE);
@@ -37,43 +44,43 @@ Camera::~Camera() {
 	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
 }
 
+void Camera::updateVectors() {
+	forward = forward0;
+	up = up0;
+	
+	RotateAround(phi, up, forward);
+	
+	Vector3f cross = up.cross(forward);
+	cross.normalise();
+	
+	RotateAround(theta, cross, up);
+	RotateAround(theta, cross, forward);
+	
+	up.normalise();
+	forward.normalise();
+}
+
 void Camera::print() {
 	std::cout
 		<< position << " "
 		<< forward << " "
-		<< direction << std::endl;
+		<< up << " " << up.cross(forward)
+		<< std::endl;
 }
 
 void Camera::render() {
-
-	Vector3f s1, s2;
-
-	s1.x = std::cos((direction.y + 90) * PIdiv180);
-	s1.z = -std::sin((direction.y + 90) * PIdiv180);
-	scalar cosX = std::cos(direction.x * PIdiv180);
-
-	s2.x = s1.x * cosX;
-	s2.z = s1.z * cosX;
-	s2.y = sin(direction.x * PIdiv180);
-
-	forward = s2;
-
-	glRotatef(-direction.x, 1, 0, 0);
-	glRotatef(-direction.y, 0, 1, 0);
-	glRotatef(-direction.z, 0, 0, 1);
+	glRotatef(RAD2DEG(theta), 1, 0, 0);
+	glRotatef(RAD2DEG(-phi ), 0, 1, 0);
+	glRotatef(RAD2DEG(rho  ), 0, 0, 1);
 	glTranslatef(-position.x, -position.y, -position.z);
 }
 
 void Camera::moveForwards(scalar distance) {
-	Vector3f move(forward.x * -distance, forward.y * -distance, forward.z * -distance);
-
-	position += move;
+	position += distance * forward;
 }
 
 void Camera::strafeRight(scalar distance) {
-	Vector3f move(forward.z*distance, 0, forward.x * -distance);
-
-	position += move;
+	position += distance * up.cross(forward);
 }
 
 void Camera::move(Vector3f dir) {
@@ -81,7 +88,13 @@ void Camera::move(Vector3f dir) {
 }
 
 void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
-	direction -= Vector3f(event.yrel, event.xrel, 0) * sensitivity;
+	scalar phi = event.xrel * sensitivity;
+	
+	// Negative because downward mouse mosition is
+	// position, upward negative
+	scalar theta = -event.yrel * sensitivity;
+	
+	this->rotate(phi, theta);
 }
 
 void Camera::onMouseClick(const SDL_MouseButtonEvent& event) {
@@ -98,27 +111,11 @@ void Camera::setPosition(const Vector3f& position) {
 	this->position = position;
 }
 
-
-void Camera::setDirection(const Vector3f& direction) {
-	this->direction = direction;
-}
-
-void Camera::setUpwardDir(const Vector3f& upward) {
-	this->up = upward;
-}
-
-void Camera::setForwardDir(const Vector3f& forward) {
-	this->forward = forward;
-}
-
-void Camera::rotateX(scalar angle) {
-	direction.x += angle;
-}
-void Camera::rotateY(scalar angle) {
-	direction.y += angle;
-}
-void Camera::rotateZ(scalar angle) {
-	direction.z += angle;
+void Camera::rotate(scalar dphi, scalar dtheta) {
+	phi   -= dphi;
+	theta -= dtheta;
+	
+	this->updateVectors();
 }
 
 Vector3f Camera::getRayToFromCenter() {

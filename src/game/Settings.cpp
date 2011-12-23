@@ -6,11 +6,11 @@ namespace nde {
 Settings::Settings() {
 	set("HEIGHT", "600");
 	set("WIDTH", "800");
-
-	set("cam_pos", {20, 5, 20});
-	set("cam_dir", {0, -45, 0});
-	set("cam_forward", {1, 0, 1});
-	set("cam_upward", {0, 1, 0});
+	
+	set("cam_pos", { 20, 5, 20 });
+	set("cam_phi", 45.f);
+	set("cam_theta", 0.0f);
+	set("cam_rho", 0.0f);
 
 	set("key_quit", SDLK_q);
 

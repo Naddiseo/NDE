@@ -98,10 +98,6 @@ World::shootBox(Vector3f from, Vector3f to) {
 	box->createBox(linVel);
 
 	getScene().addRenderObjects(box);
-
-
-
-
 }
 
 } //namespace nde
