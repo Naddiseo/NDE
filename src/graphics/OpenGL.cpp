@@ -3,21 +3,10 @@
 #include <cstring>
 
 #ifdef WINDOWS
+# include <windows.h>
 #	include <GL/gl.h>
 #	include <GL/glext.h>
-typedef void (APIENTRYP PFNGLBINDBUFFERARBPROC) (GLenum target, GLuint buffer);
-typedef void (APIENTRYP PFNGLDELETEBUFFERSARBPROC) (GLsizei n, const GLuint *buffers);
-typedef void (APIENTRYP PFNGLGENBUFFERSARBPROC) (GLsizei n, GLuint *buffers);
-typedef GLboolean (APIENTRYP PFNGLISBUFFERARBPROC) (GLuint buffer);
-typedef void (APIENTRYP PFNGLBUFFERDATAARBPROC) (GLenum target, GLsizeiptrARB size, const GLvoid *data, GLenum usage);
-typedef void (APIENTRYP PFNGLBUFFERSUBDATAARBPROC) (GLenum target, GLintptrARB offset, GLsizeiptrARB size, const GLvoid *data);
-typedef void (APIENTRYP PFNGLGETBUFFERSUBDATAARBPROC) (GLenum target, GLintptrARB offset, GLsizeiptrARB size, GLvoid *data);
-typedef GLvoid* (APIENTRYP PFNGLMAPBUFFERARBPROC) (GLenum target, GLenum access);
-typedef GLboolean (APIENTRYP PFNGLUNMAPBUFFERARBPROC) (GLenum target);
-typedef void (APIENTRYP PFNGLGETBUFFERPARAMETERIVARBPROC) (GLenum target, GLenum pname, GLint *params);
-typedef void (APIENTRYP PFNGLGETBUFFERPOINTERVARBPROC) (GLenum target, GLenum pname, GLvoid* *params);
-
-#	define glGetProcAddress(a) wglGetProcAddress(reinterpret_cast<const unsigned char*>(a))
+#	define glGetProcAddress(a) wglGetProcAddress(a)
 #elif defined(__linux__)
 #	include <GL/glx.h>
 #	define glGetProcAddress(a) glXGetProcAddress(reinterpret_cast<const unsigned char*>(a))
@@ -81,22 +70,20 @@ OpenGL::OpenGL() {}
 OpenGL::~OpenGL() {}
 
 bool OpenGL::init() {
-
 	if (!isSupported("GL_ARB_vertex_buffer_object")) {
 		std::cerr << "Vertex Buffer Objects not supported" << std::endl;
 		return false;
 	}
-
-	glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) glGetProcAddress("glGenBuffersARB");
-	glBindBufferARB = (PFNGLBINDBUFFERARBPROC) glGetProcAddress("glBindBufferARB");
-	glBufferDataARB = (PFNGLBUFFERDATAARBPROC) glGetProcAddress("glBufferDataARB");
-	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glGetProcAddress("glDeleteBuffersARB");
-
-
+	
+	glGenBuffersARB = (PFNGLGENBUFFERSARBPROC)glGetProcAddress("glGenBuffersARB");
+	glBindBufferARB = (PFNGLBINDBUFFERARBPROC)glGetProcAddress("glBindBufferARB");
+	glBufferDataARB = (PFNGLBUFFERDATAARBPROC)glGetProcAddress("glBufferDataARB");
+	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC)glGetProcAddress("glDeleteBuffersARB");
+	
 	return true;
 }
 
-// Primatives
+// Primitives
 void OpenGL::drawCircle(VBOVertex center, scalar radius) {}
 
 void OpenGL::drawLine(VBOVertex a, VBOVertex b) {
