@@ -15,6 +15,8 @@ public:
 	Renderer();
 	virtual ~Renderer();
 
+	bool Init();
+
 	Renderer(const Renderer &other);
 	Renderer& operator=(const Renderer &other);
 };

@@ -28,6 +28,7 @@ Game::Game()
 	camera.setPosition(SGET_V("cam_pos"));
 	camera.rotate(SGET_F("cam_phi"), SGET_F("cam_theta"));
 	
+
 #ifdef WINDOWS
 	//HWND hWnd = GetConsoleWindow();
 	//ShowWindow(hWnd, SW_HIDE);
@@ -206,6 +207,8 @@ void
 Game::mainLoop() {
 	int height = SGET_I("HEIGHT");
 	int width = SGET_I("WIDTH");
+
+	renderer.Init();
 
 	//set up basic colors
 	assets.allocColor("red", 1.f, 0.3f, 0.3f);

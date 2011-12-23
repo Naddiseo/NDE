@@ -16,7 +16,9 @@
 
 namespace nde {
 
-Renderer::Renderer() : screen(NULL) {
+Renderer::Renderer() : screen(NULL) {}
+
+bool Renderer::Init() {
 	int height = Settings::getInstance().get_int("HEIGHT");
 	int width = Settings::getInstance().get_int("WIDTH");
 
@@ -25,7 +27,7 @@ Renderer::Renderer() : screen(NULL) {
 
 	if (err != GLEW_OK) {
 		Game::getInstance().setError((char*)glewGetErrorString(err));
-		return;
+		return false;
 	}
 
 	if (glewGetExtension("GL_ARB_vertex_buffer_object")) {
@@ -34,13 +36,13 @@ Renderer::Renderer() : screen(NULL) {
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) == -1) {
 		Game::getInstance().setError(SDL_GetError());
-		return;
+		return false;
 	}
 	screen = SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
 
 	if (screen == NULL) {
 		Game::getInstance().setError(SDL_GetError());
-		return;
+		return false;
 	}
 
 	SDL_Flip(screen);
@@ -53,19 +55,18 @@ Renderer::Renderer() : screen(NULL) {
 
 	if (SDL_EnableKeyRepeat(10,10) == -1) {
 		Game::getInstance().setError(SDL_GetError());
-		return;
+		return false;
 	}
 
 	if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION) {
 		// TODO: throw error
 		Game::getInstance().setError("Couldn't init devIL");
-		return;
+		return false;
 	}
 	// initialize devIL
 	ilInit();
 
-
-
+	return true;
 }
 
 Renderer::~Renderer() {
