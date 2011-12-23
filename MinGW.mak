@@ -18,7 +18,7 @@ GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 MATH_FILES=util.cpp
 MATH_SOURCES=$(addprefix src/math/, $(MATH_FILES))
 
-GRAPHICS_FILES=Color.cpp Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
+GRAPHICS_FILES=Face.cpp IsRendered.cpp Renderer.cpp SkyBox.cpp
 GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
 
 RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Color.cpp Material.cpp Mesh.cpp Terrain.cpp

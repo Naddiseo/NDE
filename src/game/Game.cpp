@@ -26,9 +26,8 @@ Game::Game()
 	: fov(70), haserror(false), shutdown(false), errorstring(0)
 {
 	camera.setPosition(SGET_V("cam_pos"));
-	camera.setUpwardDir(SGET_V("cam_upward"));
-	camera.setForwardDir(SGET_V("cam_forward"));
-
+	camera.rotate(SGET_F("cam_phi"), SGET_F("cam_theta"));
+	
 #ifdef WINDOWS
 	//HWND hWnd = GetConsoleWindow();
 	//ShowWindow(hWnd, SW_HIDE);
@@ -39,9 +38,10 @@ Game::~Game() {}
 
 void
 Game::handleEvents() {
-	static int speed = 1.0;
+	static scalar speed = 1.0;
+	
 	while (SDL_PollEvent(&event)) {
-		switch ((short)event.type) {
+		switch (event.type) {
 		case SDL_QUIT:
 			shutdown = true;
 			return;
@@ -75,40 +75,40 @@ Game::handleEvents() {
 				return;
 				break;
 			case SDLK_UP:
-				camera.rotate(0, 0.01);
+				camera.rotate(0, 0.015625);
 				break;
 			case SDLK_DOWN:
-				camera.rotate(0, -0.01);
+				camera.rotate(0, -0.015625);
 				break;
 			case SDLK_RIGHT:
-				camera.rotate(0.01, 0);
+				camera.rotate(0.015625, 0);
 				break;
 			case SDLK_LEFT:
-				camera.rotate(-0.01, 0);
+				camera.rotate(-0.015625, 0);
 				break;
 			case SDLK_w:
 				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
-					Vector3f tmp(0, 0.3 * speed, 0);
+					Vector3f tmp(0, 0.375 * speed, 0);
 					camera.move(tmp);
 				}
 				else {
-					camera.moveForwards(-0.3 * speed);
+					camera.moveForwards(0.375 * speed);
 				}
 				break;
 			case SDLK_s:
 				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
-					Vector3f tmp(0, -0.3 * speed, 0);
+					Vector3f tmp(0, -0.375 * speed, 0);
 					camera.move(tmp);
 				}
 				else {
-					camera.moveForwards(0.3 * speed);
+					camera.moveForwards(-0.375 * speed);
 				}
 				break;
 			case SDLK_a:
-				camera.strafeRight(0.1 * speed);
+				camera.strafeRight(0.125 * speed);
 				break;
 			case SDLK_d:
-				camera.strafeRight(-0.1 * speed);
+				camera.strafeRight(-0.125 * speed);
 				break;
 
 			case SDLK_KP0:
@@ -117,8 +117,7 @@ Game::handleEvents() {
 					camera.move(tmp);
 				}
 				else {
-					// TODO: Reset rotation?
-					camera.setForwardDir({ 1, 0, 1 });
+					camera.rotate(-camera.getPhi(), -camera.getTheta());
 				}
 				break;
 			case SDLK_PRINT: {
@@ -173,8 +172,8 @@ void Game::drawAxis() {
 	glTranslatef (0, 0, -2);
 	
 	// Viewing rotations.
-	glRotatef (camera.getRotY(), 0,1,0);
-	glRotatef (camera.getRotX(), 1,0,0);
+	glRotatef(camera.getTheta(), 0, 1, 0);
+	glRotatef(camera.getPhi()  , 1, 0, 0);
 
 	glGetFloatv(GL_MODELVIEW_MATRIX, fvViewMatrix);
 	

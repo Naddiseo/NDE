@@ -7,9 +7,10 @@ Settings::Settings() {
 	settings["HEIGHT"] = "600";
 	settings["WIDTH"] = "800";
 
-	settings["cam_pos"] = "20 5 20";
-	settings["cam_forward"] = "1 0 1";
-	settings["cam_upward"] = "0 1 0";
+	settings["cam_pos"]   = "20 5 20";
+	settings["cam_phi"]   = "45";
+	settings["cam_theta"] = "0";
+	settings["cam_rho"]   = "0";
 }
 
 Settings::~Settings() {}
