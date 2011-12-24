@@ -74,12 +74,12 @@ KeyboardMapSetup::~KeyboardMapSetup() {}
 bool KeyboardMapSetup::init() {
 	nde::KeyboardMap& keymap = input->getKeyMap();
 	
-	#define INSTALL_CALLBACK(name) do { \
+	#define INSTALL_CALLBACK(name) { \
 		keymap.installCallback(\
 			(SDLKey)SGET_I("key_" #name), \
 			std::bind(&KeyboardMapSetup::name, this, std::placeholders::_1) \
 		); \
-		} while(0)
+	}
 	
 	INSTALL_CALLBACK(quit);
 	keymap.installCallback(SDLKey::SDLK_ESCAPE, std::bind(&KeyboardMapSetup::quit, this, std::placeholders::_1));
