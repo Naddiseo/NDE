@@ -88,8 +88,6 @@ Game::mainLoop() {
 		graphics->startScene();
 
 		input.pollEvents();
-		input.processEvents();
-		input.clearEvents();
 
 		graphics->clearScreen();
 		graphics->setMatrixMode(MatrixMode::MODELVIEW);

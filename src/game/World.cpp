@@ -20,6 +20,9 @@ World::World() {
 	solver = new btSequentialImpulseConstraintSolver;
 
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfig);
+	D("Hello");
+	D(&dynamicsWorld);
+	assert(dynamicsWorld != NULL);
 
 	dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
 
@@ -27,7 +30,7 @@ World::World() {
 
 World::~World() {
 	//cleanup in the reverse order of creation/initialization
-
+	D("Bye");
 	//remove the rigidbodies from the dynamics world and delete them
 	for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
 		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
