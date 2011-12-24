@@ -75,7 +75,7 @@ void World::step() {
 }
 
 void
-World::shootBox(Vector3f from, Vector3f to) {
+World::shootBox(Vector3f from, Vector3f dir) {
 	btBoxShape* shape = new btBoxShape(btVector3(.5f,.5f,.5f));
 	scalar mass = 3.f;
 	btTransform startTransform;
@@ -93,9 +93,11 @@ World::shootBox(Vector3f from, Vector3f to) {
 	box->addCollisionShape(shape);
 	box->getWorldTransform().setOrigin(from);
 	box->getWorldTransform().setRotation(btQuaternion(0, 0, 0, 1));
-	Vector3f linVel(to.x-from.x, to.y-from.y, to.z-from.z);
+	
+	Vector3f linVel(dir);
 	linVel.normalise();
 	linVel *= 33.f;
+	
 	box->createBox(linVel);
 
 	getScene().addRenderObjects(box);
