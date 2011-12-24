@@ -11,19 +11,19 @@ KeyboardMap::KeyboardMap() {
 
 KeyboardMap::~KeyboardMap() {}
 
-void KeyboardMap::installCallback(SDLKey key, keyboard_callback_t callback) {
+void KeyboardMap::installCallback(SDLKey key, const keyboard_callback_t& callback) {
 	callbacks[key] = callback;
 }
 
-void KeyboardMap::uninstallCallback(SDLKey key, keyboard_callback_t callback) {
+void KeyboardMap::uninstallCallback(SDLKey key) {
 	callbacks[key] = NULL;
 }
 
-void KeyboardMap::dispatch(SDL_KeyboardEvent& event) {
-
+void KeyboardMap::dispatch(const SDL_KeyboardEvent& event) {
 	keyboard_callback_t c = callbacks[event.keysym.sym];
+	
 	if (c) {
-		c((long unsigned int)event.keysym.mod); // TODO
+		c((unsigned int)event.keysym.mod);
 	}
 }
 

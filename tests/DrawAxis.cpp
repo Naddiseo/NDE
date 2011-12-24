@@ -15,9 +15,10 @@ DrawAxis::~DrawAxis() {}
 
 void
 DrawAxis::tick() {
+#if 0
 	using namespace nde;
-//	Camera& camera = Game::getInstance().getCamera();
-//	Vector3f camerapos = camera.getPosition();
+	//Camera& camera = Game::getInstance().getCamera();
+	//Vector3f camerapos = camera.getPosition();
 	//Vector3f forward = camera.getForward();
 	
 	scalar fvViewMatrix[16] = {
@@ -72,4 +73,5 @@ DrawAxis::tick() {
 	glEnd();
 	glColor4f(1,1,1,1);
 	glPopMatrix();
+#endif
 }

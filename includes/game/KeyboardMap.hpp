@@ -5,7 +5,7 @@
 
 namespace nde {
 
-typedef std::function<void(EngineModule*, size_t)> keyboard_callback_t;
+typedef std::function<void(size_t)> keyboard_callback_t;
 
 
 class KeyboardMap {
@@ -15,10 +15,10 @@ public:
 	KeyboardMap();
 	virtual ~KeyboardMap();
 
-	void installCallback(SDLKey key, keyboard_callback_t callback);
-	void uninstallCallback(SDLKey key, keyboard_callback_t callback);
+	void installCallback(SDLKey key, const keyboard_callback_t& callback);
+	void uninstallCallback(SDLKey key);
 
-	void dispatch(SDL_KeyboardEvent& event);
+	void dispatch(const SDL_KeyboardEvent& event);
 };
 
 }
