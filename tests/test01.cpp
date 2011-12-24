@@ -29,7 +29,8 @@ BEGIN_MAIN {
 	DrawAxis* axis = new DrawAxis(&world);
 	//nde::SkyBox* s = new nde::SkyBox(&world);
 	
-	KeyboardMapSetup mapsetup;
+	KeyboardMapSetup* mapsetup = new KeyboardMapSetup();
+	game.addModule(mapsetup);
 
 	world.getScene().addRenderObjects(t, axis);
 	game.mainLoop();

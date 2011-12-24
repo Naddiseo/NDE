@@ -15,10 +15,13 @@ public:
 	KeyboardMap();
 	virtual ~KeyboardMap();
 
-	void installCallback(SDLKey key, const keyboard_callback_t& callback);
+	void installCallback(SDLKey key, keyboard_callback_t callback);
 	void uninstallCallback(SDLKey key);
 
-	void dispatch(const SDL_KeyboardEvent& event);
+	void dispatch(size_t mods);
+
+	void press(const SDLKey key);
+	void depress(const SDLKey key);
 };
 
 }
