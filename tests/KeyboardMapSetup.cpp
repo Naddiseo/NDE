@@ -82,6 +82,7 @@ bool KeyboardMapSetup::init() {
 		} while(0)
 	
 	INSTALL_CALLBACK(quit);
+	keymap.installCallback(SDLKey::SDLK_ESCAPE, std::bind(&KeyboardMapSetup::quit, this, std::placeholders::_1));
 	INSTALL_CALLBACK(look_up);
 	INSTALL_CALLBACK(look_down);
 	INSTALL_CALLBACK(look_left);
