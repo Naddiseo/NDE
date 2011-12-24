@@ -12,8 +12,8 @@ bool Input::init() {
 
 void Input::pollEvents() {
 	SDL_Event event;
-	while (SDL_PollEvent(&event) == 0) {
-		switch (event.type) {
+	while (SDL_PollEvent(&event)) {
+		switch ((short)event.type) {
 		case SDL_QUIT:
 			game->stopGame();
 			return;
