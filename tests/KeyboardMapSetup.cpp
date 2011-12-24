@@ -22,7 +22,7 @@ void KeyboardMapSetup::move_down(size_t mods) {}
 void KeyboardMapSetup::move_left(size_t mods) {}
 void KeyboardMapSetup::move_right(size_t mods) {}
 
-void KeyboardMapSetup::reset_camera(size_t mods) {}
+void KeyboardMapSetup::camera_reset(size_t mods) {}
 void KeyboardMapSetup::screenshot(size_t mods) {}
 
 KeyboardMapSetup::KeyboardMapSetup() {
@@ -33,20 +33,26 @@ KeyboardMapSetup::~KeyboardMapSetup() {}
 
 bool KeyboardMapSetup::init() {
 	nde::KeyboardMap& keymap = input->getKeyMap();
-
-	keymap.installCallback((SDLKey)SGET_I("key_quit"), std::bind<void>(&KeyboardMapSetup::quit, this, std::placeholders::_1));
 	
-	keymap.installCallback((SDLKey)SGET_I("key_look_up"), std::bind<void>(&KeyboardMapSetup::look_up, this, std::placeholders::_1));
-	keymap.installCallback((SDLKey)SGET_I("key_look_down"), std::bind<void>(&KeyboardMapSetup::look_down, this, std::placeholders::_1));
-	keymap.installCallback((SDLKey)SGET_I("key_look_left"), std::bind<void>(&KeyboardMapSetup::look_left, this, std::placeholders::_1));
-	keymap.installCallback((SDLKey)SGET_I("key_look_right"), std::bind<void>(&KeyboardMapSetup::look_right, this, std::placeholders::_1));
-
-	keymap.installCallback((SDLKey)SGET_I("key_move_up"), std::bind<void>(&KeyboardMapSetup::move_up, this, std::placeholders::_1));
-	keymap.installCallback((SDLKey)SGET_I("key_move_down"), std::bind<void>(&KeyboardMapSetup::move_down, this, std::placeholders::_1));
-	keymap.installCallback((SDLKey)SGET_I("key_move_left"), std::bind<void>(&KeyboardMapSetup::move_left, this, std::placeholders::_1));
-	keymap.installCallback((SDLKey)SGET_I("key_move_right"), std::bind<void>(&KeyboardMapSetup::move_right, this, std::placeholders::_1));
-
-	keymap.installCallback((SDLKey)SGET_I("key_camera_reset"), std::bind<void>(&KeyboardMapSetup::reset_camera, this, std::placeholders::_1));
-	keymap.installCallback((SDLKey)SGET_I("key_screenshot"), std::bind<void>(&KeyboardMapSetup::screenshot, this, std::placeholders::_1));
+	#define INSTALL_CALLBACK(name) \
+		keymap.installCallback(\
+			(SDLKey)SGET_I("key_" #name),\
+			std::bind<void>(&KeyboardMapSetup::name, this, std::placeholders::_1)\
+		)
+	
+	INSTALL_CALLBACK(quit);
+	INSTALL_CALLBACK(look_up);
+	INSTALL_CALLBACK(look_down);
+	INSTALL_CALLBACK(look_left);
+	INSTALL_CALLBACK(look_right);
+	INSTALL_CALLBACK(move_up);
+	INSTALL_CALLBACK(move_down);
+	INSTALL_CALLBACK(move_left);
+	INSTALL_CALLBACK(move_right);
+	INSTALL_CALLBACK(camera_reset);
+	INSTALL_CALLBACK(screenshot);
+	
+	#undef INSTALL_CALLBACK
+	
 	return true;
 }
