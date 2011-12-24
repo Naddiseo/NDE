@@ -29,29 +29,29 @@ void KeyboardMapSetup::look_right(size_t mods) {
 
 void KeyboardMapSetup::move_up(size_t mods) {
 	if ((mods & KMOD_LCTRL) == KMOD_LCTRL) {
-		Vector3f tmp(0, 0.375 * 10, 0);
+		Vector3f tmp(0, 0.375 * 1, 0);
 		camera->move(tmp);
 	}
 	else {
-		camera->moveForwards(0.375 * 10);
+		camera->moveForwards(0.375 * 1);
 	}
 }
 
 void KeyboardMapSetup::move_down(size_t mods) {
 	if ((mods& KMOD_LCTRL) == KMOD_LCTRL) {
-		Vector3f tmp(0, -0.375 * 10, 0);
+		Vector3f tmp(0, -0.375 * 1, 0);
 		camera->move(tmp);
 	}
 	else {
-		camera->moveForwards(-0.375 * 10);
+		camera->moveForwards(-0.375 * 1);
 	}
 }
 
 void KeyboardMapSetup::move_left(size_t mods) {
-	camera->strafeRight(0.125 * 10);
+	camera->strafeRight(0.125 * 1);
 }
 void KeyboardMapSetup::move_right(size_t mods) {
-	camera->strafeRight(-0.125 * 10);
+	camera->strafeRight(-0.125 * 1);
 }
 
 void KeyboardMapSetup::camera_reset(size_t mods) {

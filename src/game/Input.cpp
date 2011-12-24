@@ -37,11 +37,12 @@ void Input::pollEvents() {
 			break;
 		case SDL_KEYUP:
 			keymap.depress(event.key.keysym.sym);
+			break;
 		default:
 			break;
 		}
-		keymap.dispatch(0);
 	}
+	keymap.dispatch(event.key.keysym.mod);
 
 }
 
