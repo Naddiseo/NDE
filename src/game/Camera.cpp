@@ -93,19 +93,19 @@ void Camera::move(Vector3f dir) {
 }
 
 void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
-	scalar phi = event.xrel * sensitivity;
+	scalar dphi = event.xrel * sensitivity;
 	
 	// Negative because downward mouse mosition is
 	// positive, upward negative
-	scalar theta = -event.yrel * sensitivity;
+	scalar dtheta = -event.yrel * sensitivity;
 	
-	this->rotate(phi, theta);
+	this->rotate(dphi, dtheta);
 }
 
 void Camera::onMouseClick(const SDL_MouseButtonEvent& event) {
 	switch (event.button) {
 	case SDL_BUTTON_RIGHT:
-		Game::getInstance().getWorld().shootBox(position, getRayToFromCenter());
+		Game::getInstance().getWorld().shootBox(position, forward);
 		break;
 	default:
 		break;
