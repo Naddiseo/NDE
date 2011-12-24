@@ -31,7 +31,6 @@ BEGIN_MAIN {
 	
 	KeyboardMapSetup mapsetup;
 
-	nde::Game& game = nde::Game::getInstance();
 	world.getScene().addRenderObjects(t, axis);
 	game.mainLoop();
 

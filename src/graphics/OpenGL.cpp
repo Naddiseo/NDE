@@ -1,8 +1,4 @@
-#include "graphics/OpenGL.hpp"
-#include "debug.hpp"
-
 #include <cstring>
-
 #ifdef WINDOWS
 # include <windows.h>
 #	include <GL/gl.h>
@@ -14,8 +10,11 @@
 #else
 #	error "Your platform is currently not supported"
 #endif
-#include <IL/il.h>
+#include <SDL/SDL.h>
 #include <GL/glu.h>
+#include <IL/il.h>
+#include <IL/ilu.h>
+#include "debug.hpp"
 
 #include "graphics/OpenGL.hpp"
 

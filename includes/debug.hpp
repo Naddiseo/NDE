@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 #include <cstdlib>
-#include <cassert>
 
 namespace nde {
 
@@ -16,8 +16,7 @@ namespace nde {
 #	define NDE_WARN(x) _PRINT("Warning", x)
 
 void _ERROR(std::string file, size_t line, std::string msg);
-void _ERROR(std::string file, size_t line, std::ostream o);
-
+void _ERROR(std::string file, size_t line, const std::ostream& o);
 #	define NDE_ERROR(x) _ERROR(__FILE__, __LINE__, x)
 #else
 #	define D(x)
@@ -27,7 +26,8 @@ void _ERROR(std::string file, size_t line, std::ostream o);
 #	define NDE_ERROR(x)
 #endif
 
+
 void _FATAL_ERROR(std::string file, size_t line, std::string msg);
-void _FATAL_ERROR(std::string file, size_t line, std::ostream msg);
+void _FATAL_ERROR(std::string file, size_t line, const std::ostream& msg);
 #define NDE_FATAL_ERROR(x) _FATAL_ERROR(__FILE__, __LINE__, x)
 }

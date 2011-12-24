@@ -6,16 +6,14 @@ Input::Input() {}
 
 Input::~Input() {}
 
-bool Input::init(const Game* _game) {
-	game = _game;
-
+bool Input::init() {
 	return true;
 }
 
 void Input::pollEvents() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event) == 0) {
-		event_list.push(event);
+		event_list.push_back(event);
 	}
 }
 
@@ -50,7 +48,7 @@ void Input::processEvent(SDL_Event& event) {
 				switch (event.key.keysym.sym) {
 				case SDLK_ESCAPE:
 				case SDLK_q:
-					game->shutdown = true;
+					game->stopGame();
 					return;
 					break;
 				case SDLK_UP:
@@ -92,15 +90,15 @@ void Input::processEvent(SDL_Event& event) {
 
 				case SDLK_KP0:
 					if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
-						//Vector3f tmp = -camera.getPos();
-						//camera.move(tmp);
+						Vector3f tmp = -camera->getPosition();
+						camera->move(tmp);
 					}
 					else {
-						//camera.rotate(-camera.getPhi(), -camera.getTheta());
+						camera->rotate(-camera->getPhi(), -camera->getTheta());
 					}
 					break;
 				case SDLK_PRINT: {
-					//renderer.getGraphics()->takeScreenshot("Screenshot.png");
+					graphics->takeScreenshot("Screenshot.png");
 				};
 					break;
 				default:
@@ -113,7 +111,7 @@ void Input::processEvent(SDL_Event& event) {
 
 void Input::processEvents() {
 	for (SDL_Event& event : event_list) {
-		processEvent(event)
+		processEvent(event);
 	}
 }
 

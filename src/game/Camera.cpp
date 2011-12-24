@@ -45,6 +45,8 @@ Camera::~Camera() {
 	//SDL_WM_GrabInput(SDL_GrabMode::SDL_GRAB_OFF);
 }
 
+bool Camera::init() { return true; }
+
 void Camera::updateVectors() {
 	forward = forward0;
 	up = up0;

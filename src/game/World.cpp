@@ -57,6 +57,8 @@ World::~World() {
 	delete collisionConfig;
 }
 
+bool World::init() { return true; }
+
 void World::addRigidBody(btRigidBody* body) {
 	dynamicsWorld->addRigidBody(body);
 }

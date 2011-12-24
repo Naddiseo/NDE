@@ -1,23 +1,21 @@
 #pragma once
-#include <queue>
+#include <list>
 #include <SDL/SDL.h>
 
 #include "game/KeyboardMap.hpp"
+#include "game/EngineModule.hpp"
 
 namespace nde {
 
 
-class Game;
-
-class Input {
-	std::queue<SDL_Event> event_list;
+class Input : public EngineModule {
+	std::list<SDL_Event> event_list;
 	KeyboardMap keymap;
-	const Game* game;
 public:
 	Input();
 	virtual ~Input();
 
-	bool init(const Game* game);
+	bool init();
 
 	void pollEvents();
 	void processEvents();

@@ -47,7 +47,7 @@ public:
 
 
 	void setError(const std::string error);
-	void stopGame();
+	void stopGame(bool _error = false);
 
 	void mainLoop();
 private:

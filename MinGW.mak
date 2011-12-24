@@ -42,7 +42,7 @@ rebuild_clean:
 
 all: library test01
 
-test01: libNDE.a tests/test01.o tests/KeyboardMapSetup.o
+test01: libNDE.a tests/test01.o tests/KeyboardMapSetup.o tests/DrawAxis.o
 	$(CXX) $^ -L. -lNDE $(CXXFLAGS) -o $(EXE)
 
 library: $(LIBNDE)

@@ -16,9 +16,9 @@ DrawAxis::~DrawAxis() {}
 void
 DrawAxis::tick() {
 	using namespace nde;
-	Camera& camera = Game::getInstance().getCamera();
-	Vector3f camerapos = camera.getPosition();
-	Vector3f forward = camera.getForward();
+//	Camera& camera = Game::getInstance().getCamera();
+//	Vector3f camerapos = camera.getPosition();
+	//Vector3f forward = camera.getForward();
 }
 
 

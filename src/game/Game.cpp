@@ -27,9 +27,9 @@ void Game::setError(const std::string error) {
 	stopGame();
 }
 
-void Game::stopGame() {
+void Game::stopGame(bool _error) {
 	shutdown = true;
-	haserror = true;
+	haserror = _error;
 }
 
 Game::Game()
@@ -77,6 +77,11 @@ Game::mainLoop() {
 	world.setGraphics(graphics);
 	world.setInput(&input);
 	world.setCamera(&camera);
+
+	input.setGame(this);
+	input.setGraphics(graphics);
+	input.setCamera(&camera);
+	input.setWorld(&world);
 
 
 	while (!(haserror || shutdown)) {
