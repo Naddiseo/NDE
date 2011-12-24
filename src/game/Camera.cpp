@@ -94,7 +94,7 @@ void Camera::onMouseMotion(const SDL_MouseMotionEvent& event) {
 	scalar phi = event.xrel * sensitivity;
 	
 	// Negative because downward mouse mosition is
-	// position, upward negative
+	// positive, upward negative
 	scalar theta = -event.yrel * sensitivity;
 	
 	this->rotate(phi, theta);
