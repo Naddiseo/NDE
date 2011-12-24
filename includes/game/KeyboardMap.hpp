@@ -1,6 +1,7 @@
 #pragma once
 #include <functional>
 #include <SDL/SDL.h>
+#include "game/EngineModule.hpp"
 
 namespace nde {
 

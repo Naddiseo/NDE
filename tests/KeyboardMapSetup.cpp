@@ -34,25 +34,24 @@ KeyboardMapSetup::KeyboardMapSetup() {
 KeyboardMapSetup::~KeyboardMapSetup() {}
 
 bool KeyboardMapSetup::init() {
+	// TODO:
 #if 0
 	nde::KeyboardMap& keymap = input->getKeyMap();
 
-	nde::keyboard_callback_t f = std::bind(&KeyboardMapSetup::quit, this, std::placeholders::_1);
+	keymap.installCallback((SDLKey)SGET_I("key_quit"), std::bind<void>(&KeyboardMapSetup::quit, this, std::placeholders::_2));
 
-	keymap.installCallback((SDLKey)SGET_I("key_quit"), f);
+	keymap.installCallback((SDLKey)SGET_I("key_look_up"), std::bind<void>(&KeyboardMapSetup::look_up, this, std::placeholders::_2));
+	keymap.installCallback((SDLKey)SGET_I("key_look_down"), std::bind<void>(&KeyboardMapSetup::look_down, this, std::placeholders::_2));
+	keymap.installCallback((SDLKey)SGET_I("key_look_left"), std::bind<void>(&KeyboardMapSetup::look_left, this, std::placeholders::_2));
+	keymap.installCallback((SDLKey)SGET_I("key_look_right"), std::bind<void>(&KeyboardMapSetup::look_right, this, std::placeholders::_2));
 
-	keymap.installCallback((SDLKey)SGET_I("key_look_up"), &KeyboardMapSetup::look_up);
-	keymap.installCallback((SDLKey)SGET_I("key_look_down"), &KeyboardMapSetup::look_down);
-	keymap.installCallback((SDLKey)SGET_I("key_look_left"), &KeyboardMapSetup::look_left);
-	keymap.installCallback((SDLKey)SGET_I("key_look_right"), &KeyboardMapSetup::look_right);
+	keymap.installCallback((SDLKey)SGET_I("key_move_up"), std::bind<void>(&KeyboardMapSetup::move_up, this, std::placeholders::_2));
+	keymap.installCallback((SDLKey)SGET_I("key_move_down"), std::bind<void>(&KeyboardMapSetup::move_down, this, std::placeholders::_2));
+	keymap.installCallback((SDLKey)SGET_I("key_move_left"), std::bind<void>(&KeyboardMapSetup::move_left, this, std::placeholders::_2));
+	keymap.installCallback((SDLKey)SGET_I("key_move_right"), std::bind<void>(&KeyboardMapSetup::move_right, this, std::placeholders::_2));
 
-	keymap.installCallback((SDLKey)SGET_I("key_move_up"), &KeyboardMapSetup::move_up);
-	keymap.installCallback((SDLKey)SGET_I("key_move_down"), &KeyboardMapSetup::move_down);
-	keymap.installCallback((SDLKey)SGET_I("key_move_left"), &KeyboardMapSetup::move_left);
-	keymap.installCallback((SDLKey)SGET_I("key_move_right"), &KeyboardMapSetup::move_right);
-
-	keymap.installCallback((SDLKey)SGET_I("key_camera_reset"), &KeyboardMapSetup::reset_camera);
-	keymap.installCallback((SDLKey)SGET_I("key_screenshot"), &KeyboardMapSetup::screenshot);
+	keymap.installCallback((SDLKey)SGET_I("key_camera_reset"), std::bind<void>(&KeyboardMapSetup::reset_camera, this, std::placeholders::_2));
+	keymap.installCallback((SDLKey)SGET_I("key_screenshot"), std::bind<void>(&KeyboardMapSetup::screenshot, this, std::placeholders::_2));
 #endif
 	return true;
 }
