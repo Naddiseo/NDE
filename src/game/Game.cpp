@@ -39,7 +39,6 @@ Game::Game()
 	camera.setPosition(SGET_V("cam_pos"));
 	camera.rotate(SGET_F("cam_phi"), SGET_F("cam_theta"));
 	
-
 #ifdef WINDOWS
 	//HWND hWnd = GetConsoleWindow();
 	//ShowWindow(hWnd, SW_HIDE);
@@ -220,8 +219,7 @@ Game::mainLoop() {
 	int width = SGET_I("WIDTH");
 
 	if (!renderer.init()) {
-		ERROR("Couldn't init renderer");
-		std::cerr << "Couldn't init renderer" << std::endl;
+		NDE_ERROR("Couldn't init renderer");
 		haserror = true;
 	}
 

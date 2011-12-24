@@ -13,7 +13,6 @@
 #include "game/Settings.hpp"
 #include "game/Game.hpp"
 
-
 namespace nde {
 
 Renderer::Renderer() : screen(NULL) {}
@@ -23,11 +22,10 @@ bool Renderer::init(GLibrary gl) {
 	int width = Settings::getInstance().get_int("WIDTH");
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) == -1) {
-		ERROR(SDL_GetError());
+		NDE_ERROR(SDL_GetError());
 		return false;
 	}
-
-
+	
 	switch (gl) {
 #ifdef USE_OPENGL
 	case GLibrary::OPENGL:
@@ -43,20 +41,21 @@ bool Renderer::init(GLibrary gl) {
 		break;
 #endif
 	default:
-		FATAL_ERROR("Unsupported Graphics library");
+		NDE_FATAL_ERROR("Unsupported Graphics library");
 		break;
 	}
 	SDL_Flip(screen);
 
 	if (SDL_EnableKeyRepeat(10,10) == -1) {
-		ERROR(SDL_GetError());
+		NDE_ERROR(SDL_GetError());
 		return false;
 	}
 
 	if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION) {
-		ERROR("Couldn't find correct devIL version");
+		NDE_ERROR("Couldn't find correct devIL version");
 		return false;
 	}
+	
 	// initialize devIL
 	ilInit();
 
@@ -65,9 +64,7 @@ bool Renderer::init(GLibrary gl) {
 
 Renderer::~Renderer() {
 	delete graphics;
-
 	SDL_Quit();
 }
-
 
 } /* namespace nde */

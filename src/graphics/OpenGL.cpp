@@ -33,33 +33,32 @@ namespace nde {
 
 static bool isSupported(const char* extension) {
 	/* TODO: use GLEW */
-	const unsigned char* extensions = NULL;
-	const unsigned char* start;
-	unsigned char* where;
-	unsigned char* terminator;
-
-	where = (unsigned char*)strchr(extension, ' ');
-
+	
+	unsigned char* where = (unsigned char*)strchr(extension, ' ');
+	
 	if (where || *extension == 0) {
 		return false;
 	}
-
-	extensions = glGetString(GL_EXTENSIONS);
-
-	start = extensions;
+	
+	const unsigned char* extensions = glGetString(GL_EXTENSIONS);
+	
+	const unsigned char* start = extensions;
 
 	for (;;) {
 		where = (unsigned char*)strstr((const char*)start, extension);
+		
 		if (!where) {
 			break;
 		}
-		terminator = where + strlen(extension);
+		
+		unsigned char* terminator = where + strlen(extension);
 
 		if (where == start || *(where - 1) == ' ') {
 			if (*terminator == ' ' || *terminator == 0) {
 				return true;
 			}
 		}
+		
 		start = terminator;
 	}
 
@@ -72,7 +71,7 @@ OpenGL::~OpenGL() {}
 
 bool OpenGL::init() {
 	if (!isSupported("GL_ARB_vertex_buffer_object")) {
-		ERROR("Vertex Buffer Objects not supported");
+		NDE_ERROR("Vertex Buffer Objects not supported");
 		return false;
 	}
 	
@@ -84,11 +83,10 @@ bool OpenGL::init() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
 
-	glMatrixMode( GL_PROJECTION );
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(70, width/height, 1, 35);
-
-
+	
 	return true;
 }
 
@@ -133,7 +131,7 @@ void OpenGL::drawQuad(VBOVertex a, VBOVertex b, VBOVertex c, VBOVertex d) {
 	glEnd();
 }
 
-// 3d primatives
+// 3D Primitives
 void OpenGL::drawSphere(VBOVertex center, scalar radius){}
 void OpenGL::drawBox(VBOVertex min, VBOVertex max){}
 
@@ -144,7 +142,6 @@ void OpenGL::flushBuffer(){}
 void OpenGL::translate(Vector3f position) {
 	glTranslatef(position.x, position.y, position.z);
 }
-
 
 void OpenGL::scale(Vector3f amount) {
 	glScalef(amount.x, amount.y, amount.z);
