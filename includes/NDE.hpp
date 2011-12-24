@@ -23,6 +23,7 @@
 #include "game/Settings.hpp"
 #include "resources/Terrain.hpp"
 #include "graphics/SkyBox.hpp"
+#include "game/EngineModule.hpp"
 
 #undef SGET_I
 #undef SGET_F

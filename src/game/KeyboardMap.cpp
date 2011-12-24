@@ -5,6 +5,7 @@ namespace nde {
 KeyboardMap::KeyboardMap() {
 	for (size_t i = 0; i < SDLK_LAST; i++) {
 		callbacks[i] = NULL;
+		pressed[i] = false;
 	}
 }
 

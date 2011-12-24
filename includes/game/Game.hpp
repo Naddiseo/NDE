@@ -5,6 +5,7 @@
  *  Created on: 2011-12-01
  *      Author: richard
  */
+#include <vector>
 
 #include "game/Camera.hpp"
 #include "game/Input.hpp"
@@ -28,6 +29,8 @@ class Game {
 	bool shutdown;
 	std::string errorstring;
 
+
+	std::vector<EngineModule*> modules;
 public:
 	static Game& getInstance() {
 		static Game instance;
@@ -44,6 +47,7 @@ public:
  	World& getWorld() { return world; }
  	Camera& getCamera() { return camera; }
 
+ 	void addModule(EngineModule* module) { modules.push_back(module); }
 
 
 	void setError(const std::string error);
@@ -54,8 +58,6 @@ private:
 	Game();
 	Game(Game const&);
 	void operator=(Game const&);
-
-	void drawAxis();
 
 };
 
