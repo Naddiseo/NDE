@@ -44,44 +44,58 @@ Game::Game()
 #endif
 }
 
-Game::~Game() {}
-
+Game::~Game() {
+	for (EngineModule* module : modules) {
+		delete module;
+	}
+}
 
 void
 Game::mainLoop() {
 	static iGraphicsLibrary* graphics = NULL;
 	GLibrary gl;
 
+#define InitModule(m) do { if (!m.init()) { NDE_ERROR("Could not init module " #m); } } while(0);
+#define InitPModule(m) do { if (!m->init()) { NDE_ERROR("Could not init module " #m); } } while(0);
+
 #ifdef USE_OPENGL
 	gl = GLibrary::OPENGL;
 #endif
-
 
 	if (!renderer.init(gl)) {
 		NDE_ERROR("Couldn't init renderer");
 	}
 	graphics = renderer.getGraphics();
 
-	if (!assets.init()) {
-		NDE_ERROR("Couldn't init assets");
-	}
-	
-
+	InitModule(assets);
 
 	camera.setGame(this);
 	camera.setGraphics(graphics);
 	camera.setInput(&input);
 	camera.setWorld(&world);
+	InitModule(camera);
+
 
 	world.setGame(this);
 	world.setGraphics(graphics);
 	world.setInput(&input);
 	world.setCamera(&camera);
+	InitModule(world);
 
 	input.setGame(this);
 	input.setGraphics(graphics);
 	input.setCamera(&camera);
 	input.setWorld(&world);
+	InitModule(input);
+
+	for (EngineModule* module : modules) {
+		module->setCamera(&camera);
+		module->setGame(this);
+		module->setGraphics(graphics);
+		module->setInput(&input);
+		module->setWorld(&world);
+		InitPModule(module);
+	}
 
 
 	while (!(haserror || shutdown)) {

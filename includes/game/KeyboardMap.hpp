@@ -1,12 +1,16 @@
 #pragma once
+#include <functional>
 #include <SDL/SDL.h>
+#include "game/EngineModule.hpp"
 
 namespace nde {
 
-typedef void (*keyboard_callback_t)(size_t mods);
+typedef std::function<void(EngineModule*, size_t)> keyboard_callback_t;
+
 
 class KeyboardMap {
 	keyboard_callback_t callbacks[SDLK_LAST];
+	bool pressed[SDLK_LAST];
 public:
 	KeyboardMap();
 	virtual ~KeyboardMap();
