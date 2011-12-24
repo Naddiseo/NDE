@@ -8,8 +8,8 @@
 namespace nde {
 
 Settings::Settings() {
-	set("HEIGHT", "600");
-	set("WIDTH", "800");
+	set("HEIGHT", 600);
+	set("WIDTH", 800);
 	
 	set("cam_pos", Vector3f { 20, 5, 20 });
 	set("cam_phi", 45.f);

@@ -10,10 +10,10 @@ namespace nde {
 class SettingsValue
 {
 	enum class Type : char {
-		STRING,
-		SCALAR,
-		INT,
-		VECTOR
+		STRING = 'S',
+		SCALAR = 'R',
+		INT = 'I',
+		VECTOR = 'V'
 	} type;
 
 	std::string str_val;
@@ -25,7 +25,8 @@ class SettingsValue
 	
 	void check(Type type) const {
 		if (this->type != type) {
-			// TODO: Throw exception
+			D("cannot cast setting value of type " << (char)this->type << " to " << (char)type);
+			NDE_ERROR("invalid cast of setting value");
 		}
 	}
 	
