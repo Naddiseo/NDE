@@ -16,6 +16,7 @@ namespace nde {
 #	define NDE_WARN(x) _PRINT("Warning", x)
 
 void _ERROR(std::string file, size_t line, std::string msg);
+void _ERROR(std::string file, size_t line, std::ostream o);
 
 #	define NDE_ERROR(x) _ERROR(__FILE__, __LINE__, x)
 #else
@@ -27,7 +28,6 @@ void _ERROR(std::string file, size_t line, std::string msg);
 #endif
 
 void _FATAL_ERROR(std::string file, size_t line, std::string msg);
-
+void _FATAL_ERROR(std::string file, size_t line, std::ostream msg);
 #define NDE_FATAL_ERROR(x) _FATAL_ERROR(__FILE__, __LINE__, x)
-
 }

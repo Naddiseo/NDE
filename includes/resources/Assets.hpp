@@ -26,6 +26,8 @@ public:
 	Assets();
 	virtual ~Assets();
 
+	bool init();
+
 	template<typename ...Args>
 	Material* allocMaterial(Args&&... params);
 

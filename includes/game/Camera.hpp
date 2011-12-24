@@ -5,13 +5,12 @@
  *  Created on: 2011-12-10
  *      Author: richard
  */
-
-#include <SDL/SDL.h>
+#include "common.hpp"
 #include "math/vector.hpp"
 
 namespace nde {
 
-class Camera {
+class Camera : public EngineModule {
 	Vector3f position;
 	
 	Vector3f forward0, forward;
@@ -27,6 +26,8 @@ class Camera {
 public:
 	Camera();
 	virtual ~Camera();
+
+	bool init();
 
 	void render();
 
@@ -50,7 +51,8 @@ public:
 	Vector3f getRayTo(size_t x, size_t y);
 	Vector3f getRayToFromCenter();
 	
-	const Vector3f& getPos() const { return position; }
+	const Vector3f& getPosition() const { return position; }
+	const Vector3f& getForward() const { return forward; }
 };
 
 } /* namespace nde */

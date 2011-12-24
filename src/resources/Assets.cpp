@@ -24,6 +24,17 @@ Assets::~Assets() {
 	}
 }
 
+bool Assets::init() {
+	//set up basic colors
+	allocColor("red", 1.f, 0.3f, 0.3f);
+	allocColor("green", 0.3f, 1.f, 0.3f);
+	allocColor("blue", 0.3f, 0.3f, 1.f);
+	allocColor("black", 0.f, 0.f, 0.f);
+	allocColor("white", 1.f, 1.f, 1.f);
+
+	return true;
+}
+
 GLuint
 Assets::loadMaterial(const std::string& path) {
 	Material* m = allocMaterial(path);

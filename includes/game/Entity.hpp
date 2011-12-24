@@ -21,7 +21,6 @@ public:
 	virtual ~Entity();
 
 
-	void setWorld(World* _world) { world = _world; }
 	void setMass(btScalar _mass) { mass = _mass; }
 	void setMesh(Mesh* _mesh) { mesh = _mesh; }
 	void setOrigin(Vector3f origin) { location.setOrigin(origin); }

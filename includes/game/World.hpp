@@ -5,7 +5,7 @@
 
 namespace nde {
 
-class World {
+class World : public EngineModule {
 	Scene scene;
 	btAlignedObjectArray<btCollisionShape*> collisionShapes;
 	btDefaultCollisionConfiguration* collisionConfig;
@@ -20,6 +20,8 @@ class World {
 public:
 	World();
 	virtual ~World();
+
+	bool init();
 
 	void addRigidBody(btRigidBody* body);
 	void addCollisionShape(btCollisionShape* shape);

@@ -41,10 +41,16 @@ enum class VBOHint : char {
 	GUESS,      // Let the driver decide. opengl = dynamic?, directx = D3DPOOL_DEFAULT
 };
 
+enum class MatrixMode : char {
+	PROJECTION,
+	MODELVIEW,
+};
+
 class iGraphicsLibrary {
+protected:
 	Color clearColor;
 	char  vertexFlags;
-protected:
+
 	size_t height;
 	size_t width;
 public:
@@ -54,8 +60,14 @@ public:
 	virtual bool init() = 0;
 	virtual void clearScreen() = 0;
 
+	virtual void setIdentity() = 0;
+	virtual void setMatrixMode(MatrixMode m) = 0;
 	virtual void setClearColor(Color c) { clearColor = c; }
 	virtual void setVertexFlag(char mask) { vertexFlags |= mask; }
+
+
+	virtual void startScene() = 0;
+	virtual void endScene() = 0;
 
 	// Primatives
 	virtual void setLineWidth(scalar width) = 0;
@@ -75,6 +87,7 @@ public:
 
 	virtual void translate(Vector3f position) = 0;
 	virtual void scale(Vector3f amount) = 0;
+	virtual void rotate(scalar degrees, Vector3f axis) = 0;
 
 	// Utilities
 	virtual void takeScreenshot(std::string path) = 0;

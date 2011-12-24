@@ -10,8 +10,14 @@ public:
 	virtual ~OpenGL();
 
 	bool init();
-
 	void clearScreen();
+
+	void setIdentity();
+	void setMatrixMode(MatrixMode m);
+
+
+	void startScene();
+	void endScene();
 
 	// Primatives
 	void setLineWidth(scalar width);
@@ -31,6 +37,7 @@ public:
 
 	void translate(Vector3f position);
 	void scale(Vector3f amount);
+	void rotate(scalar degrees, Vector3f axis);
 
 	// Utilities
 	void takeScreenshot(std::string path);

@@ -22,9 +22,6 @@ class Game {
 	Renderer renderer;
 	World world;
 
-
-	SDL_Event event;
-
 	scalar fov;
 
 	bool haserror;
@@ -45,6 +42,7 @@ public:
 	Assets& getAssets() { return assets; }
 	Input& getInput() { return input; }
  	World& getWorld() { return world; }
+ 	Camera& getCamera() { return camera; }
 
 
 
@@ -56,9 +54,6 @@ private:
 	Game();
 	Game(Game const&);
 	void operator=(Game const&);
-
-	void handleMouse();
-	void handleEvents();
 
 	void drawAxis();
 

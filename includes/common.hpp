@@ -5,6 +5,8 @@
  *  Created on: 2011-12-11
  *      Author: richard
  */
+#define __GXX_EXPERIMENTAL_CXX0X__ 1
+
 #include <string>
 #include <vector>
 #include <map>
@@ -16,6 +18,7 @@
 #include "math/vector.hpp"
 
 #include "debug.hpp"
+#include "game/EngineModule.hpp"
 
 namespace nde {
 

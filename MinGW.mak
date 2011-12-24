@@ -12,7 +12,7 @@ INCFLAGS=$(addprefix -I, $(INCS))
 LINKFLAGS=-L$(MINGWLIB) $(addprefix -l, $(LIBS)) -static-libgcc -static-libstdc++
 CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DUSE_OPENGL=1 -DWINDOWS -DNDEBUG=1 -std=c++0x -Wall -Werror -Wfatal-errors
 
-GAME_FILES=Camera.cpp Entity.cpp Game.cpp Input.cpp KeyboardMap.cpp Scene.cpp Settings.cpp World.cpp
+GAME_FILES=Camera.cpp EngineModule.cpp Entity.cpp Game.cpp Input.cpp KeyboardMap.cpp Scene.cpp Settings.cpp World.cpp
 GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
 
 MATH_FILES=util.cpp

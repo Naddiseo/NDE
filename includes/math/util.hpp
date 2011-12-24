@@ -1,10 +1,8 @@
 #pragma once
-
+#include <cmath>
 #include "math/vector.hpp"
-
-#define PI 3.1415265359
-#define DEG2RAD(x) ((x)*(PI/180.0))
-#define RAD2DEG(x) ((x)*(180.0/PI))
+#define DEG2RAD(x) ((x)*(M_PI/180.0))
+#define RAD2DEG(x) ((x)*(180.0/M_PI))
 
 namespace nde
 {

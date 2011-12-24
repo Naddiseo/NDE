@@ -14,6 +14,7 @@
 #else
 #	error "Your platform is currently not supported"
 #endif
+#include <IL/il.h>
 #include <GL/glu.h>
 
 #include "graphics/OpenGL.hpp"
@@ -90,7 +91,38 @@ bool OpenGL::init() {
 	return true;
 }
 
-void OpenGL::clearScreen() {}
+void OpenGL::clearScreen() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void OpenGL::setIdentity() {
+	glLoadIdentity();
+}
+
+void OpenGL::setMatrixMode(MatrixMode m) {
+	switch (m) {
+	case MatrixMode::MODELVIEW:
+		glMatrixMode(GL_MODELVIEW);
+		break;
+	case MatrixMode::PROJECTION:
+		glMatrixMode(GL_PROJECTION);
+		break;
+	}
+}
+
+void OpenGL::startScene() {
+	setMatrixMode(MatrixMode::PROJECTION);
+	setIdentity();
+
+
+	gluPerspective(35, width/height, 1, 500);
+	glViewport(0, 0, width, height);
+
+}
+void OpenGL::endScene() {
+	glFlush();
+	SDL_GL_SwapBuffers();
+}
 
 // Primitives
 void OpenGL::setLineWidth(scalar width) {
@@ -147,7 +179,22 @@ void OpenGL::scale(Vector3f amount) {
 	glScalef(amount.x, amount.y, amount.z);
 }
 
+void OpenGL::rotate(scalar degrees, Vector3f axis) {
+	glRotatef(degrees, axis.x, axis.y, axis.z);
+}
+
 // Utilities
-void OpenGL::takeScreenshot(std::string path){}
+void OpenGL::takeScreenshot(std::string path) {
+	unsigned char* imageData = new unsigned char[width * height * 4];
+
+	glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+
+	ilLoadDataL(imageData, width*height*4, width, height, 1, 4);
+	iluFlipImage();
+	ilEnable(IL_FILE_OVERWRITE);
+	ilSave(IL_PNG, path.c_str());
+
+	delete[] imageData;
+}
 
 }
