@@ -232,6 +232,7 @@ Game::mainLoop() {
 	while (!(haserror || shutdown)) {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
+		
 		gluPerspective(fov, width/height, 1, 500);
 		glViewport(0, 0, width, height);
 
