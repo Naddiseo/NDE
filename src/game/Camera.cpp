@@ -20,7 +20,8 @@ namespace nde {
 Camera::Camera()
 	: position(0,0,0),
 		forward0(0,0,-1), forward(forward0),
-		up0(0,1,0), up(up0)
+		up0(0,1,0), up(up0),
+		right(up.cross(forward))
 {
 	phi = 0.f;
 	theta = 0.f;
@@ -50,11 +51,11 @@ void Camera::updateVectors() {
 	
 	RotateAround(phi, up, forward);
 	
-	Vector3f cross = up.cross(forward);
-	cross.normalise();
+	right = up.cross(forward);
+	right.normalise();
 	
-	RotateAround(theta, cross, up);
-	RotateAround(theta, cross, forward);
+	RotateAround(theta, right, up);
+	RotateAround(theta, right, forward);
 	
 	up.normalise();
 	forward.normalise();
@@ -63,15 +64,17 @@ void Camera::updateVectors() {
 void Camera::print() {
 	std::cout
 		<< position << " "
-		<< forward << " "
-		<< up << " " << up.cross(forward)
+		<< forward << " " << up << " " << right
 		<< std::endl;
 }
 
 void Camera::render() {
+	// TODO: Figure out why this doesn't look like (phi, theta, rho)
+	
 	glRotatef(RAD2DEG(theta), 1, 0, 0);
 	glRotatef(RAD2DEG(-phi ), 0, 1, 0);
 	glRotatef(RAD2DEG(rho  ), 0, 0, 1);
+	
 	glTranslatef(-position.x, -position.y, -position.z);
 }
 
@@ -80,7 +83,7 @@ void Camera::moveForwards(scalar distance) {
 }
 
 void Camera::strafeRight(scalar distance) {
-	position += distance * up.cross(forward);
+	position += distance * right;
 }
 
 void Camera::move(Vector3f dir) {

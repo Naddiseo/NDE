@@ -16,6 +16,7 @@ class Camera {
 	
 	Vector3f forward0, forward;
 	Vector3f up0, up;
+	Vector3f right;
 	
 	scalar phi, theta, rho;
 	
