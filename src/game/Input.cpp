@@ -20,7 +20,7 @@ void Input::pollEvents() {
 void Input::processEvent(SDL_Event& event) {
 	switch (event.type) {
 			case SDL_QUIT:
-				//game->shutdown = true;
+				game->stopGame();
 				return;
 				break;
 			case SDL_MOUSEMOTION:

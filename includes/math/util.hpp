@@ -2,9 +2,10 @@
 
 #include "math/vector.hpp"
 
-#define PI 3.14159265358979
-#define DEG2RAD(x) ((x)*(PI/360.0))
-#define RAD2DEG(x) ((x)*(360.0/PI))
+#define M_TAU (6.28318530717958647692)
+
+#define DEG2RAD(x) ((x)*(M_TAU/360.0))
+#define RAD2DEG(x) ((x)*(360.0/M_TAU))
 
 namespace nde
 {
