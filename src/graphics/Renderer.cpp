@@ -18,9 +18,6 @@ namespace nde {
 Renderer::Renderer() : screen(NULL) {}
 
 bool Renderer::init(GLibrary gl) {
-	int height = Settings::getInstance().get_int("HEIGHT");
-	int width = Settings::getInstance().get_int("WIDTH");
-
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) == -1) {
 		NDE_ERROR(SDL_GetError());
 		return false;
@@ -28,7 +25,12 @@ bool Renderer::init(GLibrary gl) {
 	
 	switch (gl) {
 #ifdef USE_OPENGL
-	case GLibrary::OPENGL:
+	case GLibrary::OPENGL: {
+		Settings& settings = Settings::getInstance();
+		
+		int height = settings["HEIGHT"];
+		int width = settings["WIDTH"];
+	
 		screen = SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
 
 		if (screen == NULL) {
@@ -39,6 +41,7 @@ bool Renderer::init(GLibrary gl) {
 		graphics = new OpenGL();
 
 		break;
+	}
 #endif
 	default:
 		NDE_FATAL_ERROR("Unsupported Graphics library");
@@ -46,7 +49,7 @@ bool Renderer::init(GLibrary gl) {
 	}
 	SDL_Flip(screen);
 
-	if (SDL_EnableKeyRepeat(10,10) == -1) {
+	if (SDL_EnableKeyRepeat(10, 10) == -1) {
 		NDE_ERROR(SDL_GetError());
 		return false;
 	}

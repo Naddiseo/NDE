@@ -17,7 +17,9 @@
 #include "KeyboardMapSetup.hpp"
 
 BEGIN_MAIN {
-	nde::World& world = nde::Game::getInstance().getWorld();
+	nde::Game& game = nde::Game::getInstance();
+	
+	nde::World& world = game.getWorld();
 	//nde::Assets& assets = nde::Game::getInstance().getAssets();
 	//assets.loadMaterial("assets/grass.tga"); // preload this
 	//assets.loadMaterial("assets/sky.tga"); // preload this
@@ -27,8 +29,8 @@ BEGIN_MAIN {
 	
 	KeyboardMapSetup mapsetup;
 
-	nde::Game& game = nde::Game::getInstance();
-	game.getWorld().getScene().addRenderObjects(t);
+	world.getScene().addRenderObjects(t);
+	
 	game.mainLoop();
 
 	return 0;
