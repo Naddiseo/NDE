@@ -12,6 +12,7 @@ bool Input::init() {
 
 void Input::pollEvents() {
 	SDL_Event event;
+	float speed = 1.0;
 	while (SDL_PollEvent(&event)) {
 		switch ((short)event.type) {
 		case SDL_QUIT:
@@ -19,7 +20,7 @@ void Input::pollEvents() {
 			return;
 			break;
 		case SDL_MOUSEMOTION:
-			//camera.onMouseMotion(event.motion);
+			camera->onMouseMotion(event.motion);
 			break;
 		case SDL_MOUSEBUTTONUP:
 			if (event.button.button == SDL_BUTTON_WHEELUP) {
@@ -30,15 +31,15 @@ void Input::pollEvents() {
 			}
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			//camera.onMouseClick(event.button);
+			camera->onMouseClick(event.button);
 			break;
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
 			if ((event.key.keysym.mod & KMOD_LSHIFT) == KMOD_LSHIFT) {
-				//speed = 15.0;
+				speed = 15.0;
 			}
 			else {
-				//speed = 1.0;
+				speed = 1.0;
 			}
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
@@ -47,40 +48,40 @@ void Input::pollEvents() {
 				return;
 				break;
 			case SDLK_UP:
-				//camera.rotate(0, 0.015625);
+				camera->rotate(0, 0.015625);
 				break;
 			case SDLK_DOWN:
-				//camera.rotate(0, -0.015625);
+				camera->rotate(0, -0.015625);
 				break;
 			case SDLK_RIGHT:
-				//camera.rotate(0.015625, 0);
+				camera->rotate(0.015625, 0);
 				break;
 			case SDLK_LEFT:
-				//camera.rotate(-0.015625, 0);
+				camera->rotate(-0.015625, 0);
 				break;
 			case SDLK_w:
 				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
-					//Vector3f tmp(0, 0.375 * speed, 0);
-					//camera.move(tmp);
+					Vector3f tmp(0, 0.375 * speed, 0);
+					camera->move(tmp);
 				}
 				else {
-					//camera.moveForwards(0.375 * speed);
+					camera->moveForwards(0.375 * speed);
 				}
 				break;
 			case SDLK_s:
 				if ((event.key.keysym.mod & KMOD_LCTRL) == KMOD_LCTRL) {
-					//Vector3f tmp(0, -0.375 * speed, 0);
-					//camera.move(tmp);
+					Vector3f tmp(0, -0.375 * speed, 0);
+					camera->move(tmp);
 				}
 				else {
-					//camera.moveForwards(-0.375 * speed);
+					camera->moveForwards(-0.375 * speed);
 				}
 				break;
 			case SDLK_a:
-				//camera.strafeRight(0.125 * speed);
+				camera->strafeRight(0.125 * speed);
 				break;
 			case SDLK_d:
-				//camera.strafeRight(-0.125 * speed);
+				camera->strafeRight(-0.125 * speed);
 				break;
 
 			case SDLK_KP0:
