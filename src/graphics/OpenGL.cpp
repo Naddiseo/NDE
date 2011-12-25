@@ -27,13 +27,12 @@
 PFNGLGENBUFFERSARBPROC glGenBuffersARB = NULL;                  // VBO Name Generation Procedure
 PFNGLBINDBUFFERARBPROC glBindBufferARB = NULL;                  // VBO Bind Procedure
 PFNGLBUFFERDATAARBPROC glBufferDataARB = NULL;                  // VBO Data Loading Procedure
+PFNGLBUFFERSUBDATAARBPROC glBufferSubDataARB = NULL;            // VBO Sub Data Loading
 PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB = NULL;            // VBO Deletion Procedure
 
 namespace nde {
 
 static bool isSupported(const char* extension) {
-	/* TODO: use GLEW */
-	
 	unsigned char* where = (unsigned char*)strchr(extension, ' ');
 	
 	if (where || *extension == 0) {
@@ -78,6 +77,7 @@ bool OpenGL::init() {
 	glGenBuffersARB = (PFNGLGENBUFFERSARBPROC)glGetProcAddress("glGenBuffersARB");
 	glBindBufferARB = (PFNGLBINDBUFFERARBPROC)glGetProcAddress("glBindBufferARB");
 	glBufferDataARB = (PFNGLBUFFERDATAARBPROC)glGetProcAddress("glBufferDataARB");
+	glBufferSubDataARB = (PFNGLBUFFERSUBDATAARBPROC)glGetProcAddress("glBufferSubDataARB");
 	glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC)glGetProcAddress("glDeleteBuffersARB");
 	
 	glEnable(GL_DEPTH_TEST);
@@ -156,6 +156,7 @@ void OpenGL::drawQuad(VBOVertex a, VBOVertex b, VBOVertex c, VBOVertex d) {
 		glColor4fv(&b.r);
 		glVertex3fv(&b.pos.x);
 		glColor4fv(&c.r);
+
 		glVertex3fv(&c.pos.x);
 		glColor4fv(&d.r);
 		glVertex3fv(&d.pos.x);
@@ -163,12 +164,44 @@ void OpenGL::drawQuad(VBOVertex a, VBOVertex b, VBOVertex c, VBOVertex d) {
 }
 
 // 3D Primitives
-void OpenGL::drawSphere(VBOVertex center, scalar radius){}
-void OpenGL::drawBox(VBOVertex min, VBOVertex max){}
+void OpenGL::drawSphere(VBOVertex center, scalar radius) { }
+void OpenGL::drawBox(VBOVertex min, VBOVertex max) { }
 
-VBOVertex* OpenGL::allocBuffer(size_t element_count){ return NULL; }
-void OpenGL::addToBuffer(VBOVertex v){}
-void OpenGL::flushBuffer(){}
+void OpenGL::allocBuffer(iBufferObject* ibuffer) {
+	BufferObject* buffer = (BufferObject*)ibuffer;
+	glGenBuffersARB(1, &buffer->vboId);
+	glBindBufferARB(GL_ARRAY_BUFFER, buffer->vboId);
+	glBufferDataARB(GL_ARRAY_BUFFER, sizeof(VBOVertex) * buffer->element_count, NULL, GL_STATIC_DRAW);
+
+	glGenBuffersARB(1, &buffer->indexId);
+	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, buffer->indexId);
+	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, sizeof(size_t) * buffer->element_count, NULL, GL_STATIC_DRAW);
+
+}
+
+void OpenGL::addToBuffer(iBufferObject* ibuffer) {
+	BufferObject* buffer = (BufferObject*)ibuffer;
+	glBufferSubDataARB(GL_ARRAY_BUFFER, 0, sizeof(VBOVertex) * buffer->element_count, buffer->buffer);
+	glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(size_t) * buffer->element_count, buffer->index_buffer);
+}
+
+void OpenGL::flushBuffer(iBufferObject* ibuffer) {
+	BufferObject* buffer = (BufferObject*)ibuffer;
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer->vboId);
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+	glVertexPointer(3, GL_FLOAT, sizeof(VBOVertex), BUFFER_OFFSET(offsetof(VBOVertex, pos)));
+	//glNormalPointer(GL_FLOAT, 64, BUFFER_OFFSET(12));
+	//glClientActiveTexture(GL_TEXTURE0);
+	//glTexCoordPointer(2, GL_FLOAT, 64, BUFFER_OFFSET(24));
+	//glClientActiveTexture(GL_TEXTURE1);
+	//glTexCoordPointer(2, GL_FLOAT, 64, BUFFER_OFFSET(32));
+	//glClientActiveTexture(GL_TEXTURE2);
+	//glTexCoordPointer(2, GL_FLOAT, 64, BUFFER_OFFSET(40));
+
+	 glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, buffer->indexId);
+
+	// glDrawRangeElements(GL_TRIANGLES, x, y, z, GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
+}
 
 void OpenGL::translate(Vector3f position) {
 	glTranslatef(position.x, position.y, position.z);

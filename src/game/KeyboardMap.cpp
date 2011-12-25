@@ -21,7 +21,6 @@ void KeyboardMap::uninstallCallback(SDLKey key) {
 }
 
 void KeyboardMap::dispatch(size_t mods) {
-	
 	for (size_t i = 0; i < SDLK_LAST; i++) {
 		if (pressed[i]) {
 			keyboard_callback_t c = callbacks[i];
@@ -30,8 +29,6 @@ void KeyboardMap::dispatch(size_t mods) {
 			}
 		}
 	}
-
-
 }
 
 void KeyboardMap::press(const SDLKey key) {

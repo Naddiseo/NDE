@@ -49,7 +49,7 @@ bool Renderer::init(GLibrary gl) {
 	}
 	SDL_Flip(screen);
 
-	if (SDL_EnableKeyRepeat(10, 10) == -1) {
+	if (SDL_EnableKeyRepeat(100, 100) == -1) {
 		NDE_ERROR(SDL_GetError());
 		return false;
 	}

@@ -46,6 +46,10 @@ enum class MatrixMode : char {
 	MODELVIEW,
 };
 
+class iBufferObject {
+
+};
+
 class iGraphicsLibrary {
 protected:
 	Color clearColor;
@@ -80,9 +84,9 @@ public:
 	virtual void drawSphere(VBOVertex center, scalar radius) = 0;
 	virtual void drawBox(VBOVertex min, VBOVertex max) = 0;
 
-	virtual VBOVertex* allocBuffer(size_t element_count) = 0;
-	virtual void addToBuffer(VBOVertex v) = 0;
-	virtual void flushBuffer() = 0;
+	virtual void allocBuffer(iBufferObject* buffer) = 0;
+	virtual void addToBuffer(iBufferObject* buffer) = 0;
+	virtual void flushBuffer(iBufferObject* buffer) = 0;
 
 
 	virtual void translate(Vector3f position) = 0;

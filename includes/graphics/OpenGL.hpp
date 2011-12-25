@@ -4,6 +4,14 @@
 
 namespace nde {
 
+struct BufferObject : public iBufferObject {
+	unsigned int vboId;
+	unsigned int indexId;
+	VBOVertex* buffer;
+	size_t* index_buffer;
+	size_t element_count;
+};
+
 class OpenGL : public iGraphicsLibrary {
 public:
 	OpenGL();
@@ -30,9 +38,9 @@ public:
 	void drawSphere(VBOVertex center, scalar radius);
 	void drawBox(VBOVertex min, VBOVertex max);
 
-	VBOVertex* allocBuffer(size_t element_count);
-	void addToBuffer(VBOVertex v);
-	void flushBuffer();
+	void allocBuffer(iBufferObject* buffer);
+	void addToBuffer(iBufferObject* buffer);
+	void flushBuffer(iBufferObject* buffer);
 
 
 	void translate(Vector3f position);
