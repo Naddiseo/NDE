@@ -14,5 +14,7 @@ public:
 	virtual ~ShootBox();
 
 	bool init();
+
+	void shootbox();
 };
 

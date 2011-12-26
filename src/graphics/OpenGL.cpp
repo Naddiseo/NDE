@@ -171,18 +171,18 @@ void OpenGL::allocBuffer(iBufferObject* ibuffer) {
 	BufferObject* buffer = (BufferObject*)ibuffer;
 	glGenBuffersARB(1, &buffer->vboId);
 	glBindBufferARB(GL_ARRAY_BUFFER, buffer->vboId);
-	glBufferDataARB(GL_ARRAY_BUFFER, sizeof(VBOVertex) * buffer->element_count, NULL, GL_STATIC_DRAW);
+	glBufferDataARB(GL_ARRAY_BUFFER, sizeof(VBOVertex) * buffer->vertex_count, NULL, GL_STATIC_DRAW);
 
 	glGenBuffersARB(1, &buffer->indexId);
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, buffer->indexId);
-	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, sizeof(size_t) * buffer->element_count, NULL, GL_STATIC_DRAW);
+	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER, sizeof(size_t) * buffer->index_count, NULL, GL_STATIC_DRAW);
 
 }
 
 void OpenGL::addToBuffer(iBufferObject* ibuffer) {
 	BufferObject* buffer = (BufferObject*)ibuffer;
-	glBufferSubDataARB(GL_ARRAY_BUFFER, 0, sizeof(VBOVertex) * buffer->element_count, buffer->buffer);
-	glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(size_t) * buffer->element_count, buffer->index_buffer);
+	glBufferSubDataARB(GL_ARRAY_BUFFER, 0, sizeof(VBOVertex) * buffer->vertex_count, buffer->buffer);
+	glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(size_t) * buffer->index_count, buffer->index_buffer);
 }
 
 void OpenGL::flushBuffer(iBufferObject* ibuffer) {
@@ -199,7 +199,7 @@ void OpenGL::flushBuffer(iBufferObject* ibuffer) {
 	//glTexCoordPointer(2, GL_FLOAT, 64, BUFFER_OFFSET(40));
 
 	 glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, buffer->indexId);
-	 glDrawArrays( GL_TRIANGLES, 0, buffer->element_count);
+	 glDrawArrays( GL_TRIANGLES, 0, buffer->vertex_count);
 }
 
 void OpenGL::translate(Vector3f position) {
@@ -228,8 +228,8 @@ void OpenGL::takeScreenshot(std::string path) {
 	delete[] imageData;
 }
 
-iBufferObject* OpenGL::createBuffer(size_t element_count) {
-	return new BufferObject(element_count);
+iBufferObject* OpenGL::createBuffer(size_t vertex_count, size_t index_count) {
+	return new BufferObject(vertex_count, index_count);
 }
 
 }

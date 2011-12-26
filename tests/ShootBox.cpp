@@ -6,16 +6,17 @@
  */
 
 #include "ShootBox.hpp"
+#include "Box.hpp"
 
-ShootBox::ShootBox() {
-	// TODO Auto-generated constructor stub
+ShootBox::ShootBox() {}
 
-}
-
-ShootBox::~ShootBox() {
-	// TODO Auto-generated destructor stub
-}
+ShootBox::~ShootBox() {}
 
 bool ShootBox::init() {
 	return true;
+}
+
+void ShootBox::shootbox() {
+	nde::iBufferObject* buffer = graphics->createBuffer(8, 12);
+	Box* box = new Box(world, 3, 1);
 }

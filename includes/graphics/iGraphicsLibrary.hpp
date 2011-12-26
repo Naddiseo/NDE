@@ -49,12 +49,14 @@ enum class MatrixMode : char {
 struct iBufferObject {
 	VBOVertex* buffer;
 	size_t* index_buffer;
-	size_t element_count;
+	size_t vertex_count;
+	size_t index_count;
 
-	iBufferObject(size_t count) {
-		element_count = count;
-		buffer = new VBOVertex[count];
-		index_buffer = new size_t[count];
+	iBufferObject(size_t _vertex_count, size_t _index_count) {
+		vertex_count = _vertex_count;
+		index_count = _index_count;
+		buffer = new VBOVertex[vertex_count];
+		index_buffer = new size_t[index_count];
 	}
 
 	~iBufferObject() {
@@ -114,7 +116,7 @@ public:
 	virtual void takeScreenshot(std::string path) = 0;
 
 	// Caller is responsible for freeing the memory
-	virtual iBufferObject* createBuffer(size_t element_count) = 0;
+	virtual iBufferObject* createBuffer(size_t vertex_count, size_t index_count) = 0;
 };
 
 

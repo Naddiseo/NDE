@@ -4,6 +4,7 @@
 
 #include "HasId.hpp"
 #include "graphics/Face.hpp"
+#include "graphics/iGraphicsLibrary.hpp"
 #include "math/vector.hpp"
 
 namespace nde {

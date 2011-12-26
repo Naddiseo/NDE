@@ -8,7 +8,7 @@ struct BufferObject : public iBufferObject {
 	GLuint vboId;
 	GLuint indexId;
 
-	BufferObject(size_t count) : iBufferObject(count) {}
+	BufferObject(size_t _vertex_count, size_t _index_count) : iBufferObject(_vertex_count, _index_count) {}
 };
 
 class OpenGL : public iGraphicsLibrary {
@@ -48,7 +48,7 @@ public:
 
 	// Utilities
 	void takeScreenshot(std::string path);
-	iBufferObject* createBuffer(size_t element_count);
+	iBufferObject* createBuffer(size_t vertex_count, size_t index_count);
 };
 
 }
