@@ -1,8 +1,5 @@
 #pragma once
 
-#include <map>
-#include <vector>
-
 #include "common.hpp"
 #include "resources/Material.hpp"
 #include "resources/UVMap.hpp"

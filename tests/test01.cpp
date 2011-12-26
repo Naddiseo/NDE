@@ -16,6 +16,7 @@
 #include "NDE.hpp"
 #include "KeyboardMapSetup.hpp"
 #include "DrawAxis.hpp"
+#include "ShootBox.hpp"
 
 BEGIN_MAIN {
 	nde::Game& game = nde::Game::getInstance();
@@ -27,10 +28,13 @@ BEGIN_MAIN {
 
 	nde::Terrain* t = new nde::Terrain(&world); // Scene will delete this
 	DrawAxis* axis = new DrawAxis(&world);
+
 	//nde::SkyBox* s = new nde::SkyBox(&world);
 	
 	KeyboardMapSetup* mapsetup = new KeyboardMapSetup();
+	ShootBox* boxShooter = new ShootBox();
 	game.addModule(mapsetup);
+	game.addModule(boxShooter);
 
 	world.getScene().addRenderObjects(t, axis);
 	game.mainLoop();

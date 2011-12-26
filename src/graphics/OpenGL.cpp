@@ -199,8 +199,7 @@ void OpenGL::flushBuffer(iBufferObject* ibuffer) {
 	//glTexCoordPointer(2, GL_FLOAT, 64, BUFFER_OFFSET(40));
 
 	 glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, buffer->indexId);
-
-	// glDrawRangeElements(GL_TRIANGLES, x, y, z, GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
+	 glDrawArrays( GL_TRIANGLES, 0, buffer->element_count);
 }
 
 void OpenGL::translate(Vector3f position) {
@@ -227,6 +226,10 @@ void OpenGL::takeScreenshot(std::string path) {
 	ilSave(IL_PNG, path.c_str());
 
 	delete[] imageData;
+}
+
+iBufferObject* OpenGL::createBuffer(size_t element_count) {
+	return new BufferObject(element_count);
 }
 
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <btBulletDynamicsCommon.h>
+#include "common.hpp"
 #include "game/Scene.hpp"
 
 
@@ -13,8 +14,6 @@ class World : public EngineModule {
 	btDbvtBroadphase* overlappingPairCache;
 	btSequentialImpulseConstraintSolver* solver;
 	btDiscreteDynamicsWorld* dynamicsWorld;
-
-
 
 	std::vector<Entity*> entities;
 public:

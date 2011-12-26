@@ -46,8 +46,25 @@ enum class MatrixMode : char {
 	MODELVIEW,
 };
 
-class iBufferObject {
+struct iBufferObject {
+	VBOVertex* buffer;
+	size_t* index_buffer;
+	size_t element_count;
 
+	iBufferObject(size_t count) {
+		element_count = count;
+		buffer = new VBOVertex[count];
+		index_buffer = new size_t[count];
+	}
+
+	~iBufferObject() {
+		if (buffer) {
+			delete[] buffer;
+		}
+		if (index_buffer) {
+			delete[] index_buffer;
+		}
+	}
 };
 
 class iGraphicsLibrary {
@@ -95,6 +112,9 @@ public:
 
 	// Utilities
 	virtual void takeScreenshot(std::string path) = 0;
+
+	// Caller is responsible for freeing the memory
+	virtual iBufferObject* createBuffer(size_t element_count) = 0;
 };
 
 

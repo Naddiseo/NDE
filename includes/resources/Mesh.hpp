@@ -16,7 +16,7 @@ protected:
 
 	size_t array_count;
 	size_t color_count;
-	GLuint vboId;
+	iBufferObject* buffer;
 
 public:
 	std::vector<Vector3f*> vertices;
@@ -27,8 +27,9 @@ public:
 
 	virtual void render(Vector3f& translate);
 
-	GLuint reserve(size_t elements);
+	//GLuint reserve(size_t elements);
 	//char*   reserveColors(size_t elements);
+	void setBuffer(iBufferObject* buf) { buffer = buf; }
 	virtual void flush();
 
 	virtual Vector3f* add(scalar x, scalar y, scalar z);

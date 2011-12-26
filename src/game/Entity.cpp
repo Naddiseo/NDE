@@ -12,6 +12,7 @@ Entity::Entity(World* _world) {
 	mass = 0.0;
 
 	location.setIdentity();
+	mesh = Game::getInstance().getAssets().allocMesh();
 }
 
 Entity::~Entity() {
@@ -56,7 +57,6 @@ void Entity::createBox(Vector3f linVel) {
 	body->setCcdMotionThreshold(0.5);
 	body->setCcdSweptSphereRadius(0.9f);
 
-	mesh = Game::getInstance().getAssets().allocMesh();
 
 	face = mesh->allocFace();
 	face->col = Color("a", ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX), ((float)rand()/(float)RAND_MAX));

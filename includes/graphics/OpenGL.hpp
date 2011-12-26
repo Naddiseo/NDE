@@ -5,11 +5,10 @@
 namespace nde {
 
 struct BufferObject : public iBufferObject {
-	unsigned int vboId;
-	unsigned int indexId;
-	VBOVertex* buffer;
-	size_t* index_buffer;
-	size_t element_count;
+	GLuint vboId;
+	GLuint indexId;
+
+	BufferObject(size_t count) : iBufferObject(count) {}
 };
 
 class OpenGL : public iGraphicsLibrary {
@@ -49,6 +48,7 @@ public:
 
 	// Utilities
 	void takeScreenshot(std::string path);
+	iBufferObject* createBuffer(size_t element_count);
 };
 
 }

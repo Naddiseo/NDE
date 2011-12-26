@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <utility> // for std::forward
 
 #include <SDL/SDL.h>
 #include <GL/gl.h>
@@ -31,8 +32,6 @@ class IsRendered;
 class Entity;
 typedef std::vector<Face*> faces_t;
 typedef std::vector<Entity*> rendered_list_t;
-
-typedef std::map<std::string, GLuint> intmap_t;
 
 }
 
