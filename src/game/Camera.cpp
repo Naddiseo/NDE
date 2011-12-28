@@ -130,7 +130,7 @@ Vector3f Camera::getRayToFromCenter() {
 }
 
 Vector3f Camera::getRayTo(size_t x, size_t y) {
-	GLfloat winX, winY, winZ;
+/*	GLfloat winX, winY, winZ;
 	GLdouble posX, posY, posZ;
 
 	GLint viewport[4];
@@ -148,6 +148,7 @@ Vector3f Camera::getRayTo(size_t x, size_t y) {
 	gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
 
 	return Vector3f(posX, posY, posZ);
+*/
 }
 
 } /* namespace nde */

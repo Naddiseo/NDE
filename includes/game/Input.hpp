@@ -3,6 +3,7 @@
 #include <SDL/SDL.h>
 
 #include "game/KeyboardMap.hpp"
+#include "game/MouseMap.hpp"
 #include "game/EngineModule.hpp"
 
 namespace nde {
@@ -10,6 +11,7 @@ namespace nde {
 
 class Input : public EngineModule {
 	KeyboardMap keymap;
+	MouseMap mousemap;
 public:
 	Input();
 	virtual ~Input();
@@ -19,6 +21,7 @@ public:
 	void pollEvents();
 
 	KeyboardMap& getKeyMap() { return keymap; }
+	MouseMap& getMouseMap() { return mousemap; }
 };
 
 }

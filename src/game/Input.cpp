@@ -19,18 +19,11 @@ void Input::pollEvents() {
 			return;
 			break;
 		case SDL_MOUSEMOTION:
-			camera->onMouseMotion(event.motion);
+			mousemap.dispatchMove(event.motion);
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if (event.button.button == SDL_BUTTON_WHEELUP) {
-				//fov -= 1;
-			}
-			else if (event.button.button == SDL_BUTTON_WHEELDOWN) {
-				//fov += 1;
-			}
-			break;
 		case SDL_MOUSEBUTTONDOWN:
-			camera->onMouseClick(event.button);
+			mousemap.dispatchClick(event.button);
 			break;
 		case SDL_KEYDOWN:
 			keymap.press(event.key.keysym.sym);
