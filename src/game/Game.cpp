@@ -37,7 +37,7 @@ Game::Game()
 {
 	camera.setPosition(SGET_V("cam_pos"));
 	camera.rotate(SGET_F("cam_phi"), SGET_F("cam_theta"));
-	
+
 #ifdef WINDOWS
 	//HWND hWnd = GetConsoleWindow();
 	//ShowWindow(hWnd, SW_HIDE);
@@ -107,7 +107,7 @@ Game::mainLoop() {
 		graphics->setMatrixMode(MatrixMode::MODELVIEW);
 		graphics->setIdentity();
 
-		camera.render();
+		camera.render(); // TODO: this should have a "render", there should be a "player" object
 		world.step();
 
 		for (Entity* r : world.getScene().getToRender()) {

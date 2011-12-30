@@ -10,7 +10,7 @@ namespace nde {
 Settings::Settings() {
 	set("HEIGHT", 600);
 	set("WIDTH", 800);
-	
+
 	set("cam_pos", Vector3f { 20, 5, 20 });
 	set("cam_phi", 45.f);
 	set("cam_theta", 0.0f);
@@ -30,13 +30,15 @@ Settings::Settings() {
 
 	set("key_camera_reset", (int)SDLK_KP0);
 	set("key_screenshot", (int)SDLK_PRINT);
+
+	set("mouse_click_duration", 200); // 200ms
 }
 
 Settings::~Settings() {}
 
 void Settings::set(const std::string& key, const SettingsValue& val) {
 	settings_t::iterator iter = settings.find(key);
-	
+
 	if (iter != settings.end()) {
 		iter->second = val;
 	} else {

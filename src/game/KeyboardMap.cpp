@@ -6,7 +6,6 @@ namespace nde {
 KeyboardMap::KeyboardMap() {
 	for (size_t i = 0; i < SDLK_LAST; i++) {
 		callbacks[i] = NULL;
-		pressed[i] = false;
 	}
 }
 
@@ -21,6 +20,7 @@ void KeyboardMap::uninstallCallback(SDLKey key) {
 }
 
 void KeyboardMap::dispatch(size_t mods) {
+	pressed = SDL_GetKeyState(NULL);
 	for (size_t i = 0; i < SDLK_LAST; i++) {
 		if (pressed[i]) {
 			keyboard_callback_t c = callbacks[i];

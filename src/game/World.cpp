@@ -11,7 +11,7 @@ World::World() {
 
 	collisionConfig = new btDefaultCollisionConfiguration();
 	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
-	dispatcher = new	btCollisionDispatcher(collisionConfig);
+	dispatcher = new btCollisionDispatcher(collisionConfig);
 
 	///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
 	overlappingPairCache = new btDbvtBroadphase();
@@ -93,11 +93,11 @@ World::shootBox(Vector3f from, Vector3f dir) {
 	box->addCollisionShape(shape);
 	box->getWorldTransform().setOrigin(from);
 	box->getWorldTransform().setRotation(btQuaternion(0, 0, 0, 1));
-	
+
 	Vector3f linVel(dir);
 	linVel.normalise();
 	linVel *= 33.f;
-	
+
 	box->createBox(linVel);
 
 	getScene().addRenderObjects(box);
