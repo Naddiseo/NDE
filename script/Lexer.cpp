@@ -25,6 +25,7 @@ static std::map<std::string, TokenType> keywords = {
 	{"else", TokenType::ELSE},
 	{"true", TokenType::TRUE},
 	{"false", TokenType::FALSE},
+	{"class", TokenType::CLASS},
 };
 
 typedef std::map<std::string, TokenType>::iterator kw_t;

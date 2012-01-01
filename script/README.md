@@ -7,6 +7,7 @@
  * String
  * Vector
  * Void
+ * Boolean
  
 Reserved words:
  * int
@@ -14,6 +15,7 @@ Reserved words:
  * float
  * string
  * vector
+ * bool
  * void
  * return
  * if
@@ -21,6 +23,7 @@ Reserved words:
  * for
  * break
  * continue
+ * class
 
 ```
 void main() {
