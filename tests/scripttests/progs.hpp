@@ -7,3 +7,6 @@ extern nde::tokens_t prog1_expected;
 
 extern std::string prog2;
 extern nde::tokens_t prog2_expected;
+
+extern std::string prog3;
+extern nde::tokens_t prog3_expected;

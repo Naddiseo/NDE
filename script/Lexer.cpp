@@ -194,9 +194,6 @@ Lexer::getPunct() {
 			case '=':
 				next();
 				return TokenType::LSHIFTASSIGN;
-			default:
-				backup();
-				break;
 			}
 			return TokenType::LSHIFT;
 		}
@@ -207,15 +204,12 @@ Lexer::getPunct() {
 		case '=':
 			next();
 			return TokenType::GTE;
-		case '<':
+		case '>':
 			next();
 			switch (*peek) {
 			case '=':
 				next();
 				return TokenType::RSHIFTASSIGN;
-			default:
-				backup();
-				break;
 			}
 			return TokenType::RSHIFT;
 		}
