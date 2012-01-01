@@ -33,7 +33,7 @@ SOUND_SOURCES=$(addprefix sound/, $(SOUND_FILES))
 SYS_FILES=
 SYS_SOURCES=$(addprefix sys/, $(SYS_FILES))
 
-TESTS_FILES=scripttests/lexer.cpp
+TESTS_FILES=scripttests/lexer.cpp scripttests/progs.cpp main.cpp
 TESTS_SOURCES=$(addprefix tests/, $(TESTS_FILES))
 
 TOOLS_FILES=
@@ -48,10 +48,22 @@ SOURCES=$(AI_SOURCES) $(GAME_SOURCES) $(GRAPHICS_SOURCES) $(LIB_SOURCES) $(MATH_
 
 OBJECTS= $(SOURCES:.cpp=.o)
 
-all: clear library lexertest
+ifeq ($(NPROCS),)
+OS:=$(shell uname -s)
 
-lexertest: libNDE.a $(TESTS_SOURCES:.cpp=.o)
-	$(CXX)  $^ -L ./ -lNDE -lcppunit $(LINKFLAGS)  $(CXXFLAGS)   -o nde.bin
+ifeq ($(OS),Linux)
+	NPROCS:=$(shell echo "1+$(shell grep -c ^processor /proc/cpuinfo)"|bc)
+endif
+	
+
+%:
+	$(MAKE) -j$(NPROCS) NPROCS=$(NPROCS) $@
+else
+
+all: clear library scripttests
+
+scripttests: libNDE.a $(TESTS_SOURCES:.cpp=.o)
+	$(CXX)  $^ -L ./ -lNDE -lcppunit $(LINKFLAGS)  $(CXXFLAGS) -o ndetests.bin
 
 library: libNDE.a
 
@@ -78,5 +90,10 @@ clean:
 clear:
 	clear
 
+test: clear library scripttests
+	./ndetests.bin
+
 run:
 	./nde.bin 
+
+endif

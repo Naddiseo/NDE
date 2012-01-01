@@ -9,6 +9,8 @@ namespace nde {
 
 
 class Lexer {
+	typedef union { int i; float f; } number_t;
+
 	tokens_t tokens;
 	const char* program;
 	char* program_end;
@@ -37,6 +39,7 @@ private:
 	void setError(std::string s);
 
 	bool next();
+	void backup(size_t count = 1);
 
 	bool isWhite() const;
 	bool isAlpha() const;
@@ -49,6 +52,8 @@ private:
 	void skipWhite();
 	std::string getIdent();
 	TokenType getPunct();
+	number_t getNumber(TokenType& t);
+	std::string getString();
 
 };
 

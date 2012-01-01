@@ -7,29 +7,10 @@
 namespace nde {
 
 enum class TokenType : char {
-	ERROR,
-
-	// native types
-	INT,
-	UINT,
-	FLOAT,
-	STRING,
-	VECTOR,
-	VOID,
-
-	//
-	IDENT,
-
-	// PUNCTUATION
-	LPAREN, // (
-	RPAREN, // )
-	LBRACE, // {
-	RBRACE, // }
-
-	ASSIGN, // =
-	EQUAL, // ==
-	NEQUAL, // !=
-
+#	define TOK(x) x,
+#	include "toks.hpp"
+#	undef TOK
+	__LAST__
 };
 
 struct Token {
@@ -49,6 +30,8 @@ struct Token {
 	Token(TokenType _t, size_t _l, size_t _c, float _f);
 	//Token(TokenType _t, size_t _l, size_t _c, Vector _v);
 	~Token();
+
+	std::string getName();
 
 	bool isExact(const Token& other) const;
 	bool operator==(const Token& other) const;

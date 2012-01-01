@@ -1,6 +1,15 @@
 #include "script/Token.hpp"
+#include <cmath>
 
 namespace nde {
+
+static const float THRESHHOLD = 0.00005;
+
+static const std::string TOKEN_NAMES[static_cast<size_t>(TokenType::__LAST__)] = {
+#	define TOK(x) #x,
+#	include "toks.hpp"
+#	undef TOK
+};
 
 Token::Token()
 	: type(TokenType::ERROR), lineno(0), charno(0) {}
@@ -23,6 +32,13 @@ Token::Token(TokenType _t, size_t _l, size_t _c, float _f)
 
 Token::~Token() {}
 
+
+std::string
+Token::getName() {
+	return TOKEN_NAMES[static_cast<size_t>(type)];
+}
+
+
 bool
 Token::isExact(const Token& other) const {
 	return (
@@ -37,18 +53,17 @@ Token::operator==(const Token& other) const  {
 	bool ret = (type == other.type);
 
 	switch (type) {
-	case TokenType::INT:
-	case TokenType::UINT:
+	case TokenType::INTVAL:
 		ret = ret && (other.inttype == inttype);
 		break;
-	case TokenType::FLOAT:
-		ret = ret && (other.flttype == flttype);
+	case TokenType::FLOATVAL:
+		ret = ret && (std::abs((float)(other.flttype - flttype)) < THRESHHOLD);
 		break;
-	case TokenType::STRING:
+	case TokenType::STRINGVAL:
 	case TokenType::IDENT:
 		ret = ret && (other.strtype == strtype);
 		break;
-	case TokenType::VECTOR:
+	case TokenType::VECTORVAL:
 		// ret = ret && (other.vectype == vectype);
 		break;
 	default:
@@ -60,21 +75,20 @@ Token::operator==(const Token& other) const  {
 #ifdef NDEBUG
 Token::operator std::string() {
 	std::stringstream ss;
-	ss << "TOKEN(" << (int)type << "," << lineno << "," << charno << ")";
+	ss << "TOKEN(" << getName() << "," << lineno << "," << charno << ")";
 
 	switch (type) {
-	case TokenType::INT:
-	case TokenType::UINT:
+	case TokenType::INTVAL:
 		ss << "[" << inttype << "]";
 		break;
-	case TokenType::FLOAT:
+	case TokenType::FLOATVAL:
 		ss << "[" << flttype << "]";
 		break;
-	case TokenType::STRING:
+	case TokenType::STRINGVAL:
 	case TokenType::IDENT:
 		ss << "[" << strtype << "]";
 		break;
-	case TokenType::VECTOR:
+	case TokenType::VECTORVAL:
 		// ret = ret && (other.vectype == vectype);
 		break;
 	default:
