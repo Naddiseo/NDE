@@ -1,0 +1,28 @@
+
+
+** Built in types
+ * Integer
+ * Unsigned Integer
+ * Float
+ * String
+ * Vector
+ * Void
+ 
+Reserved words:
+ * int
+ * uint
+ * float
+ * string
+ * vector
+ * void
+ * return
+ * if
+ * while
+ * for
+ * break
+ * continue
+
+```
+void main() {
+}
+```
