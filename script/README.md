@@ -28,31 +28,31 @@ A simple C subset that will integrate into the NDE game engine.
 * continue
 * class
 
-	class MyClass {
-		float myfloat = 0.0;
-		string hello = "Foo";
-		
-		string getHello() {
-			return this.hello;
-		}
-	}
-	
-	class MyDerivedClass : MyClass {
-		string getHello(string suffix = "!") {
-			return "World" + suffix;
-		}
-	}
-	
+    class MyClass {
+        float myfloat = 0.0;
+        string hello = "Foo";
+        
+        string getHello() {
+            return this.hello;
+        }
+    }
+
+    class MyDerivedClass : MyClass {
+        string getHello(string suffix = "!") {
+            return "World" + suffix;
+        }
+    }
+
     void main() {
-    	int a = 4, b;
-    	uint c = a;
-    	b = c+1 << a;
-    	
-    	MyDerivedClass cls();
-    	
-    	float foo = cls.myfloat >= 0 ? 1.0 : 2.0;
-    	
-    	string msg = cls.getHello("?");
-    	
+        int a = 4, b;
+        uint c = a;
+        b = c+1 << a;
+
+        MyDerivedClass cls();
+
+        float foo = cls.myfloat >= 0 ? 1.0 : 2.0;
+
+        string msg = cls.getHello("?");
+	
     }
 

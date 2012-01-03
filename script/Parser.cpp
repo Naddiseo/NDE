@@ -1,3 +1,4 @@
+#include <iostream>
 #include "script/Parser.hpp"
 
 namespace nde {
@@ -12,8 +13,16 @@ Parser::~Parser() {}
 
 bool
 Parser::parse() {
+	bool ret = true;
 
-	return true;
+	try {
+		ast = program();
+	}
+	catch (ParseError& e) {
+		ret = false;
+		std::cerr << e.what() << std::endl;
+	}
+	return ret;
 }
 
 void
@@ -145,9 +154,19 @@ ast::eReturnType Parser::var_type() {
  * 	| // empty
  * 	;
  */
-void Parser::optional_var_assign() {}
+ast::ExprNode Parser::optional_var_assign() {
+	if (current.type == TokenType::ASSIGN) {
+		expectType(TokenType::ASSIGN);
+		return expression();
+	}
 
+	return ast::EmptyExpression();
+}
 
+ast::ExprNode Parser::expression() {
+
+	return ast::EmptyExpression();
+}
 
 } // namespace nde
 

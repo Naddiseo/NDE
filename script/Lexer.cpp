@@ -31,7 +31,7 @@ static std::map<std::string, TokenType> keywords = {
 
 typedef std::map<std::string, TokenType>::iterator kw_t;
 
-Lexer::Lexer() : lineno(1), charno(1), haserror(false) {}
+Lexer::Lexer() : lineno(1), charno(1) {}
 
 Lexer::~Lexer() {}
 
@@ -89,12 +89,6 @@ Lexer::lex(const std::string& _program) {
 
 	return !haserror;
 #undef SAVE
-}
-
-void
-Lexer::setError(std::string s) {
-	errmsg = s;
-	haserror = true;
 }
 
 bool

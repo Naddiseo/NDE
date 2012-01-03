@@ -23,6 +23,22 @@ enum class eDeclType {
 	CLASS
 };
 
+struct ExprNode {};
+typedef std::vector<ExprNode> expr_list_t;
+
+struct Expression : public ExprNode {
+	expr_list_t children;
+};
+
+struct EmptyExpression : public ExprNode {};
+
+struct ConditionalExpr : public Expression {};
+struct OrExpr : public Expression {};
+struct AndExpr : public Expression {};
+struct NotExpr : public Expression {};
+struct ComparisonExpr : public Expression {};
+
+
 struct Decl {
 	eDeclType type;
 	eReturnType value_type;

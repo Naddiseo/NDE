@@ -1,6 +1,7 @@
 #pragma once
 #include <exception>
 #include <sstream>
+#include <script/ScriptBase.hpp>
 #include "script/Token.hpp"
 #include "script/ASTree.hpp"
 
@@ -13,25 +14,29 @@ public:
 		this->msg << "Parse Error[" << t.lineno << ":" << t.charno << "] " << msg;
 	}
 
-	ParseError(const nde::ParseError& other) { msg = other.msg; };
+	ParseError(const nde::ParseError& other) { msg << other.msg.str(); };
 
-	virtual ~ParseError() throw();
+	virtual ~ParseError() throw(){}
 
 	const char* what() const throw() {
 		return msg.str().c_str();
 	}
 };
 
-class Parser {
+class Parser : public ScriptBase<ParseError> {
 	tokens_t tokens;
 	tokens_t::iterator iter;
 	Token current;
 	Token peek;
+
+	ast::Program ast;
 public:
 	Parser(tokens_t& _tokens);
 	virtual ~Parser();
 
 	bool parse();
+
+	ast::Program& getAST() { return ast; }
 private:
 
 	void next();
@@ -87,7 +92,14 @@ private:
 	 * 	| // empty
 	 * 	;
 	 */
-	void optional_var_assign();
+	ast::ExprNode optional_var_assign();
+
+	/*
+	 * expr
+	 * 	: assignment
+	 * 	;
+	 */
+	ast::ExprNode expression();
 
 };
 

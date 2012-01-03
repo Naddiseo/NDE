@@ -118,4 +118,14 @@ nde::tokens_t prog3_expected = {
 	{TT(QUESTION), 64, 1},
 };
 
+
+std::string prog4 =
+	"class Base {\n"
+	"	"
+	"}\n"
+	"class Child : Base {\n"
+	"}\n"
+	"void main(){ Child c(); }"
+	;
+
 #undef TT

@@ -63,7 +63,7 @@ public:
 	}
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION( LexerTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(LexerTest);
 
 
 

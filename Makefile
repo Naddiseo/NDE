@@ -28,7 +28,7 @@ PHYSICS_SOURCES=$(addprefix physics/, $(PHYSICS_FILES))
 RESOURCES_FILES=
 RESOURCES_SOURCES=$(addprefix resources/, $(RESOURCES_FILES))
 
-SCRIPT_FILES=Lexer.cpp Token.cpp Parser.cpp ASTree.cpp toks.cpp
+SCRIPT_FILES=Lexer.cpp Token.cpp Parser.cpp ASTree.cpp toks.cpp ScriptBase.cpp
 SCRIPT_SOURCES=$(addprefix script/, $(SCRIPT_FILES))
 
 SOUND_FILES=
@@ -37,7 +37,7 @@ SOUND_SOURCES=$(addprefix sound/, $(SOUND_FILES))
 SYS_FILES=
 SYS_SOURCES=$(addprefix sys/, $(SYS_FILES))
 
-TESTS_FILES=scripttests/lexer.cpp scripttests/progs.cpp main.cpp
+TESTS_FILES=scripttests/lexer.cpp scripttests/parser.cpp scripttests/progs.cpp main.cpp
 TESTS_SOURCES=$(addprefix tests/, $(TESTS_FILES))
 
 TOOLS_FILES=

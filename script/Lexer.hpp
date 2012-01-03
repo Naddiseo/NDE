@@ -1,14 +1,17 @@
 #pragma once
 #include <string>
+#include <stdexcept>
 
+#include <script/ScriptBase.hpp>
 #include "script/Token.hpp"
 
 namespace nde {
 
 #define MIN_SCRIPT_LENGTH 10 // try writing a program shorter than this
 
+class LexerError : public std::runtime_error { };
 
-class Lexer {
+class Lexer : public ScriptBase<LexerError> {
 	typedef union { int i; float f; } number_t;
 
 	tokens_t tokens;
@@ -20,8 +23,6 @@ class Lexer {
 	size_t lineno;
 	size_t charno;
 
-	std::string errmsg;
-	bool haserror;
 public:
 	Lexer();
 	virtual ~Lexer();
@@ -30,14 +31,9 @@ public:
 
 	tokens_t::iterator begin();
 	tokens_t::iterator end();
-	const tokens_t& getTokens() { return tokens; }
-
-	bool hasError(const std::string* s) const { s = &errmsg; return haserror; }
+	tokens_t& getTokens() { return tokens; }
 
 private:
-
-	void setError(std::string s);
-
 	bool next();
 	void backup(size_t count = 1);
 
