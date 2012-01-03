@@ -4,14 +4,9 @@
 #ifdef NDEBUG
 #	include <sstream>
 #endif
-namespace nde {
+#include "script/toks.hpp"
 
-enum class TokenType : char {
-#	define TOK(x) x,
-#	include "toks.hpp"
-#	undef TOK
-	__LAST__
-};
+namespace nde {
 
 struct Token {
 	TokenType type;
@@ -32,6 +27,10 @@ struct Token {
 	~Token();
 
 	std::string getName();
+
+	static std::string typeToString(TokenType _t);
+
+	bool isError() const { return type == TokenType::IF; }
 
 	bool isExact(const Token& other) const;
 	bool operator==(const Token& other) const;

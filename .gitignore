@@ -39,3 +39,4 @@ _$*
 *.lib
 *.dll
 .settings
+*.d

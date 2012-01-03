@@ -49,7 +49,7 @@ std::string prog3 = // test all the tokens
 	"||\nor\n&&\nand\n"
 	"~\n|\n&\n^\n<<\n>>\n|=\n&=\n^=\n<<=\n>>=\n"
 	"+\n-\n*\n/\n++\n--\n+=\n-=\n*=\n/=\n"
-	"class\n"
+	"class\nreturn\n:\n?\n"
 	;
 nde::tokens_t prog3_expected = {
 	{TT(INT), 1, 1},
@@ -112,7 +112,10 @@ nde::tokens_t prog3_expected = {
 	{TT(SUBASSIGN), 58, 1},
 	{TT(MULASSIGN), 59, 1},
 	{TT(DIVASSIGN), 60, 1},
-	{TT(CLASS), 61, 1}
+	{TT(CLASS), 61, 1},
+	{TT(RETURN), 62, 1},
+	{TT(COLON), 63, 1},
+	{TT(QUESTION), 64, 1},
 };
 
 #undef TT

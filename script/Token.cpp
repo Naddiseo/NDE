@@ -1,15 +1,11 @@
 #include "script/Token.hpp"
 #include <cmath>
 
+#include  "script/toks.hpp"
+
 namespace nde {
 
 static const float THRESHHOLD = 0.00005;
-
-static const std::string TOKEN_NAMES[static_cast<size_t>(TokenType::__LAST__)] = {
-#	define TOK(x) #x,
-#	include "toks.hpp"
-#	undef TOK
-};
 
 Token::Token()
 	: type(TokenType::ERROR), lineno(0), charno(0) {}
@@ -38,6 +34,11 @@ Token::getName() {
 	return TOKEN_NAMES[static_cast<size_t>(type)];
 }
 
+
+std::string
+Token::typeToString(TokenType _t) {
+	return TOKEN_NAMES[static_cast<size_t>(_t)];
+}
 
 bool
 Token::isExact(const Token& other) const {

@@ -26,6 +26,7 @@ static std::map<std::string, TokenType> keywords = {
 	{"true", TokenType::TRUE},
 	{"false", TokenType::FALSE},
 	{"class", TokenType::CLASS},
+	{"return", TokenType::RETURN},
 };
 
 typedef std::map<std::string, TokenType>::iterator kw_t;
@@ -307,6 +308,12 @@ Lexer::getPunct() {
 
 	case ';':
 		return TokenType::SEMICOLON;
+
+	case ':':
+		return TokenType::COLON;
+
+	case '?':
+		return TokenType::QUESTION;
 	}
 
 	setError(std::string("Unknown Operator '") + *c + "'");
