@@ -22,6 +22,147 @@
 	 * 	;
 	 */
 
+	/*
+	 * class_decl
+	 *   : CLASS ident_t optional_inherits LBRACE declarations RBRACE
+	 *   ;
+	 */
+	
+	/*
+	 * optional_inherits
+	 *   : COLON ident_t
+	 *   | // empty
+	 *   ;
+	 */
+
+	/*
+	 * function_decl
+	 *   : return_type ident LPAREN optional_argument_list RPAREN code_block
+	 *   ;
+	 */
+	
+	/*
+	 * return_type
+	 *   : var_type
+	 *   | void
+	 *   ;
+	 */
+
+	/*
+	 * optional_argument_list
+	 *   : argument_list
+	 *   | // empty
+	 *   ;
+	 */
+
+	/*
+	 * argument_list
+	 *   : argument_list COMMA argument
+	 *   | argument
+	 *   ;
+	 */
+
+	/*
+	 * argument
+	 *  : var_type ident_t optional_var_assign
+	 *  ;
+	 */
+
+	/*
+	 * code_block
+	 *   : LBRACE optional_statements RBRACE
+	 *   ;
+	 */
+
+	/*
+	 * optional_statements
+	 *   : statements
+	 *   | // empty
+	 *   ;
+	 */
+
+	/*
+	 * statements
+	 *   : statements statement
+	 *   | statement
+	 *   ;
+	 */
+
+	/*
+	 * statement
+	 *   : var_decl
+	 *   | if_stmt
+	 *   | while_stmt
+	 *   | for_stmt
+	 *   | return_stmt
+	 *   | expr_stmt
+	 *   ;
+	 */
+
+	/*
+	 * if_stmt
+	 *  : IF expr code_block optional_else_if_list optional_else
+	 *  ;
+	 */
+	
+	/*
+	 * optional_else_if_list
+	 *   : else_if_list
+	 *   | // empty
+	 *   ;
+	 */
+
+	/*
+	 * else_if_list
+	 *   : else_if_list else_if
+	 *   | else_if
+	 *   ;
+	 */
+
+	/* 
+	 * else_if
+	 *   : ELSE IF expr code_block
+	 *   ;
+	 */
+	
+	/*
+	 * optional_else
+	 *   : ELSE code_block
+	 *   | // empty
+	 *   ;
+	 */
+
+	/*
+	 * while_stmt
+	 *   : WHILE expr code_block
+	 *   ;
+	 */
+
+	/*
+	 * for_stmt
+	 *   : FOR expr SEMICOLON expr SEMICOLON expr SEMICOLON code_block
+	 *   ;
+	 */
+
+	/*
+	 * return_stmt
+	 *   : RETURN optional_expr_stmt
+	 *   ;
+	 */
+
+	/*
+	 * optional_expr_stmt
+	 *   : expr_stmt
+	 *   | // none
+	 *   ;
+	 */
+
+	/*
+	 * expr_stmt
+	 *   : expr ';'
+	 *   ;
+	 */
+
 	/* var_decl
 	 * 	: var_type ident_t optional_var_assign ';'
 	 * 	;
