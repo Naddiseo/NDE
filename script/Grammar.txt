@@ -328,14 +328,14 @@
 
 	/*
 	 * subscript
-	 *   : primary LSQUARE expr RSQUARE
+	 *   : primary_expr LSQUARE expr RSQUARE
 	 *   ;
 	 */
 
 	/*
 	 * function_call
-	 *   : primary LPAREN optional_expr_list RPAREN
-	 *   | TRIGGER primary LPAREN optional_expr_list RPAREN
+	 *   : primary_expr LPAREN optional_expr_list RPAREN
+	 *   | TRIGGER primary_expr LPAREN optional_expr_list RPAREN
 	 *   ;
 	 */
 
