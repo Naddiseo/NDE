@@ -2,7 +2,7 @@
 
 A simple C subset that will integrate into the NDE game engine.
 
-### Built in types
+## Built in types
 * Integer
 * Unsigned Integer
 * Float
@@ -11,7 +11,7 @@ A simple C subset that will integrate into the NDE game engine.
 * Void
 * Boolean
  
-### Reserved words:
+## Reserved words:
 
 * int
 * uint
@@ -27,6 +27,16 @@ A simple C subset that will integrate into the NDE game engine.
 * break
 * continue
 * class
+* event
+* trigger
+
+## What events are
+
+Events in NDES are procedures that can be executed asynchronously, 
+that is, they can be run in their own threads. Events that are to
+be executed in their own thread are called with the trigger keyword,
+which marks them as running in their own thread. Events that are called
+without the trigger keyword are not run in their own thread.
 
     class MyClass {
         float myfloat = 0.0;
@@ -41,7 +51,13 @@ A simple C subset that will integrate into the NDE game engine.
         string getHello(string suffix = "!") {
             return "World" + suffix;
         }
+        
+        
+	    event void onclick() { 
+	    	this.myfloat = 1;
+	    }
     }
+    
 
     void main() {
         int a = 4, b;
@@ -53,6 +69,8 @@ A simple C subset that will integrate into the NDE game engine.
         float foo = cls.myfloat >= 0 ? 1.0 : 2.0;
 
         string msg = cls.getHello("?");
+        
+        trigger cls.onclick();
 	
     }
 

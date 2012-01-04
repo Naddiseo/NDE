@@ -38,6 +38,7 @@
 	/*
 	 * function_decl
 	 *   : return_type ident LPAREN optional_argument_list RPAREN code_block
+	 *   | EVENT return_type ident LPAREN optional_argument_list RPAREN code_block
 	 *   ;
 	 */
 	
@@ -176,6 +177,7 @@
 	 * 	| string
 	 * 	| vector
 	 * 	| bool
+	 * 	| var_type LSQUARE RSQUARE
 	 * 	;
 	 */
 
@@ -333,6 +335,7 @@
 	/*
 	 * function_call
 	 *   : primary LPAREN optional_expr_list RPAREN
+	 *   | TRIGGER primary LPAREN optional_expr_list RPAREN
 	 *   ;
 	 */
 
