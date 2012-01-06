@@ -1,25 +1,23 @@
 %{
+#include "ASTree.hpp"
 
 int yylex();
 int yyerror(const char* p) { return 0;}
 
 extern int yylineno;
+
+using namespace nde::ast;
 %}
 %locations
 
-%union {
-	char* stringval;
-	int	 intval;
-	bool	boolval;
-	float floatval;
-	float* vectorval;
-}
+
 
 %token <stringval> IDENT STRINGVAL;
 %token <intval> INTVAL;
 %token <boolval> BOOLVAL;
 %token <floatval> FLOATVAL;
 %token <vectorval> VECTORVAL;
+
 
 /* type names */
 %token INT UINT FLOAT STRING VECTOR BOOL VOID
@@ -56,16 +54,195 @@ extern int yylineno;
 %left '[' ']'
 %left '(' ')'
 
+%union {
+	char* stringval;
+	int	 intval;
+	bool	boolval;
+	float floatval;
+	float* vectorval;
+	
+	eReturnType  vartype;
+	eDeclType    decltype;
+	eBinaryOp    binop;
+	eUnaryOp     uop;
+	eLiteralType littype;
+	
+	VarType*    vartype_class;
+	ExprNode*   exprnode;
+	StmtNode*   stmtnode;
+	
+	BinaryExpr* binexpr;
+	TernaryExpr* ternexpr;
+	UnaryExpr*   uexpr;
+	
+	PrimaryExpr* primexpr;
+	IdentNode*   identnode;
+	LiteralExpr* literalexpr;
+	AttributeNode* attrnode;
+	SubscriptNode* subscriptnode;
+	FunctionCall*  funccall;
+	CodeBlock*     codeblock;
+	
+	Decl*          decl;
+	VarDecl*       vardecl;
+	FunctionDecl*  funcdecl;
+	ClassDecl*     classdecl;
+	
+	IfStmt*        ifstmt;
+	WhileStmt*     whilestmt;
+	ForStmt*       forstmt;
+	ExprStmt*      exprstmt;
+	ReturnStmt*    returnstmt;
+	BreakStmt*     breakstmt;
+	ContinueStmt*  continuestmt;
+	
+	Program*       program;
+	
+	
+	expr_list_t*    exprlist;
+	stmt_list_t*    stmtlist;
+	declarations_t* decllist;
+	vardecls_t*     vardecllist;
+	
+}
+//char*
+%type <stringval> optional_inherits
+
+//int
+%type <intval> 
+
+//bool
+%type <boolval> 
+
+//float
+%type <floatval> 
+
+//float*
+%type <vectorval> 
+
+//eReturnType
+%type <vartype> 
+
+//eDeclType
+%type <decltype> 
+
+//eBinaryOp
+%type <binop> 
+
+//eUnaryOp
+%type <uop> 
+
+//eLiteralType
+%type <littype> 
+
+//VarType*
+%type <vartype_class> 
+
+//ExprNode*
+%type <exprnode> 
+
+//StmtNode*
+%type <stmtnode> statement
+
+//BinaryExpr*
+%type <binexpr> 
+
+//TernaryExpr*
+%type <ternexpr> 
+
+//UnaryExpr*
+%type <uexpr> 
+
+//PrimaryExpr*
+%type <primexpr>
+ 
+//IdentNode*
+%type <identnode> 
+
+//LiteralExpr*
+%type <literalexpr> 
+
+//AttributeNode*
+%type <attrnode> 
+
+//SubscriptNode*
+%type <subscriptnode> 
+
+//FunctionCall*
+%type <funccall> 
+
+//CodeBlock*
+%type <codeblock> code_block optional_else
+
+//Decl*
+%type <decl> declaration
+
+//VarDecl*
+%type <vardecl> 
+
+//FunctionDecl*
+%type <funcdecl> function_decl
+
+//ClassDecl*
+%type <classdecl> class_decl
+ 
+//IfStmt*
+%type <ifstmt> if_stmt optional_else_if_list else_if_list else_if
+
+//WhileStmt*
+%type <whilestmt> 
+
+//ForStmt*
+%type <forstmt> 
+
+//ExprStmt*
+%type <exprstmt> 
+
+//ReturnStmt*
+%type <returnstmt> 
+
+//BreakStmt*
+%type <breakstmt> 
+
+//ContinueStmt*
+%type <continuestmt> 
+
+//Program*
+%type <program> program
+
+//expr_list_t*
+%type <exprlist> 
+
+//stmt_list_t*
+%type <stmtlist> optional_statements statements
+
+//declarations_t*
+%type <decllist> declarations
+
+//vardecls_t*
+%type <vardecllist> optional_argument_list argument_list
+
+
 %%
 
 program
-	: declarations
-	| // empty
+	: declarations {
+		$$ = new Program();
+		$$->declarations = $1;
+	} 
+	| // empty { $$ = NULL; }
 	;
 
 declarations
-	: declarations declaration
-	| declaration
+	: declarations declaration {
+		$1->push_back($2);
+		$$ = $1;
+	}
+	| declaration {
+		declarations_t* d = new declarations_t();
+		d->push_back($1);
+		$$ = d;
+	}
 	;
 
 declaration
@@ -75,17 +252,35 @@ declaration
 	;
 
 class_decl
-	: CLASS IDENT optional_inherits '{' declarations '}'
+	: CLASS IDENT optional_inherits '{' declarations '}' {
+		ClassDecl* c = new ClassDecl();
+		c->name = $2;
+		c->parent = $3;
+		c->declarations = $5;
+		$$ = c;
+	}
 	;
 
 optional_inherits
-	: ':' IDENT
-	|
+	: ':' IDENT { $$ = $2; }
+	| { $$ = const_cast<char*>(""); }
 	;
 
 function_decl
-	: var_type IDENT '(' optional_argument_list ')' code_block
-	| EVENT var_type IDENT '(' optional_argument_list ')' code_block
+	: var_type IDENT '(' optional_argument_list ')' code_block {
+		FunctionDecl* f = new FunctionDecl();
+		f->is_event = false;
+		f->arguments = $4;
+		f->block = $6;
+		$$ = f;
+	}
+	| EVENT var_type IDENT '(' optional_argument_list ')' code_block {
+		FunctionDecl* f = new FunctionDecl();
+		f->is_event = true;
+		f->arguments = $4;
+		f->block = $6;
+		$$ = f;
+	}
 	;
 
 optional_argument_list
@@ -124,25 +319,47 @@ statement
 	;
 
 if_stmt
-	: IF expr code_block optional_else_if_list optional_else
+	: IF expr code_block optional_else_if_list {
+		$$ = new IfStmt();
+		$$->condition = $2;
+		$$->true_block = $3;
+		if ($4 == NULL) {
+			$$->false_block = $5;
+		}
+		else {
+			$4->passDown($5);
+			$$->false_block = $4;
+		}
+	}
 	;
 
 optional_else_if_list
-	: else_if_list
-	|
+	: else_if_list { $$ = $1; }
+	| optional_else { $$ = $1; }
 	;
 
 else_if_list
-	: else_if_list else_if
-	| else_if
+	: else_if_list else_if {
+		$$ = $1;
+		$$->passDown($2);
+	}
+	| else_if {
+		$$ = $1;
+	}
 	;
 
 else_if
-	: ELIF expr code_block
+	: ELIF expr code_block optional_else {
+		$$ = new IfStmt();
+		$$->condition = $2;
+		$$->true_block = $3;
+		$$->false_block = $4;
+	}
 	;
 
 optional_else
-	: ELSE code_block
+	: ELSE code_block { $$ = $2; }
+	| { $$ = NULL; }
 	;
 
 while_stmt

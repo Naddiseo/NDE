@@ -23,7 +23,8 @@ enum class eDeclType {
 	CLASS
 };
 
-enum class eAssignType {
+enum class eBinaryOp {
+	ERROR,
 	ASSIGN,
 	BOR,
 	BAND,
@@ -34,26 +35,18 @@ enum class eAssignType {
 	SUB,
 	MUL,
 	DIV
-};
 
-enum class eComparisonType {
 	GT,
 	LT,
 	GTE,
 	LTE
-};
 
-enum class eShiftType {
 	LEFT,
 	RIGHT
-};
 
-enum class eAddType {
 	ADD,
 	SUB
-};
 
-enum class eMulType {
 	MUL,
 	DIV,
 	MOD
@@ -86,58 +79,40 @@ struct VarType {
 	VarType(eReturnType _t) : type(_t) {}
 };
 
-struct ExprNode {};
-struct StmtNode {};
+struct ExprNode {
+	virtual ~ExprNode() {}
+};
+struct StmtNode {
+	virtual ~StmtNode() {}
+};
 typedef std::vector<ExprNode> expr_list_t;
 typedef std::vector<StmtNode> stmt_list_t;
 
 struct EmptyExpression : public ExprNode {};
 
 struct BinaryExpr : public ExprNode {
-	ExprNode lhs;
-	ExprNode rhs;
-};
-
-
-struct AssignmentExpr : public BinaryExpr {
-	eAssignType op;
+	eBinaryOp op;
+	ExprNode* lhs;
+	ExprNode* rhs;
+	
+	BinaryExpr() : op(eBinaryOp::ERROR) {}
+	BinaryExpr(eBinaryOp _o) : op(_o) {}
 };
 
 struct TernaryExpr : public ExprNode {
-	ExprNode condition;
-	ExprNode true_cond;
-	ExprNode false_cond;
-};
-
-struct OrExpr : public BinaryExpr {};
-struct XorExpr : public BinaryExpr {};
-struct AndExpr : public BinaryExpr {};
-struct EqualsExpr : public BinaryExpr {
-	bool is_negated;
-};
-
-struct ComparisonExpr : public BinaryExpr {
-	eComparisonType op;
-};
-
-struct ShiftExpr : public BinaryExpr {
-	eShiftType op;
-};
-
-struct AddExpr : public BinaryExpr {
-	eAddType op;
-};
-
-struct MulExpr : public BinaryExpr {
-	eMulType op;
+	ExprNode* condition;
+	ExprNode* true_cond;
+	ExprNode* false_cond;
 };
 
 struct UnaryExpr : public ExprNode {
 	eUnaryType op;
-	ExprNode expr;
+	ExprNode* expr;
 };
 
-struct PrimaryExpr : public ExprNode {};
+struct PrimaryExpr : public ExprNode {
+	virtual ~PrimaryExpr() {}
+};
 
 struct IdentNode : public PrimaryExpr {
 	std::string ident;
@@ -155,86 +130,102 @@ struct LiteralExpr : public PrimaryExpr {
 };
 
 struct AttributeNode : public PrimaryExpr {
-	PrimaryExpr lhs;
-	IdentNode ident;
+	PrimaryExpr* lhs;
+	IdentNode* ident;
 };
 
 struct SubscriptNode : public PrimaryExpr {
-	PrimaryExpr base;
-	ExprNode subscript;
+	PrimaryExpr* base;
+	ExprNode* subscript;
 };
 
 struct FunctionCall : public PrimaryExpr {
 	bool is_trigger;
-	PrimaryExpr name;
-	expr_list_t arguments;
+	PrimaryExpr* name;
+	expr_list_t* arguments;
 };
 
 struct CodeBlock : public StmtNode {
-	stmt_list_t children;
+	stmt_list_t* children;
 };
 
 struct Decl : StmtNode {
-	VarType type;
+	VarType* type;
 	eDeclType decl_type;
 	eReturnType value_type;
-	std::string name;
+	std::string* name;
 
 	Decl() : decl_type(eDeclType::ERROR) {}
 	Decl(eDeclType _t) : decl_type(_t) {}
 	virtual ~Decl();
 };
 
-typedef std::vector<Decl> declarations_t;
+typedef std::vector<Decl*> declarations_t;
 
 struct VarDecl : public Decl {
-	ExprNode default_value;
+	ExprNode* default_value;
 	VarDecl() : Decl(eDeclType::VAR) {}
 };
 
+typedef std::vector<VarDecl*> vardecls_t;
+
 struct FunctionDecl : public Decl {
 	bool is_event;
-	std::vector<VarDecl> arguments;
-	declarations_t locals;
-	CodeBlock block;
+	vardecls_t* arguments;
+	CodeBlock* block;
 
 	FunctionDecl() : Decl(eDeclType::FUNCTION) {}
 };
 
 struct ClassDecl : public Decl {
 	std::string parent;
-	declarations_t declarations;
+	declarations_t* declarations;
 
 	ClassDecl() : Decl(eDeclType::CLASS) {}
 };
 
 struct IfStmt :  public StmtNode {
-	ExprNode condition;
-	CodeBlock true_block;
-	CodeBlock false_block;
+	ExprNode* condition;
+	CodeBlock* true_block;
+	IfStmt* false_block;
+	
+	IfStmt() : condition(NULL), true_block(NULL), false_block(NULL) {}
+	
+	void passDown(StmtNode* block) {
+		if (false_block == NULL) {
+			false_block = block;
+		}
+		else {
+			false_block->passDown(block);
+		}
+	}
 };
 
 struct WhileStmt :  public StmtNode {
-	ExprNode condition;
-	CodeBlock block;
+	ExprNode* condition;
+	CodeBlock* block;
 };
 
 struct ForStmt :  public StmtNode {
-	ExprNode begin;
-	ExprNode condition;
-	ExprNode counter;
+	ExprNode* begin;
+	ExprNode* condition;
+	ExprNode* counter;
+	CodeBlock* block;
 };
 
 struct ExprStmt :  public StmtNode {
-	ExprNode expr;
+	ExprNode* expr;
 };
 
 struct ReturnStmt :  public StmtNode {
-	ExprStmt return_val;
+	ExprStmt* return_val;
 };
 
+struct BreakStmt : public StmtNode {}
+struct ContinueStmt : public StmtNode {}
+
 struct Program {
-	declarations_t declarations;
+	declarations_t* declarations;
 };
 
 } //namespace ast

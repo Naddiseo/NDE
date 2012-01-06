@@ -1,6 +1,7 @@
 %{
 #include <sstream>
 #include <cstring>
+#include "ASTree.hpp"
 #include "parser.tab.h"
 static std::stringstream ss;
 class LexerError;
