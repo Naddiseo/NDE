@@ -30,7 +30,17 @@ Parser::next() {
 	current = peek;
 	peek = *iter++;
 }
-
+void
+Parser::backup() {
+	/*
+	 *    +------+------+
+	 *    |      |      |
+	 * current  peek  *iter
+	 */
+	peek = current;
+	iter -= 2;
+	current = *iter++;
+}
 
 void
 Parser::expectType(Token t, TokenType tt) {
@@ -97,24 +107,31 @@ ast::Decl Parser::declaration() {
 		// var or function decl
 	case TokenType::VOID: {
 		// method decl
-		Token rettype = current;
-		Token name;
-
 		next();
 		expectType(TokenType::IDENT);
 
 		switch (current.type) {
 		case TokenType::LPAREN:
 			// function decl
+			ret = function_decl();
 			break;
 		case TokenType::ASSIGN:
 		case TokenType::SEMICOLON:
-			var_decl();
+			backup();
+			backup();
+			ret = var_decl();
 			break;
 		default:
 			throw ParseError("Bad token for declaration", current);
 			break;
 		}
+	};
+		break;
+	case TokenType::EVENT:
+		ret = function_decl();
+		break;
+	case TokenType::CLASS: {
+		ret = class_decl();
 	};
 		break;
 	default:
@@ -131,7 +148,20 @@ ast::Decl Parser::declaration() {
  *   : CLASS ident_t optional_inherits LBRACE declarations RBRACE
  *   ;
  */
-ast::ClassDecl Parser::class_decl() {}
+ast::ClassDecl Parser::class_decl() {
+	ast::ClassDecl ret;
+
+	expectType(TokenType::CLASS);
+	ret.name = current.strtype;
+	expectType(TokenType::IDENT);
+	ret.parent = optional_inherits();
+
+	expectType(TokenType::LBRACE);
+	ret.declarations = declarations();
+	expectType(TokenType::RBRACE);
+
+	return ret;
+}
 
 /*
  * optional_inherits
@@ -139,7 +169,20 @@ ast::ClassDecl Parser::class_decl() {}
  *   | // empty
  *   ;
  */
-std::string Parser::optional_inherits() {}
+std::string Parser::optional_inherits() {
+	std::string ret;
+
+	if (current.type == TokenType::COLON) {
+		next();
+		ret = current.strtype;
+		expectType(TokenType::IDENT);
+	}
+	else {
+		next();
+	}
+
+	return ret;
+}
 
 /*
  * function_decl
@@ -147,7 +190,26 @@ std::string Parser::optional_inherits() {}
  *   | EVENT return_type ident LPAREN optional_argument_list RPAREN code_block
  *   ;
  */
-ast::FunctionDecl Parser::function_decl() {}
+ast::FunctionDecl Parser::function_decl() {
+	ast::FunctionDecl ret;
+
+	if (current.type == TokenType::EVENT) {
+		next();
+		ret.is_event = true;
+	}
+
+	ret.type = return_type();
+	ret.name = current.strtype;
+	expectType(TokenType::IDENT);
+
+	expectType(TokenType::LPAREN);
+	ret.arguments = optional_argument_list();
+	expectType(TokenType::RPAREN);
+
+	ret.block = code_block();
+
+	return ret;
+}
 
 /*
  * return_type
@@ -155,7 +217,18 @@ ast::FunctionDecl Parser::function_decl() {}
  *   | void
  *   ;
  */
-ast::VarType Parser::return_type() {}
+ast::VarType Parser::return_type() {
+	ast::VarType ret;
+
+	if (current.type == TokenType::VOID) {
+		ret.type = ast::eReturnType::VOID;
+	}
+	else {
+		ret = var_type();
+	}
+
+	return ret;
+}
 
 /*
  * optional_argument_list
@@ -163,6 +236,26 @@ ast::VarType Parser::return_type() {}
  *   | // empty
  *   ;
  */
+std::vector<ast::VarDecl>
+Parser::optional_argument_list() {
+	std::vector<ast::VarDecl> ret;
+
+	while (current.type != TokenType::RPAREN) {
+		ast::VarDecl arg;
+		arg.type = var_type();
+		arg.name = current.strtype;
+		expectType(TokenType::IDENT);
+
+		arg.default_value = optional_var_assign();
+
+		if (current.type == TokenType::COMMA) {
+			next();
+		}
+		ret.push_back(arg);
+	}
+
+	return ret;
+}
 
 /*
  * argument_list
@@ -182,7 +275,41 @@ ast::VarType Parser::return_type() {}
  *   : LBRACE optional_statements RBRACE
  *   ;
  */
-ast::CodeBlock Parser::code_block() {}
+ast::CodeBlock Parser::code_block() {
+	ast::CodeBlock ret;
+	expectType(TokenType::LBRACE);
+
+	while (current.type != TokenType::RBRACE) {
+		switch (current.type) {
+		case TokenType::IF:
+			ret.children.push_back(if_stmt());
+			break;
+		case TokenType::WHILE:
+			ret.children.push_back(while_stmt());
+			break;
+		case TokenType::FOR:
+			ret.children.push_back(for_stmt());
+			break;
+		case TokenType::RETURN:
+			ret.children.push_back(return_stmt());
+			break;
+		case TokenType::INT:
+		case TokenType::UINT:
+		case TokenType::FLOAT:
+		case TokenType::STRING:
+		case TokenType::VECTOR:
+		case TokenType::BOOL:
+			ret.children.push_back(var_decl());
+			break;
+		default:
+			ret.children.push_back(expr_stmt());
+			break;
+		}
+	}
+
+	expectType(TokenType::RBRACE);
+	return ret;
+}
 
 /*
  * optional_statements
@@ -208,14 +335,22 @@ ast::CodeBlock Parser::code_block() {}
  *   | expr_stmt
  *   ;
  */
-ast::StmtNode Parser::statement() {}
+ast::StmtNode Parser::statement() {
+	ast::StmtNode ret;
+
+	return ret;
+}
 
 /*
  * if_stmt
  *  : IF expr code_block optional_else_if_list optional_else
  *  ;
  */
-ast::IfStmt Parser::if_stmt() {}
+ast::IfStmt Parser::if_stmt() {
+	ast::IfStmt ret;
+
+	return ret;
+}
 
 /*
  * optional_else_if_list
@@ -249,21 +384,33 @@ ast::IfStmt Parser::if_stmt() {}
  *   : WHILE expr code_block
  *   ;
  */
-ast::WhileStmt Parser::while_stmt() {}
+ast::WhileStmt Parser::while_stmt() {
+	ast::WhileStmt ret;
+
+	return ret;
+}
 
 /*
  * for_stmt
  *   : FOR expr_stmt expr_stmt expr_stmt code_block
  *   ;
  */
-ast::ForStmt Parser::for_stmt() {}
+ast::ForStmt Parser::for_stmt() {
+	ast::ForStmt ret;
+
+	return ret;
+}
 
 /*
  * return_stmt
  *   : RETURN optional_expr_stmt
  *   ;
  */
-ast::ReturnStmt Parser::return_stmt() {}
+ast::ReturnStmt Parser::return_stmt() {
+	ast::ReturnStmt ret;
+
+	return ret;
+}
 
 /*
  * optional_expr_stmt
@@ -277,7 +424,11 @@ ast::ReturnStmt Parser::return_stmt() {}
  *   : expr ';'
  *   ;
  */
-ast::ExprStmt Parser::expr_stmt() {}
+ast::ExprStmt Parser::expr_stmt() {
+	ast::ExprStmt ret;
+
+	return ret;
+}
 
  /* var_decl
  * 	: var_type ident_t optional_var_assign ';'
@@ -300,7 +451,45 @@ ast::VarDecl Parser::var_decl() {
  * 	;
  */
 ast::VarType Parser::var_type() {
-	return ast::eReturnType::OBJECT;
+	ast::VarType ret;
+
+	ret.is_array = (peek.type == TokenType::LSQUARE);
+
+	switch (current.type) {
+	case TokenType::IDENT:
+		ret.type = ast::eReturnType::OBJECT;
+		ret.class_name = current.strtype;
+		break;
+	case TokenType::INT:
+		ret.type = ast::eReturnType::INT;
+		break;
+	case TokenType::UINT:
+		ret.type = ast::eReturnType::UINT;
+		break;
+	case TokenType::FLOAT:
+		ret.type = ast::eReturnType::FLOAT;
+		break;
+	case TokenType::STRING:
+		ret.type = ast::eReturnType::STRING;
+		break;
+	case TokenType::VECTOR:
+		ret.type = ast::eReturnType::VECTOR;
+		break;
+	case TokenType::BOOL:
+		ret.type = ast::eReturnType::BOOL;
+		break;
+	default:
+		THROW("Unexpected variable type", current);
+		break;
+	}
+	next();
+
+	if (ret.is_array) {
+		expectType(TokenType::LSQUARE);
+		expectType(TokenType::RSQUARE);
+	}
+
+	return ret;
 }
 
 /* optional_var_assign
@@ -311,10 +500,10 @@ ast::VarType Parser::var_type() {
 ast::ExprNode Parser::optional_var_assign() {
 	if (current.type == TokenType::ASSIGN) {
 		expectType(TokenType::ASSIGN);
-		return Parser::expression() {}
+		return Parser::expression();
 	}
 
-	return ast::EmptyExpression() {}
+	return ast::EmptyExpression();
 }
 
 /*
@@ -324,7 +513,7 @@ ast::ExprNode Parser::optional_var_assign() {
  */
 ast::ExprNode Parser::expression() {
 
-	return ast::EmptyExpression() {}
+	return assignment_expr();
 }
 
 /*
@@ -342,7 +531,11 @@ ast::ExprNode Parser::expression() {
  *   | ternary_expr
  *   ;
  */
-ast::ExprNode Parser::assignment_expr() {}
+ast::ExprNode Parser::assignment_expr() {
+	ast::ExprNode ret;
+
+	return ret;
+}
 
 /*
  * ternary_expr
@@ -350,7 +543,11 @@ ast::ExprNode Parser::assignment_expr() {}
  *   | or_expr
  *   ;
  */
-ast::ExprNode Parser::ternary_expr() {}
+ast::ExprNode Parser::ternary_expr() {
+	ast::ExprNode ret;
+
+	return ret;
+}
 
 
 /*
@@ -359,7 +556,11 @@ ast::ExprNode Parser::ternary_expr() {}
  *   | and_expr
  *   ;
  */
-ast::ExprNode Parser::or_expr() {}
+ast::ExprNode Parser::or_expr() {
+	ast::ExprNode ret;
+
+	return ret;
+}
 
 /*
  * and_expr
@@ -367,7 +568,11 @@ ast::ExprNode Parser::or_expr() {}
  *   | bor_expr
  *   ;
  */
-ast::ExprNode Parser::and_expr() {}
+ast::ExprNode Parser::and_expr() {
+	ast::ExprNode ret;
+
+	return ret;
+}
 
 /*
  * bor_expr
@@ -375,7 +580,11 @@ ast::ExprNode Parser::and_expr() {}
  *   | bxor_expr
  *   ;
  */
-ast::ExprNode Parser::bor_expr() {}
+ast::ExprNode Parser::bor_expr() {
+	ast::ExprNode ret;
+
+		return ret;
+}
 
 /*
  * bxor_expr
@@ -383,7 +592,11 @@ ast::ExprNode Parser::bor_expr() {}
  *   | band_expr
  *   ;
  */
-ast::ExprNode Parser::bxor_expr() {}
+ast::ExprNode Parser::bxor_expr() {
+	ast::ExprNode ret;
+
+		return ret;
+}
 
 /*
  * band_expr
@@ -391,7 +604,11 @@ ast::ExprNode Parser::bxor_expr() {}
  *   | eq_expr
  *   ;
  */
-ast::ExprNode Parser::band_expr() {}
+ast::ExprNode Parser::band_expr() {
+	ast::ExprNode ret;
+
+		return ret;
+}
 
 /*
  * eq_expr
@@ -400,7 +617,11 @@ ast::ExprNode Parser::band_expr() {}
  *   | comparison_expr
  *   ;
  */
-ast::ExprNode Parser::eq_expr() {}
+ast::ExprNode Parser::eq_expr() {
+	ast::ExprNode ret;
+
+		return ret;
+}
 
 /*
  * comparison_expr
@@ -411,7 +632,11 @@ ast::ExprNode Parser::eq_expr() {}
  *   | shift_expr
  *   ;
  */
-ast::ExprNode Parser::comparison_expr() {}
+ast::ExprNode Parser::comparison_expr() {
+	ast::ExprNode ret;
+
+		return ret;
+}
 
 /*
  * shift_expr
@@ -420,7 +645,11 @@ ast::ExprNode Parser::comparison_expr() {}
  *   | add_expr
  *   ;
  */
-ast::ExprNode Parser::shift_expr() {}
+ast::ExprNode Parser::shift_expr() {
+	ast::ExprNode ret;
+
+		return ret;
+}
 
 /*
  * add_expr
@@ -429,7 +658,11 @@ ast::ExprNode Parser::shift_expr() {}
  *   | mul_expr
  *   ;
  */
-ast::ExprNode Parser::add_expr() {}
+ast::ExprNode Parser::add_expr() {
+	ast::ExprNode ret;
+
+		return ret;
+}
 
 /*
  * mul_expr
@@ -439,7 +672,11 @@ ast::ExprNode Parser::add_expr() {}
  *   | unary_expr
  *   ;
  */
-ast::ExprNode Parser::mul_expr() {}
+ast::ExprNode Parser::mul_expr() {
+	ast::ExprNode ret;
+
+		return ret;
+}
 
 /*
  * unary_expr
@@ -450,7 +687,11 @@ ast::ExprNode Parser::mul_expr() {}
  *   | primary_expr
  *   ;
  */
-ast::ExprNode Parser::unary_expr() {}
+ast::ExprNode Parser::unary_expr() {
+	ast::ExprNode ret;
+
+		return ret;
+}
 
 /*
  * primary_expr
@@ -460,7 +701,11 @@ ast::ExprNode Parser::unary_expr() {}
  *   | function_call
  *   ;
  */
-ast::PrimaryExpr Parser::primary_expr() {}
+ast::PrimaryExpr Parser::primary_expr() {
+	ast::PrimaryExpr ret;
+
+	return ret;
+}
 
 /*
  * atom
@@ -469,21 +714,33 @@ ast::PrimaryExpr Parser::primary_expr() {}
  *   | LPAREN expr RPAREN
  *   ;
  */
-ast::ExprNode Parser::atom() {}
+ast::ExprNode Parser::atom() {
+	ast::ExprNode ret;
+
+		return ret;
+}
 
 /*
  * attribute
  *   : primary_expr DOT IDENT
  *   ;
  */
-ast::AttributeNode Parser::attribute() {}
+ast::AttributeNode Parser::attribute() {
+	ast::AttributeNode ret;
+
+		return ret;
+}
 
 /*
  * subscript
  *   : primary_expr LSQUARE expr RSQUARE
  *   ;
  */
-ast::SubscriptNode Parser::subscript() {}
+ast::SubscriptNode Parser::subscript() {
+	ast::SubscriptNode ret;
+
+		return ret;
+}
 
 /*
  * function_call
@@ -491,7 +748,11 @@ ast::SubscriptNode Parser::subscript() {}
  *   | TRIGGER primary_expr LPAREN optional_expr_list RPAREN
  *   ;
  */
-ast::FunctionCall Parser::function_call() {}
+ast::FunctionCall Parser::function_call() {
+	ast::FunctionCall ret;
+
+		return ret;
+}
 
 /*
  * literal
@@ -505,7 +766,11 @@ ast::FunctionCall Parser::function_call() {}
  *   | VECTORVAL
  *   ;
  */
-ast::LiteralExpr Parser::literal() {}
+ast::LiteralExpr Parser::literal() {
+	ast::LiteralExpr ret;
+
+		return ret;
+}
 
 /*
  * optional_expr_list
@@ -520,7 +785,11 @@ ast::LiteralExpr Parser::literal() {}
  *   | expr
  *   ;
  */
-ast::expr_list_t Parser::expr_list() {}
+ast::expr_list_t Parser::expr_list() {
+	ast::expr_list_t ret;
+
+	return ret;
+}
 
 
 } // namespace nde

@@ -40,6 +40,7 @@ public:
 private:
 
 	void next();
+	void backup();
 	void expectType(Token t, TokenType tt);
 	void expectType(TokenType tt);
 
@@ -106,6 +107,7 @@ private:
 	 *   | // empty
 	 *   ;
 	 */
+	std::vector<ast::VarDecl> optional_argument_list();
 
 	/*
 	 * argument_list

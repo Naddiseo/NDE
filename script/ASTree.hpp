@@ -176,17 +176,19 @@ struct CodeBlock : public StmtNode {
 
 struct Decl : StmtNode {
 	VarType type;
+	eDeclType decl_type;
 	eReturnType value_type;
 	std::string name;
 
-	Decl() : type(eDeclType::ERROR) {}
-	Decl(eDeclType t) : type(t) {}
+	Decl() : decl_type(eDeclType::ERROR) {}
+	Decl(eDeclType _t) : decl_type(_t) {}
 	virtual ~Decl();
 };
 
 typedef std::vector<Decl> declarations_t;
 
 struct VarDecl : public Decl {
+	ExprNode default_value;
 	VarDecl() : Decl(eDeclType::VAR) {}
 };
 
@@ -223,12 +225,12 @@ struct ForStmt :  public StmtNode {
 	ExprNode counter;
 };
 
-struct ReturnStmt :  public StmtNode {
-	ExprStmt return_val;
-};
-
 struct ExprStmt :  public StmtNode {
 	ExprNode expr;
+};
+
+struct ReturnStmt :  public StmtNode {
+	ExprStmt return_val;
 };
 
 struct Program {

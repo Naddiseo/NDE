@@ -36,6 +36,8 @@ TOK(LPAREN)    // (
 TOK(RPAREN)    // )
 TOK(LBRACE)    // {
 TOK(RBRACE)    // }
+TOK(LSQUARE)   // [
+TOK(RSQUARE)   // ]
 TOK(COMMA)     // ,
 TOK(DOT)       // .
 TOK(COLON)     // :

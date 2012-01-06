@@ -3,7 +3,7 @@
 #include <sstream>
 
 namespace nde {
-#define THROW(msg) raiseError(msg, __FILE__, __LINE__);
+#define THROW(msg,...) raiseError(msg, __FILE__, __LINE__, ##__VA_ARGS__);
 
 template<class ErrorClass>
 class ScriptBase {
@@ -22,10 +22,11 @@ protected:
 		haserror = true;
 	}
 
-	void raiseError(std::string s, std::string file, size_t line) {
+	template <typename... Args>
+	void raiseError(std::string s, std::string file, size_t line, Args... args) {
 		std::stringstream ss;
 		ss << "[" << file << ":" << line << "] " << s;
-		throw ErrorClass(ss.str());
+		throw ErrorClass(ss.str(), std::forward<Args>(args)...);
 	}
 };
 
