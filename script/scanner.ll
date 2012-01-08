@@ -126,13 +126,13 @@ void Scanner::set_debug(bool b) { yy_flex_debug = b; }
 #ifdef yylex
 #	undef yylex
 #endif
-
+/*
 int 
 yyFlexLexer::yylex() {
 	// shouldn't get here
 	std::cerr << "in yyFlexLexer::yylex()!" << std::endl;
 	return 0;
-}
+}*/
 
 //int 
 //NDEFlexLexer::yywrap() {

@@ -1,4 +1,4 @@
-YYDEBUG=0
+YYDEBUG=1
 CXXFLAGS=-I. -g3 -std=c++0x -DYYDEBUG=$(YYDEBUG) -Werror -Wfatal-errors -pipe -fomit-frame-pointer -D_FORTIFY_SOURCE=2 -fstack-protector-all
 
 SCANNERBASE=scanner

@@ -9,7 +9,7 @@
 		nde::script::Scanner::lex( \
 			nde::script::Parser::semantic_type* yylval, \
 			nde::script::Parser::location_type* yylloc, \
-			nde::script::Driver&driver, \
+			nde::script::Driver& driver \
 		)
 #endif
 
