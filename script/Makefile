@@ -1,31 +1,28 @@
 YYDEBUG=0
-CXXFLAGS=-I. -g3 -std=c++0x -DYYDEBUG=$(YYDEBUG) -Wfatal-errors
+CXXFLAGS=-I. -g3 -std=c++0x -DYYDEBUG=$(YYDEBUG) -Werror -Wfatal-errors -pipe -fomit-frame-pointer -D_FORTIFY_SOURCE=2 -fstack-protector-all
 
-all: parser lexer
-	$(CXX) $(CXXFLAGS) -o ndes.bin parser.tab.c lex.yy.c
+SCANNERBASE=scanner
+PARSERBASE=parser
 
-lexer: tokenizer.l
-	flex tokenizer.l
+all: clear  lexer parser
+	$(CXX) $(CXXFLAGS) -o ndes.bin Parser.cpp Scanner.cpp Driver.cpp
+
+lexer: $(SCANNERBASE).ll
+	flex -o Scanner.cpp --header-file=Scanner.hpp -Ce $(SCANNERBASE).ll
 	
-parser: parser.y
-	bison -dv parser.y
+parser: $(PARSERBASE).yy
+	bison -o Parser.cpp --defines=Parser.hpp -dv $(PARSERBASE).yy
 	
-tokenizer.l:
-parser.y:
+$(SCANNERBASE).ll:
+$(PARSERBASE).yy:
 
 clean:
-	- rm -v lex.yy.c calc.tab.c calc.tab.h calc.output
+	- rm -v Scanner.[ch]pp Parser.output Parser.[ch]pp *.hh *.bin
+
+clear:
+	clear
 
 run:
 	./lcalc
 
-test:
-	LHS=`./lcalc <test.0 2>&1` && \
-	RHS=`cat test.0.res`&& [ $(LHS) = "\$RHS" ] && echo "Passed" || echo "Failed"
-	
-package:
-	mkdir -p reames_as1
-	cp calc.y calc.l Makefile reames_as1
-	tar -zcf reames_as1.tgz reames_as1
-	
-.PHONY: tokenizer.l parser.y
+.PHONY: $(SCANNERBASE).ll $(PARSERBASE).ypp

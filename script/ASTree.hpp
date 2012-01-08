@@ -3,6 +3,7 @@
 #include <string>
 
 namespace nde {
+namespace script {
 namespace ast {
 
 enum class eReturnType {
@@ -26,30 +27,30 @@ enum class eDeclType {
 enum class eBinaryOp {
 	ERROR,
 	ASSIGN,
-	BOR,
-	BAND,
-	BXOR,
-	LSHIFT,
-	RSHIFT,
-	ADD,
-	SUB,
-	MUL,
-	DIV
+	BORASSIGN,
+	BANDASSIGN,
+	BXORASSIGN,
+	LSHIFTASSIGN,
+	RSHIFTASSIGN,
+	ADDASSIGN,
+	SUBASSIGN,
+	MULASSIGN,
+	DIVASSIGN,
 
 	GT,
 	LT,
 	GTE,
-	LTE
+	LTE,
 
-	LEFT,
-	RIGHT
+	LSHIFT,
+	RSHIFT,
 
 	ADD,
-	SUB
+	SUB,
 
 	MUL,
 	DIV,
-	MOD
+	MOD,
 };
 
 enum class eUnaryType {
@@ -70,19 +71,25 @@ enum class eLiteralType {
 	VECTORVAL,
 };
 
-struct VarType {
+struct ASTNode {
+	virtual ~ASTNode() {}
+
+};
+
+struct VarType : public ASTNode {
 	eReturnType type;
 	std::string class_name; // if type == OBJECT
 	bool is_array;
 
 	VarType() {}
 	VarType(eReturnType _t) : type(_t) {}
+	virtual ~VarType() {}
 };
 
-struct ExprNode {
+struct ExprNode : public ASTNode  {
 	virtual ~ExprNode() {}
 };
-struct StmtNode {
+struct StmtNode : public ASTNode  {
 	virtual ~StmtNode() {}
 };
 typedef std::vector<ExprNode> expr_list_t;
@@ -94,20 +101,28 @@ struct BinaryExpr : public ExprNode {
 	eBinaryOp op;
 	ExprNode* lhs;
 	ExprNode* rhs;
-	
+
 	BinaryExpr() : op(eBinaryOp::ERROR) {}
 	BinaryExpr(eBinaryOp _o) : op(_o) {}
+	BinaryExpr(ExprNode* _lhs, eBinaryOp _op, ExprNode* _rhs)
+		: op(_op), lhs(_lhs), rhs(_rhs) {}
 };
 
 struct TernaryExpr : public ExprNode {
 	ExprNode* condition;
 	ExprNode* true_cond;
 	ExprNode* false_cond;
+
+	TernaryExpr(ExprNode* _c, ExprNode* _t, ExprNode* _f)
+		: condition(_c), true_cond(_t), false_cond(_f) {}
 };
 
 struct UnaryExpr : public ExprNode {
 	eUnaryType op;
 	ExprNode* expr;
+
+	UnaryExpr(eUnaryType _o, ExprNode* _e)
+		: op(_o), expr(_e) {}
 };
 
 struct PrimaryExpr : public ExprNode {
@@ -116,6 +131,8 @@ struct PrimaryExpr : public ExprNode {
 
 struct IdentNode : public PrimaryExpr {
 	std::string ident;
+
+	IdentNode(std::string _i) : ident(_i) {}
 };
 
 struct LiteralExpr : public PrimaryExpr {
@@ -123,15 +140,29 @@ struct LiteralExpr : public PrimaryExpr {
 	std::string str_val;
 	union {
 		float flt_val;
-		int int_val;
+		size_t int_val;
 	};
 	bool bool_val;
 	// Vector vector_val;
+
+	LiteralExpr(std::string _s)
+		: type(eLiteralType::STRINGVAL), str_val(_s) {}
+	LiteralExpr(float _f)
+			: type(eLiteralType::FLOATVAL), flt_val(_f) {}
+	LiteralExpr(size_t _i)
+			: type(eLiteralType::INTVAL), int_val(_i) {}
+	LiteralExpr(bool _b)
+			: type(eLiteralType::BOOLVAL), bool_val(_b) {}
+	//LiteralExpr(Vector _v)
+	//		: type(eLiteralType::STRINGVAL), vector_val(_v) {}
 };
 
 struct AttributeNode : public PrimaryExpr {
 	PrimaryExpr* lhs;
 	IdentNode* ident;
+
+	AttributeNode(PrimaryExpr* _l, IdentNode* _i)
+		: lhs(_l), ident(_i) {}
 };
 
 struct SubscriptNode : public PrimaryExpr {
@@ -188,10 +219,10 @@ struct IfStmt :  public StmtNode {
 	ExprNode* condition;
 	CodeBlock* true_block;
 	IfStmt* false_block;
-	
+
 	IfStmt() : condition(NULL), true_block(NULL), false_block(NULL) {}
-	
-	void passDown(StmtNode* block) {
+
+	void passDown(IfStmt* block) {
 		if (false_block == NULL) {
 			false_block = block;
 		}
@@ -221,14 +252,15 @@ struct ReturnStmt :  public StmtNode {
 	ExprStmt* return_val;
 };
 
-struct BreakStmt : public StmtNode {}
-struct ContinueStmt : public StmtNode {}
+struct BreakStmt : public StmtNode {};
+struct ContinueStmt : public StmtNode {};
 
 struct Program {
 	declarations_t* declarations;
 };
 
 } //namespace ast
+} // namespace script
 } // namespace nde
 
 
