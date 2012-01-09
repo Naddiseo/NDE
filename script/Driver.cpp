@@ -1,11 +1,11 @@
 #include <fstream>
 #include <sstream>
+#include "Script.hpp"
 
 #include "Driver.hpp"
 #include "ScannerImpl.hpp"
 
-namespace nde {
-namespace script {
+NDESCRIPT_NS_BEGIN
 
 Driver::Driver(class ast::Program& _program)
 	: trace_parsing(false), trace_scanning(false), program(_program)
@@ -58,5 +58,4 @@ Driver::error(const std::string& m) {
 
 
 
-} // namespace script
-} // namespace nde
+NDESCRIPT_NS_END

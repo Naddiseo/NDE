@@ -4,7 +4,7 @@
 %define "parser_class_name" "Parser"
 %name-prefix="nde::script"
 
-/*%define "namespace" "nde::script"*/
+%define "namespace" "nde::script"
 
 %code requires {
 #include "ASTree.hpp"
@@ -116,21 +116,16 @@ class Driver;
 %%
 
 program
-	: declarations {
-		driver.declarations = $1;
-	} 
+	: declarations {} 
 	| /* empty*/ { YYACCEPT; }
 	;
 
 declarations
 	: declarations declaration {
-		$1->push_back($2);
-		$$ = $1;
+		driver.program.declarations.push_back($2);
 	}
 	| declaration {
-		declarations_t* d = new declarations_t();
-		d->push_back($1);
-		$$ = d;
+		driver.program.declarations.push_back($1);
 	}
 	;
 
@@ -142,11 +137,8 @@ declaration
 
 class_decl
 	: CLASS IDENT optional_inherits '{' declarations '}' {
-		ClassDecl* c = new ClassDecl();
-		c->name = $2;
-		c->parent = $3;
-		c->declarations = $5;
-		$$ = c;
+		$$ = new ast::ASTNode(new ast::ClassDecl($3, $5));
+		//c->name = $2;
 	}
 	;
 
@@ -157,7 +149,7 @@ optional_inherits
 
 function_decl
 	: var_type IDENT '(' optional_argument_list ')' code_block {
-		FunctionDecl* f = new FunctionDecl();
+		FunctionDecl* f = new ast::FunctionDecl();
 		f->name = $2;
 		f->is_event = false;
 		f->arguments = $4;
@@ -165,7 +157,7 @@ function_decl
 		$$ = f;
 	}
 	| EVENT var_type IDENT '(' optional_argument_list ')' code_block {
-		FunctionDecl* f = new FunctionDecl();
+		FunctionDecl* f = new ast::FunctionDecl();
 		f->name = $3;
 		f->is_event = true;
 		f->arguments = $5;
@@ -247,10 +239,7 @@ else_if_list
 
 else_if
 	: ELIF expr code_block optional_else {
-		$$ = new IfStmt();
-		$$->condition = $2;
-		$$->true_block = $3;
-		$$->false_block = $4;
+		$$ = new ast::ASTNode(new ast::IfStmt($2, $3, $4));
 	}
 	;
 
@@ -261,38 +250,30 @@ optional_else
 
 while_stmt
 	: WHILE expr code_block {
-		$$ = new WhileStmt();
-		$$->condition = $2;
-		$$->block = $3;
+		$$ = new ast::ASTNode(new ast::WhileStmt($2, $3));
 	}
 	;
 
 for_stmt
 	: FOR expr ';' expr ';' expr code_block {
-		$$ = new ForStmt();
-		$$->begin = $2;
-		$$->condition = $4;
-		$$->counter = $6;
-		$$->block = $7;
+		$$ = new ast::ASTNode(new ast::ForStmt($2, $4, $6, $7));
 	}
 	;
 
 return_stmt
 	: RETURN optional_expr_stmt  {
-		$$ = new ReturnStmt();
-		$$->return_val = $2;
+		$$ = new ast::ASTNode(new ast::ReturnStmt($2));
 	}
 	;
 
 optional_expr_stmt
 	: expr_stmt
-	| ';' { $$ = new ExprStmt(); }
+	| ';' { $$ = new ast::ASTNode(new ast::ExprStmt()); }
 	;
 
 expr_stmt
 	: expr ';' { 
-		$$ = new ExprStmt();
-		$$->block = $1;
+		$$ = new ast::ASTNode(new ast::ExprStmt($1));
 	}
 	;
 
@@ -302,7 +283,7 @@ var_decl_stmt
 
 var_decl
 	: var_type IDENT optional_is_array optional_var_assign {
-		$$ = new VarDecl();
+		$$ = new ast::VarDecl($3);
 		$1->is_array = $3;
 		$$->type = $1;
 		$$->name = $2;
@@ -323,22 +304,22 @@ trigger_call
 	;
 
 loop_control_stmt
-	: BREAK ';' { $$ = new BreakStmt(); }
-	| CONTINUE ';' { $$ = new ContinueStmt(); }
+	: BREAK ';' { $$ = new ast::BreakStmt(); }
+	| CONTINUE ';' { $$ = new ast::ContinueStmt(); }
 	;
 
 var_type
 	: IDENT { 
-		$$ = new VarType(eReturnType::OBJECT);
+		$$ = new ast::VarType(eReturnType::OBJECT);
 		$$->class_name = $1; 
 	}
-	| INT { $$ = new VarType(eReturnType::INT); }
-	| UINT { $$ = new VarType(eReturnType::UINT); } 
-	| FLOAT { $$ = new VarType(eReturnType::FLOAT); }
-	| STRING { $$ = new VarType(eReturnType::STRING); }
-	| VECTOR { $$ = new VarType(eReturnType::VECTOR); }
-	| BOOL { $$ = new VarType(eReturnType::BOOl); }
-	| VOID { $$ = new VarTYpe(eReturnType::VOID); }
+	| INT { $$ = new ast::VarType(eReturnType::INT); }
+	| UINT { $$ = new ast::VarType(eReturnType::UINT); } 
+	| FLOAT { $$ = new ast::VarType(eReturnType::FLOAT); }
+	| STRING { $$ = new ast::VarType(eReturnType::STRING); }
+	| VECTOR { $$ = new ast::VarType(eReturnType::VECTOR); }
+	| BOOL { $$ = new ast::VarType(eReturnType::BOOl); }
+	| VOID { $$ = new ast::VarTYpe(eReturnType::VOID); }
 	;
 
 optional_var_assign

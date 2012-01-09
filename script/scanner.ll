@@ -4,8 +4,8 @@
 #include "Driver.hpp"
 #include "Parser.hpp"
 
-typedef nde::script::Parser::token token;
-typedef nde::script::Parser::token_type token_type;
+typedef NDESCRIPT_NS Parser::token token;
+typedef NDESCRIPT_NS Parser::token_type token_type;
 
 #define yyterminate() return token::END
 
@@ -112,8 +112,8 @@ true|false   {
 
 %%
 
-namespace nde {
-namespace script {
+//namespace nde {
+//namespace script {
 
 Scanner::Scanner(FLEX_STD istream* in, FLEX_STD ostream* out)
 	: NDEFlexLexer(in, out) {}
@@ -138,5 +138,5 @@ yyFlexLexer::yylex() {
 //NDEFlexLexer::yywrap() {
 //	return 1;
 //}
-} // namespace script
-} // namespace nde
+//} // namespace script
+//} // namespace nde

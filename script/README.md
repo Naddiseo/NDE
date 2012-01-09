@@ -2,6 +2,12 @@
 
 A simple C subset that will integrate into the NDE game engine.
 
+
+#### Resources
+
+https://idlebox.net/2007/flex-bison-cpp-example/
+
+
 ## Built in types
 * Integer
 * Unsigned Integer

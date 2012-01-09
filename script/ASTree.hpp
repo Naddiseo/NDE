@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "Script.hpp"
 
-namespace nde {
-namespace script {
+NDESCRIPT_NS_BEGIN
 namespace ast {
 
 enum class eReturnType {
@@ -71,12 +71,89 @@ enum class eLiteralType {
 	VECTORVAL,
 };
 
-struct ASTNode {
-	virtual ~ASTNode() {}
 
+#define NODEFN(klass, var_name, enum_name)
+
+#define NODETYPE \
+	NODEFN(VarType, var_type, VARTYPE) \
+	NODEFN(ExprNode, expr_node, EXPRNODE) \
+	NODEFN(StmtNode, stmt_node, STMTNODE) \
+	NODEFN(expr_list_t, expr_list, EXPRLIST) \
+	NODEFN(stmt_list_t, stmt_list, STMTLIST) \
+	NODEFN(EmptyExpression, empty_expression, EMPTYEXPRESSION) \
+	NODEFN(BinaryExpr, bin_expr, BINEXPR) \
+	NODEFN(TernaryExpr, ternary_expr, TERNARYEXPR) \
+	NODEFN(UnaryExpr, unary_expr, UNARYEXPR) \
+	NODEFN(PrimaryExpr, primary_expr, PRIMARYEXPR) \
+	NODEFN(IdentNode, ident_node, IDENTNODE) \
+	NODEFN(LiteralExpr, literal_expr, LITERALEXPR) \
+	NODEFN(AttributeNode, attribute_node, ATTRIBUTENODE) \
+	NODEFN(SubscriptNode, subscript_node, SUBSCRIPTNODE) \
+	NODEFN(FunctionCall, function_call, FUNCTIONCALL) \
+	NODEFN(CodeBlock, code_block, CODEBLOCK) \
+	NODEFN(Decl, decl_node, DECLNODE) \
+	NODEFN(VarDecl, var_decl, VARDECL) \
+	NODEFN(declarations_t, declarations, DECLARATIONS) \
+	NODEFN(vardecls_t, var_decls, VARDECLS) \
+	NODEFN(FunctionDecl, function_decl, FUNCTIONDECL) \
+	NODEFN(ClassDecl, class_decl, CLASSDECL) \
+	NODEFN(IfStmt, if_stmt, IFSTMT) \
+	NODEFN(WhileStmt, while_stmt, WHILESTMT) \
+	NODEFN(ForStmt, for_stmt, FORSTMT) \
+	NODEFN(ExprStmt, expr_stmt, EXPRSTMT) \
+	NODEFN(ReturnStmt, return_stmt, RETURNSTMT) \
+	NODEFN(ContinueStmt, continue_stmt, CONTINUESTMT)
+#undef NODEFN
+
+enum class eNodeType {
+
+#define NODEFN(klass, var_name, enum_name) enum_name,
+	NODETYPE
+#undef NODEFN
 };
 
-struct VarType : public ASTNode {
+#define NODEFN(klass, var_name, enum_name) class klass;
+NODETYPE
+#undef NODEFN
+
+struct ASTNode {
+	virtual ~ASTNode();
+
+	union value_t {
+#define NODEFN(klass, var_name, enum_name) klass* var_name;
+		NODETYPE
+#undef NODEFN
+	};
+
+	eNodeType type;
+	value_t value;
+#define NODEFN(klass, var_name, enum_name) ASTNode(klass* _v) : type(eNodeType::enum_name) { value.var_name = _v; }
+	NODETYPE
+#undef NODEFN
+};
+
+typedef std::vector<ASTNode*> node_list_t;
+
+template<typename T>
+class NodeList {
+	typedef std::vector<T*> list_t;
+	list_t nodes;
+public:
+	typedef typename std::vector<T*>::iterator iterator;
+
+	~NodeList() {
+		for (T* node : nodes) {
+			delete node;
+		}
+	}
+
+	void push_back(T* node) { nodes.push_back(node); }
+
+	iterator begin() { return nodes.begin(); }
+	iterator end() { return nodes.end(); }
+};
+
+struct VarType {
 	eReturnType type;
 	std::string class_name; // if type == OBJECT
 	bool is_array;
@@ -86,43 +163,52 @@ struct VarType : public ASTNode {
 	virtual ~VarType() {}
 };
 
-struct ExprNode : public ASTNode  {
+struct ExprNode {
 	virtual ~ExprNode() {}
 };
-struct StmtNode : public ASTNode  {
+struct StmtNode {
 	virtual ~StmtNode() {}
 };
-typedef std::vector<ExprNode> expr_list_t;
-typedef std::vector<StmtNode> stmt_list_t;
 
-struct EmptyExpression : public ExprNode {};
+struct expr_list_t : public NodeList<ExprNode> {};
+struct stmt_list_t : public NodeList<StmtNode> {};
+
+struct EmptyExpression : public ExprNode {
+	virtual ~EmptyExpression() {}
+};
 
 struct BinaryExpr : public ExprNode {
 	eBinaryOp op;
-	ExprNode* lhs;
-	ExprNode* rhs;
+	ASTNode* lhs;
+	ASTNode* rhs;
+
+	virtual ~BinaryExpr() {}
 
 	BinaryExpr() : op(eBinaryOp::ERROR) {}
 	BinaryExpr(eBinaryOp _o) : op(_o) {}
-	BinaryExpr(ExprNode* _lhs, eBinaryOp _op, ExprNode* _rhs)
+	BinaryExpr(ASTNode* _lhs, eBinaryOp _op, ASTNode* _rhs)
 		: op(_op), lhs(_lhs), rhs(_rhs) {}
 };
 
 struct TernaryExpr : public ExprNode {
-	ExprNode* condition;
-	ExprNode* true_cond;
-	ExprNode* false_cond;
+	ASTNode* condition;
+	ASTNode* true_cond;
+	ASTNode* false_cond;
 
-	TernaryExpr(ExprNode* _c, ExprNode* _t, ExprNode* _f)
+	TernaryExpr(ASTNode* _c, ASTNode* _t, ASTNode* _f)
 		: condition(_c), true_cond(_t), false_cond(_f) {}
+
+	virtual ~TernaryExpr() {}
 };
 
 struct UnaryExpr : public ExprNode {
 	eUnaryType op;
-	ExprNode* expr;
+	ASTNode* expr;
 
-	UnaryExpr(eUnaryType _o, ExprNode* _e)
+	UnaryExpr(eUnaryType _o, ASTNode* _e)
 		: op(_o), expr(_e) {}
+
+	virtual ~UnaryExpr() {}
 };
 
 struct PrimaryExpr : public ExprNode {
@@ -133,6 +219,8 @@ struct IdentNode : public PrimaryExpr {
 	std::string ident;
 
 	IdentNode(std::string _i) : ident(_i) {}
+
+	virtual ~IdentNode() {}
 };
 
 struct LiteralExpr : public PrimaryExpr {
@@ -144,6 +232,8 @@ struct LiteralExpr : public PrimaryExpr {
 	};
 	bool bool_val;
 	// Vector vector_val;
+
+	virtual ~LiteralExpr() {}
 
 	LiteralExpr(std::string _s)
 		: type(eLiteralType::STRINGVAL), str_val(_s) {}
@@ -158,30 +248,32 @@ struct LiteralExpr : public PrimaryExpr {
 };
 
 struct AttributeNode : public PrimaryExpr {
-	PrimaryExpr* lhs;
-	IdentNode* ident;
+	ASTNode* lhs;
+	ASTNode* ident;
 
-	AttributeNode(PrimaryExpr* _l, IdentNode* _i)
+	AttributeNode(ASTNode* _l, ASTNode* _i)
 		: lhs(_l), ident(_i) {}
+
+	virtual ~AttributeNode() {}
 };
 
 struct SubscriptNode : public PrimaryExpr {
-	PrimaryExpr* base;
-	ExprNode* subscript;
+	ASTNode* base;
+	ASTNode* subscript;
 };
 
 struct FunctionCall : public PrimaryExpr {
 	bool is_trigger;
-	PrimaryExpr* name;
-	expr_list_t* arguments;
+	ASTNode* name;
+	ASTNode* arguments;
 };
 
 struct CodeBlock : public StmtNode {
-	stmt_list_t* children;
+	ASTNode* children;
 };
 
 struct Decl : StmtNode {
-	VarType* type;
+	ASTNode* type;
 	eDeclType decl_type;
 	eReturnType value_type;
 	std::string* name;
@@ -191,76 +283,90 @@ struct Decl : StmtNode {
 	virtual ~Decl();
 };
 
-typedef std::vector<Decl*> declarations_t;
+struct declarations_t : public NodeList<Decl> {};
 
 struct VarDecl : public Decl {
-	ExprNode* default_value;
+	ASTNode* default_value;
 	VarDecl() : Decl(eDeclType::VAR) {}
 };
 
-typedef std::vector<VarDecl*> vardecls_t;
+struct vardecls_t : public NodeList<VarDecl> {};
 
 struct FunctionDecl : public Decl {
 	bool is_event;
-	vardecls_t* arguments;
-	CodeBlock* block;
+	ASTNode* arguments;
+	ASTNode* block;
 
 	FunctionDecl() : Decl(eDeclType::FUNCTION) {}
+	FunctionDecl(ASTNode* args, ASTNode* b) : Decl(eDeclType::FUNCTION), is_event(false), arguments(args), block(b) {}
+	FunctionDecl(bool i_e, ASTNode* args, ASTNode* b) : Decl(eDeclType::FUNCTION), is_event(i_e), arguments(args), block(b) {}
 };
 
 struct ClassDecl : public Decl {
 	std::string parent;
-	declarations_t* declarations;
+	ASTNode* declarations;
 
 	ClassDecl() : Decl(eDeclType::CLASS) {}
+	ClassDecl(std::string _parent, ASTNode* _decls) : Decl(eDeclType::CLASS), parent(_parent), declarations(_decls) {}
 };
 
 struct IfStmt :  public StmtNode {
-	ExprNode* condition;
-	CodeBlock* true_block;
-	IfStmt* false_block;
+	ASTNode* condition;
+	ASTNode* true_block;
+	ASTNode* false_block;
 
 	IfStmt() : condition(NULL), true_block(NULL), false_block(NULL) {}
+	IfStmt(ASTNode* _cond, ASTNode* _true) : condition(_cond), true_block(_true), false_block(NULL) {}
+	IfStmt(ASTNode* _cond, ASTNode* _true, ASTNode* _false) : condition(_cond), true_block(_true), false_block(_false) {}
 
-	void passDown(IfStmt* block) {
+	void passDown(ASTNode* block) {
 		if (false_block == NULL) {
 			false_block = block;
 		}
 		else {
-			false_block->passDown(block);
+			false_block->value.if_stmt->passDown(block);
 		}
 	}
 };
 
 struct WhileStmt :  public StmtNode {
-	ExprNode* condition;
-	CodeBlock* block;
+	ASTNode* condition;
+	ASTNode* block;
+
+	WhileStmt(ASTNode* _cond, ASTNode* _block) : condition(_cond), block(_block) {}
 };
 
 struct ForStmt :  public StmtNode {
-	ExprNode* begin;
-	ExprNode* condition;
-	ExprNode* counter;
-	CodeBlock* block;
+	ASTNode* begin;
+	ASTNode* condition;
+	ASTNode* counter;
+	ASTNode* block;
+
+	ForStmt(ASTNode* _begin, ASTNode* _cond, ASTNode* _counter, ASTNode* _block)
+		: begin(_begin), condition(_cond), counter(_counter), block(_block) {}
 };
 
 struct ExprStmt :  public StmtNode {
-	ExprNode* expr;
+	ASTNode* expr;
+
+	ExprStmt(ASTNode* _expr) : expr(_expr) {}
 };
 
 struct ReturnStmt :  public StmtNode {
-	ExprStmt* return_val;
+	ASTNode* return_val;
+
+	ReturnStmt() : return_val(NULL) {}
+	ReturnStmt(ASTNode* rv) : return_val(rv) {}
 };
 
 struct BreakStmt : public StmtNode {};
 struct ContinueStmt : public StmtNode {};
 
 struct Program {
-	declarations_t* declarations;
+	node_list_t declarations;
 };
 
 } //namespace ast
-} // namespace script
-} // namespace nde
+NDESCRIPT_NS_END
 
 

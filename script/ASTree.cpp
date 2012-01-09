@@ -1,12 +1,18 @@
 #include "script/ASTree.hpp"
 
-namespace nde {
+NDESCRIPT_NS_BEGIN
 namespace ast {
 
 Decl::~Decl() {}
 
-
+ASTNode::~ASTNode() {
+	switch (type) {
+#define NODEFN(klass, var_name, enum_name) case eNodeType::enum_name: { delete value.var_name; }; break;
+	NODETYPE;
+	}
 
 }
-} // namespace nde
 
+
+} // namespace ast
+NDESCRIPT_NS_END
