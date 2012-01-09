@@ -1,6 +1,7 @@
 %{
 #include <cstring>
 #include <sstream>
+#include "Script.hpp"
 #include "Driver.hpp"
 #include "Parser.hpp"
 
@@ -112,8 +113,7 @@ true|false   {
 
 %%
 
-//namespace nde {
-//namespace script {
+NDESCRIPT_NS_BEGIN
 
 Scanner::Scanner(FLEX_STD istream* in, FLEX_STD ostream* out)
 	: NDEFlexLexer(in, out) {}
@@ -138,5 +138,4 @@ yyFlexLexer::yylex() {
 //NDEFlexLexer::yywrap() {
 //	return 1;
 //}
-//} // namespace script
-//} // namespace nde
+NDESCRIPT_NS_END
