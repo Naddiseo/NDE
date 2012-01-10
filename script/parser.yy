@@ -12,7 +12,9 @@
 
 %{
 #include "ASTree.hpp"
+NDESCRIPT_NS_BEGIN
 class Driver;
+NDESCRIPT_NS_END
 %}
 
 %parse-param { class Driver& driver }
