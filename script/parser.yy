@@ -382,7 +382,7 @@ function_call
 
 literal
 	: STRINGVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
-	| INTVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
+	| INTVAL { $$ = new ast::Node(new ast::LiteralExpr((size_t)$1)); }
 	| BOOLVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
 	| FLOATVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
 	| VECTORVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
@@ -395,11 +395,11 @@ optional_expr_list
 
 expr_list
 	: expr_list ',' expr { 
-		((expr_list_t*)$1)->push_back($3);
+		((ast::expr_list_t*)$1)->push_back($3);
 		$$ = $1;
 	}
 	| expr {
-		auto tmp = new expr_list_t();
+		auto tmp = new ast::expr_list_t();
 		tmp->push_back($1);
 		
 		$$ = new ast::Node(tmp);
