@@ -5,7 +5,7 @@ namespace ast {
 
 Decl::~Decl() {}
 
-ASTNode::~ASTNode() {
+Node::~Node() {
 	switch (type) {
 #define NODEFN(klass, var_name, enum_name) case eNodeType::enum_name: { delete value.var_name; }; break;
 	NODETYPE;

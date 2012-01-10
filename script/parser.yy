@@ -35,7 +35,7 @@ NDESCRIPT_NS_END
 	float floatval;
 	float* vectorval;
 	
-	ast::ASTNode* node;
+	ast::Node* node;
 }
 
 
@@ -139,8 +139,7 @@ declaration
 
 class_decl
 	: CLASS IDENT optional_inherits '{' declarations '}' {
-		$$ = new ast::ASTNode(new ast::ClassDecl($3, $5));
-		//c->name = $2;
+		$$ = new ast::Node(new ast::ClassDecl(NULL, $2, $3, $5));
 	}
 	;
 
@@ -151,20 +150,10 @@ optional_inherits
 
 function_decl
 	: var_type IDENT '(' optional_argument_list ')' code_block {
-		FunctionDecl* f = new ast::FunctionDecl();
-		f->name = $2;
-		f->is_event = false;
-		f->arguments = $4;
-		f->block = $6;
-		$$ = f;
+		$$ = new ast::Node(new ast::FunctionDecl($1, std::string($2), false, $4, $6));
 	}
 	| EVENT var_type IDENT '(' optional_argument_list ')' code_block {
-		FunctionDecl* f = new ast::FunctionDecl();
-		f->name = $3;
-		f->is_event = true;
-		f->arguments = $5;
-		f->block = $7;
-		$$ = f;
+		$$ = new ast::Node(new ast::FunctionDecl($2, std::string($3), true, $5, $7));
 	}
 	;
 
@@ -175,12 +164,12 @@ optional_argument_list
 
 argument_list
 	: argument_list ',' var_decl {
-		$1->push_back($3);
+		((ast::vardecls_t*)$1)->push_back((ast::VarDecl*)$3);
 		$$ = $1;
 	}
 	| var_decl {
-		$$ = new vardecls_t();
-		$$->push_back($1);
+		$$ = new ast::Node(new ast::vardecls_t());
+		((ast::vardecls_t*)$$)->push_back((ast::VarDecl*)$1);
 	}
 	;
 
@@ -195,12 +184,13 @@ optional_statements
 
 statements
 	: statements statement {
-		$1->push_back($2);
+		((ast::stmt_list_t*)$1)->push_back((ast::StmtNode*)$2);
 		$$ = $1;
 	}
 	| statement {
-		$$ = new stmt_list_t();
-		$$->push_back($1);
+		auto tmp = new ast::stmt_list_t();
+		tmp->push_back($1);
+		$$ = new ast::Node(tmp);
 	}
 	;
 
@@ -217,22 +207,19 @@ statement
 
 if_stmt
 	: IF expr code_block optional_else_if_list {
-		$$ = new IfStmt();
-		$$->condition = $2;
-		$$->true_block = $3;
-		$$->false_block = $4;
+		$$ = new ast::IfStmt($2, $3, $4);
 	}
 	;
 
 optional_else_if_list
-	: else_if_list { $$ = $1; }
-	| optional_else { $$ = $1; }
+	: else_if_list 
+	| optional_else
 	;
 
 else_if_list
 	: else_if_list else_if {
 		$$ = $1;
-		$$->passDown($2);
+		static_cast<ast::IfStmt*>($$)->passDown($2);
 	}
 	| else_if {
 		$$ = $1;
@@ -241,7 +228,7 @@ else_if_list
 
 else_if
 	: ELIF expr code_block optional_else {
-		$$ = new ast::ASTNode(new ast::IfStmt($2, $3, $4));
+		$$ = new ast::Node(new ast::IfStmt($2, $3, $4));
 	}
 	;
 
@@ -252,30 +239,30 @@ optional_else
 
 while_stmt
 	: WHILE expr code_block {
-		$$ = new ast::ASTNode(new ast::WhileStmt($2, $3));
+		$$ = new ast::Node(new ast::WhileStmt($2, $3));
 	}
 	;
 
 for_stmt
 	: FOR expr ';' expr ';' expr code_block {
-		$$ = new ast::ASTNode(new ast::ForStmt($2, $4, $6, $7));
+		$$ = new ast::Node(new ast::ForStmt($2, $4, $6, $7));
 	}
 	;
 
 return_stmt
 	: RETURN optional_expr_stmt  {
-		$$ = new ast::ASTNode(new ast::ReturnStmt($2));
+		$$ = new ast::Node(new ast::ReturnStmt($2));
 	}
 	;
 
 optional_expr_stmt
 	: expr_stmt
-	| ';' { $$ = new ast::ASTNode(new ast::ExprStmt()); }
+	| ';' { $$ = new ast::Node(new ast::ExprStmt(NULL)); }
 	;
 
 expr_stmt
 	: expr ';' { 
-		$$ = new ast::ASTNode(new ast::ExprStmt($1));
+		$$ = new ast::Node(new ast::ExprStmt($1));
 	}
 	;
 
@@ -285,7 +272,7 @@ var_decl_stmt
 
 var_decl
 	: var_type IDENT optional_is_array optional_var_assign {
-		$$ = new ast::VarDecl($3);
+		$$ = new ast::Node(new ast::VarDecl($1, $2, $3));
 		$1->is_array = $3;
 		$$->type = $1;
 		$$->name = $2;
