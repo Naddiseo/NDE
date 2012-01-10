@@ -117,7 +117,7 @@ NDESCRIPT_NS_END
 
 program
 	: declarations {} 
-	| /* empty*/ { YYACCEPT; }
+	| /* empty*/ {  }
 	;
 
 declarations
@@ -408,3 +408,6 @@ expr_list
 
 %%
 
+void nde::script::Parser::error (const location_type& loc, const std::string& msg) {
+	driver.error(loc, msg);
+}

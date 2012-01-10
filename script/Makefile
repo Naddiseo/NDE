@@ -5,7 +5,7 @@ SCANNERBASE=scanner
 PARSERBASE=parser
 
 all: clear lexer parser
-	$(CXX) $(CXXFLAGS) -o ndes.bin Parser.cpp Scanner.cpp Driver.cpp
+	$(CXX) $(CXXFLAGS) -o ndes.bin Parser.cpp Scanner.cpp Driver.cpp ASTree.cpp main.cpp
 
 lexer: $(SCANNERBASE).ll
 	flex -o Scanner.cpp --header-file=Scanner.hpp -Ce $(SCANNERBASE).ll

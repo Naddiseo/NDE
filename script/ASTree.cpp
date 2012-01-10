@@ -1,4 +1,4 @@
-#include "script/ASTree.hpp"
+#include "ASTree.hpp"
 
 NDESCRIPT_NS_BEGIN
 namespace ast {

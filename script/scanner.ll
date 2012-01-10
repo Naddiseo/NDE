@@ -13,7 +13,8 @@ typedef NDESCRIPT_NS Parser::token_type token_type;
 #define YY_NO_UNISTD_H
 
 %}
-%option c++ noyywrap nounput debug yylineno stack batch
+%option c++ 
+%option nounput debug yylineno stack batch
 %option prefix="NDE"
 /*%option yyclass="Scanner"*/
 
@@ -58,7 +59,7 @@ true|false   {
 	return token::BOOLVAL; 
 }
 
-[a-zA-Z_][a-zA-Z0-9_] { 
+[a-zA-Z_][a-zA-Z0-9_]* { 
 	yylval->stringval = strdup(yytext);
 	return token::IDENT;
 }
@@ -126,16 +127,17 @@ void Scanner::set_debug(bool b) { yy_flex_debug = b; }
 #ifdef yylex
 #	undef yylex
 #endif
-/*
+
+NDESCRIPT_NS_END
+
 int 
 yyFlexLexer::yylex() {
 	// shouldn't get here
 	std::cerr << "in yyFlexLexer::yylex()!" << std::endl;
 	return 0;
-}*/
+}
 
-//int 
-//NDEFlexLexer::yywrap() {
-//	return 1;
-//}
-NDESCRIPT_NS_END
+int 
+NDEFlexLexer::yywrap() {
+	return 1;
+}
