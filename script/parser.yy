@@ -38,7 +38,6 @@ NDESCRIPT_NS_END
 	ast::Node* node;
 }
 
-
 %{
 #include "ASTree.hpp"
 #include "Driver.hpp"
@@ -74,7 +73,7 @@ NDESCRIPT_NS_END
 
 %type <node> var_type 
 
-%type <node> optional_var_assign expr unary_expr primary_expr atom attribute subscript function_call literal
+%type <node> optional_var_assign expr unary_expr primary_expr atom attribute subscript function_call literal ident_node
 
 //StmtNode*
 %type <node> statement loop_control_stmt declaration function_decl var_decl_stmt 
@@ -112,7 +111,6 @@ NDESCRIPT_NS_END
 %left '.'
 %left '[' ']'
 %left '(' ')'
-
 
 %start program
 %%
@@ -164,12 +162,13 @@ optional_argument_list
 
 argument_list
 	: argument_list ',' var_decl {
-		((ast::vardecls_t*)$1)->push_back((ast::VarDecl*)$3);
+		((ast::vardecls_t*)$1)->push_back($3);
 		$$ = $1;
 	}
 	| var_decl {
-		$$ = new ast::Node(new ast::vardecls_t());
-		((ast::vardecls_t*)$$)->push_back((ast::VarDecl*)$1);
+		auto tmp = new ast::vardecls_t();
+		tmp->push_back($1);
+		$$ = new ast::Node(tmp);
 	}
 	;
 
@@ -184,7 +183,7 @@ optional_statements
 
 statements
 	: statements statement {
-		((ast::stmt_list_t*)$1)->push_back((ast::StmtNode*)$2);
+		((ast::stmt_list_t*)$1)->push_back($2);
 		$$ = $1;
 	}
 	| statement {
@@ -207,7 +206,7 @@ statement
 
 if_stmt
 	: IF expr code_block optional_else_if_list {
-		$$ = new ast::IfStmt($2, $3, $4);
+		$$ = new ast::Node(new ast::IfStmt($2, $3, $4));
 	}
 	;
 
@@ -219,7 +218,7 @@ optional_else_if_list
 else_if_list
 	: else_if_list else_if {
 		$$ = $1;
-		static_cast<ast::IfStmt*>($$)->passDown($2);
+		((ast::IfStmt*)$$)->passDown($2);
 	}
 	| else_if {
 		$$ = $1;
@@ -272,11 +271,8 @@ var_decl_stmt
 
 var_decl
 	: var_type IDENT optional_is_array optional_var_assign {
-		$$ = new ast::Node(new ast::VarDecl($1, $2, $3));
-		$1->is_array = $3;
-		$$->type = $1;
-		$$->name = $2;
-		$$->default_value = $4;
+		((ast::VarType*)$1)->is_array= $3;
+		$$ = new ast::Node(new ast::VarDecl($1, $2, $4));
 	}
 	;
 
@@ -288,27 +284,24 @@ optional_is_array
 trigger_call
 	: TRIGGER function_call ';' { // can't be used as a lhs
 		$$ = $2;
-		$$->is_trigger = true;
+		((ast::FunctionCall*)$$)->is_trigger = true;
 	}
 	;
 
 loop_control_stmt
-	: BREAK ';' { $$ = new ast::BreakStmt(); }
-	| CONTINUE ';' { $$ = new ast::ContinueStmt(); }
+	: BREAK ';' { $$ = new ast::Node(new ast::BreakStmt()); }
+	| CONTINUE ';' { $$ = new ast::Node(new ast::ContinueStmt()); }
 	;
 
 var_type
-	: IDENT { 
-		$$ = new ast::VarType(eReturnType::OBJECT);
-		$$->class_name = $1; 
-	}
-	| INT { $$ = new ast::VarType(eReturnType::INT); }
-	| UINT { $$ = new ast::VarType(eReturnType::UINT); } 
-	| FLOAT { $$ = new ast::VarType(eReturnType::FLOAT); }
-	| STRING { $$ = new ast::VarType(eReturnType::STRING); }
-	| VECTOR { $$ = new ast::VarType(eReturnType::VECTOR); }
-	| BOOL { $$ = new ast::VarType(eReturnType::BOOl); }
-	| VOID { $$ = new ast::VarTYpe(eReturnType::VOID); }
+	: IDENT { $$ = new ast::Node(new ast::VarType(ast::eReturnType::OBJECT, $1)); }
+	| INT { $$ = new ast::Node(new ast::VarType(ast::eReturnType::INT)); }
+	| UINT { $$ = new ast::Node(new ast::VarType(ast::eReturnType::UINT)); } 
+	| FLOAT { $$ = new ast::Node(new ast::VarType(ast::eReturnType::FLOAT)); }
+	| STRING { $$ = new ast::Node(new ast::VarType(ast::eReturnType::STRING)); }
+	| VECTOR { $$ = new ast::Node(new ast::VarType(ast::eReturnType::VECTOR)); }
+	| BOOL { $$ = new ast::Node(new ast::VarType(ast::eReturnType::BOOL)); }
+	| VOID { $$ = new ast::Node(new ast::VarType(ast::eReturnType::VOID)); }
 	;
 
 optional_var_assign
@@ -317,48 +310,46 @@ optional_var_assign
 	;
 
 expr
-	: expr ASSIGN  expr { $$ = new BinaryExpr($1, eBinaryOp::ASSIGN, $3); }
-	| expr BORASSIGN expr { $$ = new BinaryExpr($1, eBinaryOp::BORASSIGN, $3); }
-	| expr  BANDASSIGN expr { $$ = new BinaryExpr($1, eBinaryOp::BANDASSIGN, $3); }
-	| expr BXORASSIGN expr { $$ = new BinaryExpr($1, eBinaryOp::BXORASSIGN, $3); }
-	| expr  LSHIFTASSIGN expr { $$ = new BinaryExpr($1, eBinaryOp::LSHIFTASSIGN, $3); }
-	| expr RSHIFTASSIGN expr { $$ = new BinaryExpr($1, eBinaryOp::RSHIFTASSIGN, $3); }
-	| expr ADDASSIGN expr { $$ = new BinaryExpr($1, eBinaryOp::ADDASSIGN, $3); }
-	| expr SUBASSIGN expr { $$ = new BinaryExpr($1, eBinaryOp::SUBASSIGN, $3); }
-	| expr MULASSIGN expr { $$ = new BinaryExpr($1, eBinaryOp::MULASSIGN, $3); }
-	| expr DIVASSIGN expr { $$ = new BinaryExpr($1, eBinaryOp::DIVASSIGN, $3); }
-	| expr MODASSIGN expr { $$ = new BinaryExpr($1, eBinaryOp::MODASSIGN, $3); }
-	| expr '?' expr ':' expr { $$ = new TernaryExpr($1, $3, $5); }
-	| expr OR expr { $$ = new BinaryExpr($1, eBinaryOp::OR, $3); }
-	| expr AND expr { $$ = new BinaryExpr($1, eBinaryOp::AND, $3); }
-	| expr '|' expr { $$ = new BinaryExpr($1, eBinaryOp::BOR, $3); }
-	| expr '^' expr { $$ = new BinaryExpr($1, eBinaryOp::BXOR, $3); }
-	| expr '&' expr { $$ = new BinaryExpr($1, eBinaryOp::BAND, $3); }
-	| expr EQUAL expr { $$ = new BinaryExpr($1, eBinaryOp::EQUAL, $3); }
-	| expr NEQUAL expr { $$ = new BinaryExpr($1, eBinaryOp::NEQUAL, $3); }
-	| expr GT expr { $$ = new BinaryExpr($1, eBinaryOp::GT, $3); }
-	| expr LT expr { $$ = new BinaryExpr($1, eBinaryOp::LT, $3); }
-	| expr GTE expr { $$ = new BinaryExpr($1, eBinaryOp::GTE, $3); }
-	| expr LTE expr { $$ = new BinaryExpr($1, eBinaryOp::LTE, $3); }
-	| expr LSHIFT expr { $$ = new BinaryExpr($1, eBinaryOp::LSHIFT, $3); }
-	| expr RSHIFT expr { $$ = new BinaryExpr($1, eBinaryOp::RSHIFT, $3); }
-	| expr '+' expr { $$ = new BinaryExpr($1, eBinaryOp::ADD, $3); }
-	| expr '-' expr { $$ = new BinaryExpr($1, eBinaryOp::SUB, $3); }
-	| expr '*' expr { $$ = new BinaryExpr($1, eBinaryOp::MUL, $3); }
-	| expr '/' expr { $$ = new BinaryExpr($1, eBinaryOp::DIV, $3); }
-	| expr '%' expr { $$ = new BinaryExpr($1, eBinaryOp::MOD, $3); }
+	: expr ASSIGN  expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::ASSIGN, $3)); }
+	| expr BORASSIGN expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::BORASSIGN, $3)); }
+	| expr  BANDASSIGN expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::BANDASSIGN, $3)); }
+	| expr BXORASSIGN expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::BXORASSIGN, $3)); }
+	| expr  LSHIFTASSIGN expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::LSHIFTASSIGN, $3)); }
+	| expr RSHIFTASSIGN expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::RSHIFTASSIGN, $3)); }
+	| expr ADDASSIGN expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::ADDASSIGN, $3)); }
+	| expr SUBASSIGN expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::SUBASSIGN, $3)); }
+	| expr MULASSIGN expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::MULASSIGN, $3)); }
+	| expr DIVASSIGN expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::DIVASSIGN, $3)); }
+	| expr MODASSIGN expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::MODASSIGN, $3)); }
+	| expr '?' expr ':' expr { $$ = new ast::Node(new ast::TernaryExpr($1, $3, $5)); }
+	| expr OR expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::OR, $3)); }
+	| expr AND expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::AND, $3)); }
+	| expr '|' expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::BOR, $3)); }
+	| expr '^' expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::BXOR, $3)); }
+	| expr '&' expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::BAND, $3)); }
+	| expr EQUAL expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::EQUAL, $3)); }
+	| expr NEQUAL expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::NEQUAL, $3)); }
+	| expr GT expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::GT, $3)); }
+	| expr LT expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::LT, $3)); }
+	| expr GTE expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::GTE, $3)); }
+	| expr LTE expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::LTE, $3)); }
+	| expr LSHIFT expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::LSHIFT, $3)); }
+	| expr RSHIFT expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::RSHIFT, $3)); }
+	| expr '+' expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::ADD, $3)); }
+	| expr '-' expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::SUB, $3)); }
+	| expr '*' expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::MUL, $3)); }
+	| expr '/' expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::DIV, $3)); }
+	| expr '%' expr { $$ = new ast::Node(new ast::BinaryExpr($1, ast::eBinaryOp::MOD, $3)); }
 	| unary_expr
 	;
 
 unary_expr
-	: '~' unary_expr %prec UNARY { $$ = new UnaryExpr(eUnaryType::BNOT, $2); }
-	| '!' unary_expr %prec UNARY { $$ = new UnaryExpr(eUnaryType::NOT, $2); }
-	| INC unary_expr %prec UNARY { $$ = new UnaryExpr(eUnaryType::INC, $2); }
-	| DEC unary_expr %prec UNARY { $$ = new UnaryExpr(eUnaryType::DEC, $2); }
+	: '~' unary_expr %prec UNARY { $$ = new ast::Node(new ast::UnaryExpr(ast::eUnaryType::BNOT, $2)); }
+	| '!' unary_expr %prec UNARY { $$ = new ast::Node(new ast::UnaryExpr(ast::eUnaryType::NOT, $2)); }
+	| INC unary_expr %prec UNARY { $$ = new ast::Node(new ast::UnaryExpr(ast::eUnaryType::INC, $2)); }
+	| DEC unary_expr %prec UNARY { $$ = new ast::Node(new ast::UnaryExpr(ast::eUnaryType::DEC, $2)); }
 	| primary_expr
 	;
-
-
 
 primary_expr
 	: atom
@@ -367,62 +358,53 @@ primary_expr
 	| function_call
 	;
 
-
-
 atom
-	: IDENT { $$ = new IdentNode($1); }
+	: ident_node {  }
 	| literal
 	| '(' expr ')' { $$ = $2; }
 	;
 
-
-
 attribute
-	: primary_expr '.' IDENT { $$ = new AttributeNode($1, $3); }
+	: primary_expr '.' ident_node { $$ = new ast::Node(new ast::AttributeNode($1, $3)); }
 	;
 
-
+ident_node
+	: IDENT { $$ = new ast::Node(new ast::IdentNode($1)); }
+	;
 
 subscript
-	: primary_expr '[' expr ']'
+	: primary_expr '[' expr ']' { $$ = new ast::Node(new ast::SubscriptNode($1, $3)); }
 	;
-
-
 
 function_call
-	: primary_expr '(' optional_expr_list ')'
+	: primary_expr '(' optional_expr_list ')' { $$ = new ast::Node(new ast::FunctionCall($1, $3)); }
 	;
-
 
 literal
-	: STRINGVAL { $$ = new LiteralExpr($1); }
-	| INTVAL { $$ = new LiteralExpr($1); }
-	| BOOLVAL { $$ = new LiteralExpr($1); }
-	| FLOATVAL { $$ = new LiteralExpr($1); }
-	| VECTORVAL { $$ = new LiteralExpr($1); }
+	: STRINGVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
+	| INTVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
+	| BOOLVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
+	| FLOATVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
+	| VECTORVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
 	;
-
-
 
 optional_expr_list
 	: expr_list
 	| /* empty */ { $$ = NULL; }
 	;
 
-
-
 expr_list
 	: expr_list ',' expr { 
-		$1->push_back($3);
+		((expr_list_t*)$1)->push_back($3);
 		$$ = $1;
 	}
 	| expr {
-		$$ = new expr_list_t();
-		$$->push_back($1);
+		auto tmp = new expr_list_t();
+		tmp->push_back($1);
+		
+		$$ = new ast::Node(tmp);
 	}
 	;
-
-
 
 %%
 

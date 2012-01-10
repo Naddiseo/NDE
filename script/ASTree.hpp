@@ -36,6 +36,7 @@ enum class eBinaryOp {
 	SUBASSIGN,
 	MULASSIGN,
 	DIVASSIGN,
+	MODASSIGN,
 
 	GT,
 	LT,
@@ -51,6 +52,15 @@ enum class eBinaryOp {
 	MUL,
 	DIV,
 	MOD,
+
+	OR,
+	AND,
+	BOR,
+	BAND,
+	BXOR,
+
+	EQUAL,
+	NEQUAL,
 };
 
 enum class eUnaryType {
@@ -154,6 +164,7 @@ public:
 	}
 
 	void push_back(T* node) { nodes.push_back(node); }
+	void push_back(Node* node) { nodes.push_back((T*)node); }
 
 	iterator begin() { return nodes.begin(); }
 	iterator end() { return nodes.end(); }
@@ -165,6 +176,7 @@ struct VarType {
 	bool is_array;
 
 	VarType(eReturnType _t) : type(_t) {}
+	VarType(eReturnType _t, std::string _class) : type(_t), class_name(_class) {}
 	virtual ~VarType() {}
 };
 
@@ -265,12 +277,16 @@ struct AttributeNode : public PrimaryExpr {
 struct SubscriptNode : public PrimaryExpr {
 	Node* base;
 	Node* subscript;
+
+	SubscriptNode(Node* _b, Node* _sub) : base(_b), subscript(_sub) {}
 };
 
 struct FunctionCall : public PrimaryExpr {
 	bool is_trigger;
 	Node* name;
 	Node* arguments;
+
+	FunctionCall(Node* _name, Node* _args) : is_trigger(false), name(_name), arguments(_args) {}
 };
 
 struct CodeBlock : public StmtNode {
