@@ -12,11 +12,13 @@
 		)
 #endif
 
+class yyFlexLexer;
+
 NDESCRIPT_NS_BEGIN
 
 class Scanner : public yyFlexLexer {
 public:
-		Scanner(FLEX_STD istream* arg_yyin = 0, FLEX_STD ostream* arg_yyout = 0);
+		Scanner(std::istream* arg_yyin = 0, std::ostream* arg_yyout = 0);
 
 		virtual ~Scanner();
 

@@ -19,8 +19,6 @@ namespace ast {
 	const char* name##_str[static_cast<size_t>(name::LAST)] = { inner(ENUM_INNER_STR) }; \
 	std::ostream& operator<<(std::ostream & out, name e) { return out << name##_str[static_cast<size_t>(e)]; }
 
-
-
 #define ReturnTypeEnum(X) \
 	X(VOID) \
 	X(INT) \
@@ -90,9 +88,8 @@ ENUM(eUnaryType, char, UnaryTypeEnum)
 	X(VECTORVAL)
 ENUM(eLiteralType, char, LiteralTypeEnum)
 
-#define NODEFN(klass, var_name, enum_name)
 
-#define NODETYPE \
+#define NODETYPE(NODEFN) \
 	NODEFN(VarType, var_type, VARTYPE) \
 	NODEFN(ExprNode, expr_node, EXPRNODE) \
 	NODEFN(StmtNode, stmt_node, STMTNODE) \
@@ -124,62 +121,56 @@ ENUM(eLiteralType, char, LiteralTypeEnum)
 #undef NODEFN
 
 enum class eNodeType {
-
-#define NODEFN(klass, var_name, enum_name) enum_name,
-	NODETYPE
-#undef NODEFN
+#define TO_ENUM(klass, var_name, enum_name) enum_name,
+	NODETYPE(TO_ENUM)
+#undef TO_ENUM
 };
 
-#define NODEFN(klass, var_name, enum_name) class klass;
-NODETYPE
-#undef NODEFN
+#define CLASS_FORWARD(klass, var_name, enum_name) class klass;
+	NODETYPE(CLASS_FORWARD)
+#undef CLASS_FORWARD
 
 struct Node {
 	Node() {}
 	virtual ~Node();
 
-	union value_t {
-#define NODEFN(klass, var_name, enum_name) klass* var_name;
-		NODETYPE
-#undef NODEFN
-	};
+#define TO_UNION(klass, var_name, enum_name) klass* var_name;
+		NODETYPE(TO_UNION)
+#undef TO_UNION
 
 	eNodeType type;
-	value_t value;
-#define NODEFN(klass, var_name, enum_name) Node(klass* _v) : type(eNodeType::enum_name) { value.var_name = _v; }
-	NODETYPE
-#undef NODEFN
+#define NodeConstructor(klass, var_name, enum_name) Node(klass* _v) : type(eNodeType::enum_name) { var_name = _v; }
+	NODETYPE(NodeConstructor)
+#undef NodeConstructor
 
-#define NODEFN(klass, var_name, enum_name) operator klass*() { return value.var_name; }
-	NODETYPE
-#undef NODEFN
+#define NodeCastOperator(klass, var_name, enum_name) operator klass*() { return var_name; }
+	NODETYPE(NodeCastOperator)
+#undef NodeCastOperator
 
 	void print();
 };
-
-typedef std::vector<Node*> node_list_t;
 
 extern const std::string LISTSEP;
 extern const std::string STMTSEP;
 
 template<typename T, const std::string& sep = LISTSEP>
 class NodeList  {
-	typedef std::vector<T*> list_t;
-	list_t nodes;
+	std::vector<T*> nodes;
 public:
 	typedef typename std::vector<T*>::iterator iterator;
 
 	virtual ~NodeList() {
 		for (T* node : nodes) {
-			delete node;
+			//delete node;
 		}
 	}
 
 	void push_back(T* node) { nodes.push_back(node); }
-	void push_back(Node* node) { nodes.push_back((T*)node); }
+	//void push_back(Node* node) { nodes.push_back((T*)node); }
 
 	iterator begin() { return nodes.begin(); }
 	iterator end() { return nodes.end(); }
+	size_t size() const { return nodes.size(); }
 
 	void print() {
 		for (T* node : nodes) {
@@ -220,8 +211,8 @@ struct StmtNode  {
 	virtual void print() {}
 };
 
-struct expr_list_t : public NodeList<ExprNode> {};
-struct stmt_list_t : public NodeList<StmtNode, STMTSEP> {};
+struct expr_list_t : public NodeList<Node> {};
+struct stmt_list_t : public NodeList<Node, STMTSEP> {};
 
 struct EmptyExpression : public ExprNode {
 	virtual ~EmptyExpression() {}
@@ -328,7 +319,7 @@ struct LiteralExpr : public PrimaryExpr {
 		std::cout << "(";
 		switch (type) {
 		case eLiteralType::STRINGVAL:
-			std::cout << str_val;
+			std::cout << '"' << str_val << '"';
 			break;
 		case eLiteralType::FLOATVAL:
 			std::cout << flt_val;
@@ -432,7 +423,7 @@ struct Decl : StmtNode {
 	}
 };
 
-struct declarations_t : public NodeList<Decl> {};
+struct declarations_t : public NodeList<Node, STMTSEP> {};
 
 struct VarDecl : public Decl {
 	Node* default_value;
@@ -450,7 +441,7 @@ struct VarDecl : public Decl {
 	}
 };
 
-struct vardecls_t : public NodeList<VarDecl> {};
+struct vardecls_t : public NodeList<Node> {};
 
 struct FunctionDecl : public Decl {
 	bool is_event;
@@ -485,13 +476,14 @@ struct ClassDecl : public Decl {
 
 	void print() {
 		std::cout << "class ";
-		Decl::print();
+		//Decl::print(); // return type is null
+		std::cout << name;
 		if (parent.size()) {
 			std::cout << " : " << parent;
 		}
 		std::cout << "{" << std::endl;
 			declarations->print();
-		std::cout << "}" << std::endl;
+		std::cout << std::endl << "}" << std::endl;
 	}
 };
 
@@ -509,7 +501,7 @@ struct IfStmt :  public StmtNode {
 			false_block = block;
 		}
 		else {
-			false_block->value.if_stmt->passDown(block);
+			false_block->if_stmt->passDown(block);
 		}
 	}
 
@@ -600,11 +592,11 @@ struct ContinueStmt : public StmtNode {
 };
 
 struct Program {
-	node_list_t declarations;
+	declarations_t* declarations;
 
 	void print() {
-		std::cout << declarations.size() << " declarations" << std::endl;
-		for (Node* node : declarations) {
+		std::cout << declarations->size() << " declarations" << std::endl;
+		for (Node* node : *declarations) {
 			node->print();
 		}
 	}

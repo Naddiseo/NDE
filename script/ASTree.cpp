@@ -15,17 +15,17 @@ const std::string STMTSEP = ";\n";
 
 Node::~Node() {
 	switch (type) {
-#define NODEFN(klass, var_name, enum_name) case eNodeType::enum_name: { delete value.var_name; }; break;
-	NODETYPE;
-#undef NODEFN
+#define ENUM_CASE(klass, var_name, enum_name) case eNodeType::enum_name: { /* delete var_name; */ }; break;
+	NODETYPE(ENUM_CASE);
+#undef ENUM_CASE
 	}
 }
 
 void Node::print() {
 	switch (type) {
-#define NODEFN(klass, var_name, enum_name) case eNodeType::enum_name: { value.var_name->print(); }; break;
-	NODETYPE
-#undef NODEFN
+#define ENUM_CASE(klass, var_name, enum_name) case eNodeType::enum_name: { var_name->print(); }; break;
+	NODETYPE(ENUM_CASE)
+#undef ENUM_CASE
 	default:break;
 
 	}

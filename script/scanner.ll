@@ -59,6 +59,13 @@ true|false   {
 	return token::BOOLVAL; 
 }
 
+\"[^\"]*\" {
+	yytext[yyleng] = 0;
+	yytext++;
+	yylval->stringval = strdup(yytext);
+	return token::STRINGVAL;
+}
+
 [a-zA-Z_][a-zA-Z0-9_]* { 
 	yylval->stringval = strdup(yytext);
 	return token::IDENT;
@@ -108,7 +115,7 @@ true|false   {
 [;\(\)\{\}\[\],\.\:\?\|&~^!\+\-\*\/%] { return static_cast<token_type>(yytext[0]); }
 
 . {
-	//throw LexerError();
+	driver.error(std::string("Unexpected character '") + yytext[0] + "'");
 	
 }
 

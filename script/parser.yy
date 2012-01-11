@@ -116,16 +116,19 @@ NDESCRIPT_NS_END
 %%
 
 program
-	: declarations {} 
+	: declarations { driver.program.declarations = $1->declarations; } 
 	| /* empty*/ {  }
 	;
 
 declarations
 	: declarations declaration {
-		driver.program.declarations.push_back($2);
+		((ast::declarations_t*)$1)->push_back($2);
 	}
 	| declaration {
-		driver.program.declarations.push_back($1);
+		auto tmp = new ast::declarations_t();
+		tmp->push_back($1);
+		
+		$$ = new ast::Node(tmp);
 	}
 	;
 
@@ -306,7 +309,7 @@ var_type
 
 optional_var_assign
 	: ASSIGN expr { $$ = $2; }
-	| { $$ = new ast::Node(new ast::ExprNode()); }
+	| { $$ = NULL; }
 	;
 
 expr
