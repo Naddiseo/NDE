@@ -40,6 +40,7 @@ main(int argc, char* argv[]) {
 			std::cout << "Parsing " << filename << std::endl;
 			if (driver.parseFile(filename)) {
 				std::cout << "Success" << std::endl;
+				prog.print();
 			}
 			else {
 				std::cerr << "Fail" << std::endl;

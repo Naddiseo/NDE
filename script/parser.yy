@@ -157,7 +157,7 @@ function_decl
 
 optional_argument_list
 	: argument_list
-	| { $$ = NULL; }
+	| { $$ = new ast::Node(new ast::vardecls_t()); }
 	;
 
 argument_list
@@ -178,7 +178,7 @@ code_block
 
 optional_statements
 	: statements
-	| { $$ = NULL; }
+	| { $$ = new ast::Node(new ast::stmt_list_t()); }
 	;
 
 statements
@@ -233,7 +233,7 @@ else_if
 
 optional_else
 	: ELSE code_block { $$ = $2; }
-	| { $$ = NULL; }
+	| { $$ = new ast::Node(new ast::CodeBlock(NULL)); }
 	;
 
 while_stmt
@@ -306,7 +306,7 @@ var_type
 
 optional_var_assign
 	: ASSIGN expr { $$ = $2; }
-	| { $$ = NULL; }
+	| { $$ = new ast::Node(new ast::ExprNode()); }
 	;
 
 expr
@@ -390,7 +390,7 @@ literal
 
 optional_expr_list
 	: expr_list
-	| /* empty */ { $$ = NULL; }
+	| /* empty */ { $$ = new ast::Node(new ast::expr_list_t()); }
 	;
 
 expr_list
