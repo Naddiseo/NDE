@@ -8,6 +8,7 @@
 
 #include "Driver.hpp"
 #include "ASTree.hpp"
+#include "ASTPrinter.hpp"
 
 int
 main(int argc, char* argv[]) {
@@ -40,7 +41,8 @@ main(int argc, char* argv[]) {
 			std::cout << "Parsing " << filename << std::endl;
 			if (driver.parseFile(filename)) {
 				std::cout << "Success" << std::endl;
-				prog.print();
+				nde::script::ast::ASTPrinter printer;
+				printer.print(prog.declarations);
 			}
 			else {
 				std::cerr << "Fail" << std::endl;

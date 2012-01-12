@@ -10,24 +10,11 @@ ENUM_STR(eBinaryOp, BinOpEnum)
 ENUM_STR(eUnaryType, UnaryTypeEnum)
 ENUM_STR(eLiteralType, LiteralTypeEnum)
 
-const std::string LISTSEP = ", ";
-const std::string STMTSEP = ";\n";
-
 Node::~Node() {
 	switch (type) {
-#define ENUM_CASE(klass, var_name, enum_name) case eNodeType::enum_name: { /* delete var_name; */ }; break;
+#define ENUM_CASE(klass, var_name, enum_name) case eNodeType::enum_name: {  delete var_name;  }; break;
 	NODETYPE(ENUM_CASE);
 #undef ENUM_CASE
-	}
-}
-
-void Node::print() {
-	switch (type) {
-#define ENUM_CASE(klass, var_name, enum_name) case eNodeType::enum_name: { var_name->print(); }; break;
-	NODETYPE(ENUM_CASE)
-#undef ENUM_CASE
-	default:break;
-
 	}
 }
 

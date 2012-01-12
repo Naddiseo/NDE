@@ -122,7 +122,7 @@ program
 
 declarations
 	: declarations declaration {
-		((ast::declarations_t*)$1)->push_back($2);
+		$1->declarations->push_back($2);
 	}
 	| declaration {
 		auto tmp = new ast::declarations_t();
@@ -165,7 +165,7 @@ optional_argument_list
 
 argument_list
 	: argument_list ',' var_decl {
-		((ast::vardecls_t*)$1)->push_back($3);
+		$1->var_decls->push_back($3);
 		$$ = $1;
 	}
 	| var_decl {
@@ -176,7 +176,7 @@ argument_list
 	;
 
 code_block
-	: '{' optional_statements '}' { $$ = $2; }
+	: '{' optional_statements '}' { $$ = new ast::Node(new ast::CodeBlock($2)); }
 	;
 
 optional_statements
@@ -186,7 +186,7 @@ optional_statements
 
 statements
 	: statements statement {
-		((ast::stmt_list_t*)$1)->push_back($2);
+		$1->stmt_list->push_back($2);
 		$$ = $1;
 	}
 	| statement {
@@ -205,6 +205,8 @@ statement
 	| expr_stmt
 	| trigger_call
 	| loop_control_stmt
+	| BREAK { $$ = new ast::Node(new ast::BreakStmt()); }
+	| CONTINUE { $$ = new ast::Node(new ast::ContinueStmt()); }
 	;
 
 if_stmt
@@ -221,7 +223,7 @@ optional_else_if_list
 else_if_list
 	: else_if_list else_if {
 		$$ = $1;
-		((ast::IfStmt*)$$)->passDown($2);
+		$$->if_stmt->passDown($2);
 	}
 	| else_if {
 		$$ = $1;
@@ -274,7 +276,7 @@ var_decl_stmt
 
 var_decl
 	: var_type IDENT optional_is_array optional_var_assign {
-		((ast::VarType*)$1)->is_array= $3;
+		$1->var_type->is_array= $3;
 		$$ = new ast::Node(new ast::VarDecl($1, $2, $4));
 	}
 	;
@@ -287,7 +289,7 @@ optional_is_array
 trigger_call
 	: TRIGGER function_call ';' { // can't be used as a lhs
 		$$ = $2;
-		((ast::FunctionCall*)$$)->is_trigger = true;
+		$$->function_call->is_trigger = true;
 	}
 	;
 
@@ -398,7 +400,7 @@ optional_expr_list
 
 expr_list
 	: expr_list ',' expr { 
-		((ast::expr_list_t*)$1)->push_back($3);
+		$1->expr_list->push_back($3);
 		$$ = $1;
 	}
 	| expr {

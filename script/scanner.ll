@@ -54,14 +54,14 @@ trigger  { return token::TRIGGER; }
 or       { return token::OR; }
 and      { return token::AND; }
 
-true|false   { 
+(true)|(false)   { 
 	yylval->boolval = (yytext[0] == 't');
 	return token::BOOLVAL; 
 }
 
 \"[^\"]*\" {
-	yytext[yyleng] = 0;
-	yytext++;
+	//yytext[yyleng] = 0;
+	//yytext++;
 	yylval->stringval = strdup(yytext);
 	return token::STRINGVAL;
 }
@@ -72,13 +72,13 @@ true|false   {
 }
 
 -?[0-9]+\.[0-9]+ {
-	ss << yytext;
+	ss << yytext << " ";
 	ss >> yylval->floatval;
 	return token::FLOATVAL; 
 }
 
 -?[0-9]+ {
-	ss << yytext;
+	ss << yytext << " ";
 	ss >> yylval->intval;
 	return token::INTVAL;
 }

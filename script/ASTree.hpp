@@ -117,8 +117,8 @@ ENUM(eLiteralType, char, LiteralTypeEnum)
 	NODEFN(ForStmt, for_stmt, FORSTMT) \
 	NODEFN(ExprStmt, expr_stmt, EXPRSTMT) \
 	NODEFN(ReturnStmt, return_stmt, RETURNSTMT) \
-	NODEFN(ContinueStmt, continue_stmt, CONTINUESTMT)
-#undef NODEFN
+	NODEFN(ContinueStmt, continue_stmt, CONTINUESTMT) \
+	NODEFN(BreakStmt, break_stmt, BREAKSTMT)
 
 enum class eNodeType {
 #define TO_ENUM(klass, var_name, enum_name) enum_name,
@@ -134,50 +134,38 @@ struct Node {
 	Node() {}
 	virtual ~Node();
 
+	union {
 #define TO_UNION(klass, var_name, enum_name) klass* var_name;
 		NODETYPE(TO_UNION)
 #undef TO_UNION
+	};
 
 	eNodeType type;
 #define NodeConstructor(klass, var_name, enum_name) Node(klass* _v) : type(eNodeType::enum_name) { var_name = _v; }
 	NODETYPE(NodeConstructor)
 #undef NodeConstructor
 
-#define NodeCastOperator(klass, var_name, enum_name) operator klass*() { return var_name; }
-	NODETYPE(NodeCastOperator)
-#undef NodeCastOperator
-
-	void print();
 };
 
-extern const std::string LISTSEP;
-extern const std::string STMTSEP;
-
-template<typename T, const std::string& sep = LISTSEP>
+template<typename T>
 class NodeList  {
 	std::vector<T*> nodes;
 public:
 	typedef typename std::vector<T*>::iterator iterator;
+	typedef typename std::vector<T*>::const_reference const_reference;
 
 	virtual ~NodeList() {
 		for (T* node : nodes) {
-			//delete node;
+			delete node;
 		}
 	}
 
 	void push_back(T* node) { nodes.push_back(node); }
-	//void push_back(Node* node) { nodes.push_back((T*)node); }
 
 	iterator begin() { return nodes.begin(); }
 	iterator end() { return nodes.end(); }
 	size_t size() const { return nodes.size(); }
-
-	void print() {
-		for (T* node : nodes) {
-			node->print();
-			std::cout << sep;
-		}
-	}
+	const_reference back() const { return nodes.back(); }
 };
 
 struct VarType {
@@ -188,31 +176,17 @@ struct VarType {
 	VarType(eReturnType _t) : type(_t) {}
 	VarType(eReturnType _t, std::string _class) : type(_t), class_name(_class) {}
 	virtual ~VarType() {}
-
-	void print() {
-		if (type == eReturnType::OBJECT) {
-			std::cout << class_name;
-		}
-		else {
-			std::cout << type;
-		}
-
-		std::cout << ((is_array) ? "[] " : " ");
-	}
 };
 
 struct ExprNode {
 	virtual ~ExprNode() {}
-
-	virtual void print() {}
 };
 struct StmtNode  {
 	virtual ~StmtNode() {}
-	virtual void print() {}
 };
 
 struct expr_list_t : public NodeList<Node> {};
-struct stmt_list_t : public NodeList<Node, STMTSEP> {};
+struct stmt_list_t : public NodeList<Node> {};
 
 struct EmptyExpression : public ExprNode {
 	virtual ~EmptyExpression() {}
@@ -229,14 +203,6 @@ struct BinaryExpr : public ExprNode {
 	BinaryExpr(eBinaryOp _o) : op(_o) {}
 	BinaryExpr(Node* _lhs, eBinaryOp _op, Node* _rhs)
 		: op(_op), lhs(_lhs), rhs(_rhs) {}
-
-	void print() {
-		std::cout << "((";
-			lhs->print();
-		std::cout << ")" << op << "(";
-			rhs->print();
-		std::cout << "))";
-	}
 };
 
 struct TernaryExpr : public ExprNode {
@@ -248,16 +214,6 @@ struct TernaryExpr : public ExprNode {
 		: condition(_c), true_cond(_t), false_cond(_f) {}
 
 	virtual ~TernaryExpr() {}
-
-	void print() {
-		std::cout << "((";
-			condition->print();
-		std::cout << ") ? (";
-			true_cond->print();
-		std::cout << ") : (";
-			false_cond->print();
-		std::cout << "))";
-	}
 };
 
 struct UnaryExpr : public ExprNode {
@@ -268,12 +224,6 @@ struct UnaryExpr : public ExprNode {
 		: op(_o), expr(_e) {}
 
 	virtual ~UnaryExpr() {}
-
-	void print() {
-		std::cout << op << "(";
-			expr->print();
-		std::cout << ")";
-	}
 };
 
 struct PrimaryExpr : public ExprNode {
@@ -286,10 +236,6 @@ struct IdentNode : public PrimaryExpr {
 	IdentNode(std::string _i) : ident(_i) {}
 
 	virtual ~IdentNode() {}
-
-	void print() {
-		std::cout << ident << " ";
-	}
 };
 
 struct LiteralExpr : public PrimaryExpr {
@@ -297,7 +243,7 @@ struct LiteralExpr : public PrimaryExpr {
 	std::string str_val;
 	union {
 		float flt_val;
-		size_t int_val;
+		int int_val;
 	};
 	bool bool_val;
 	// Vector vector_val;
@@ -315,28 +261,6 @@ struct LiteralExpr : public PrimaryExpr {
 	//LiteralExpr(Vector _v)
 	//		: type(eLiteralType::STRINGVAL), vector_val(_v) {}
 
-	void print() {
-		std::cout << "(";
-		switch (type) {
-		case eLiteralType::STRINGVAL:
-			std::cout << '"' << str_val << '"';
-			break;
-		case eLiteralType::FLOATVAL:
-			std::cout << flt_val;
-			break;
-		case eLiteralType::INTVAL:
-			std::cout << int_val;
-			break;
-		case eLiteralType::BOOLVAL:
-			std::cout << bool_val;
-			break;
-		case eLiteralType::VECTORVAL:
-		default:
-			break;
-		}
-
-		std::cout << ")";
-	}
 };
 
 struct AttributeNode : public PrimaryExpr {
@@ -347,14 +271,6 @@ struct AttributeNode : public PrimaryExpr {
 		: lhs(_l), ident(_i) {}
 
 	virtual ~AttributeNode() {}
-
-	void print() {
-		std::cout << "(";
-			lhs->print();
-		std::cout << ".";
-			ident->print();
-		std::cout << ")";
-	}
 };
 
 struct SubscriptNode : public PrimaryExpr {
@@ -363,14 +279,6 @@ struct SubscriptNode : public PrimaryExpr {
 
 	SubscriptNode(Node* _b, Node* _sub) : base(_b), subscript(_sub) {}
 	virtual ~SubscriptNode() {}
-
-	void print() {
-		std::cout << "(";
-			base->print();
-		std::cout << "[";
-			subscript->print();
-		std::cout << "])";
-	}
 };
 
 struct FunctionCall : public PrimaryExpr {
@@ -380,16 +288,6 @@ struct FunctionCall : public PrimaryExpr {
 
 	FunctionCall(Node* _name, Node* _args) : is_trigger(false), name(_name), arguments(_args) {}
 	virtual ~FunctionCall() {}
-
-	void print() {
-		if (is_trigger) {
-			std::cout << "trigger ";
-		}
-		name->print();
-		std::cout << "(";
-			arguments->print();
-		std::cout << ")";
-	}
 };
 
 struct CodeBlock : public StmtNode {
@@ -398,14 +296,6 @@ struct CodeBlock : public StmtNode {
 	CodeBlock() {}
 	CodeBlock(Node* _c) : children(_c) {}
 	virtual ~CodeBlock() {}
-
-	void print() {
-		std::cout << "{" << std::endl;
-		if (children) {
-			children->print();
-		}
-		std::cout << "}" << std::endl;
-	}
 };
 
 struct Decl : StmtNode {
@@ -416,14 +306,9 @@ struct Decl : StmtNode {
 	Decl(Node* _return_type, eDeclType _t, std::string _name)
 		: return_type(_return_type), decl_type(_t), name(_name) {}
 	virtual ~Decl() {}
-
-	void print() {
-		return_type->print();
-		std::cout << " " << name;
-	}
 };
 
-struct declarations_t : public NodeList<Node, STMTSEP> {};
+struct declarations_t : public NodeList<Node> {};
 
 struct VarDecl : public Decl {
 	Node* default_value;
@@ -431,14 +316,6 @@ struct VarDecl : public Decl {
 		: Decl(_return_type, eDeclType::VAR, _name), default_value(_default_value) {}
 
 	virtual ~VarDecl() {}
-
-	void print() {
-		Decl::print();
-		if (default_value) {
-			std::cout << " = ";
-			default_value->print();
-		}
-	}
 };
 
 struct vardecls_t : public NodeList<Node> {};
@@ -455,14 +332,6 @@ struct FunctionDecl : public Decl {
 		: Decl(_return_type, eDeclType::FUNCTION, _name), is_event(i_e), arguments(args), block(b) {}
 
 	virtual ~FunctionDecl() {}
-
-	void print() {
-		Decl::print();
-		std::cout << "(";
-			arguments->print();
-		std::cout << ")";
-		block->print();
-	}
 };
 
 struct ClassDecl : public Decl {
@@ -473,18 +342,6 @@ struct ClassDecl : public Decl {
 		: Decl(_return_type, eDeclType::CLASS, _name), parent(_parent), declarations(_decls) {}
 
 	virtual ~ClassDecl() {}
-
-	void print() {
-		std::cout << "class ";
-		//Decl::print(); // return type is null
-		std::cout << name;
-		if (parent.size()) {
-			std::cout << " : " << parent;
-		}
-		std::cout << "{" << std::endl;
-			declarations->print();
-		std::cout << std::endl << "}" << std::endl;
-	}
 };
 
 struct IfStmt :  public StmtNode {
@@ -504,16 +361,6 @@ struct IfStmt :  public StmtNode {
 			false_block->if_stmt->passDown(block);
 		}
 	}
-
-	void print() {
-		std::cout << "if (";
-			condition->print();
-		std::cout << ")";
-			true_block->print();
-		std::cout << " else ";
-			false_block->print();
-
-	}
 };
 
 struct WhileStmt :  public StmtNode {
@@ -522,13 +369,6 @@ struct WhileStmt :  public StmtNode {
 
 	WhileStmt(Node* _cond, Node* _block) : condition(_cond), block(_block) {}
 	virtual ~WhileStmt() {}
-
-	void print() {
-		std::cout << "while (";
-			condition->print();
-		std::cout << ")";
-			block->print();
-	}
 };
 
 struct ForStmt :  public StmtNode {
@@ -541,17 +381,6 @@ struct ForStmt :  public StmtNode {
 		: begin(_begin), condition(_cond), counter(_counter), block(_block) {}
 
 	virtual ~ForStmt() {}
-
-	void print() {
-		std::cout << "for (";
-			begin->print();
-		std::cout << ";";
-			condition->print();
-		std::cout << ";";
-			counter->print();
-		std::cout << ")";
-			block->print();
-	}
 };
 
 struct ExprStmt :  public StmtNode {
@@ -560,10 +389,6 @@ struct ExprStmt :  public StmtNode {
 	ExprStmt(Node* _expr) : expr(_expr) {}
 
 	virtual ~ExprStmt() {}
-
-	void print() {
-		expr->print();
-	}
 };
 
 struct ReturnStmt :  public StmtNode {
@@ -572,34 +397,17 @@ struct ReturnStmt :  public StmtNode {
 	ReturnStmt() : return_val(NULL) {}
 	ReturnStmt(Node* rv) : return_val(rv) {}
 	virtual ~ReturnStmt() {}
-
-	void print() {
-		std::cout << "return (";
-			return_val->print();
-		std::cout << ")";
-	}
 };
 
 struct BreakStmt : public StmtNode {
 	virtual ~BreakStmt() {}
-
-	void print() { std::cout << "break"; }
 };
 struct ContinueStmt : public StmtNode {
 	virtual ~ContinueStmt() {}
-
-	void print() { std::cout << "continue"; }
 };
 
 struct Program {
 	declarations_t* declarations;
-
-	void print() {
-		std::cout << declarations->size() << " declarations" << std::endl;
-		for (Node* node : *declarations) {
-			node->print();
-		}
-	}
 };
 
 } //namespace ast
