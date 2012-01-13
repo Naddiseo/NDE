@@ -46,6 +46,7 @@ for      { return token::FOR; }
 break    { return token::BREAK; }
 continue { return token::CONTINUE; }
 else     { return token::ELSE; }
+elif     { return token::ELIF; }
 class    { return token::CLASS; }
 return   { return token::RETURN; }
 event    { return token::EVENT; }
@@ -60,8 +61,8 @@ and      { return token::AND; }
 }
 
 \"[^\"]*\" {
-	//yytext[yyleng] = 0;
-	//yytext++;
+	yytext[yyleng-1] = 0;
+	yytext++;
 	yylval->stringval = strdup(yytext);
 	return token::STRINGVAL;
 }

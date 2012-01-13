@@ -78,7 +78,7 @@ NDESCRIPT_NS_END
 //StmtNode*
 %type <node> statement loop_control_stmt declaration function_decl var_decl_stmt 
 %type <node> var_decl class_decl if_stmt optional_else_if_list else_if_list else_if 
-%type <node> while_stmt for_stmt  optional_expr_stmt expr_stmt return_stmt trigger_call code_block optional_else
+%type <node> while_stmt for_stmt  optional_expr_stmt expr_stmt return_stmt trigger_call code_block optional_else for_stmt_first_arg
 
 //expr_list_t*
 %type <node> optional_expr_list expr_list
@@ -91,8 +91,6 @@ NDESCRIPT_NS_END
 
 //vardecls_t*
 %type <node> optional_argument_list argument_list
-
-%destructor { free($$); } <stringval> IDENT STRINGVAL;
 
 %left ','
 %right ASSIGN BORASSIGN BANDASSIGN BXORASSIGN LSHIFTASSIGN RSHIFTASSIGN ADDASSIGN SUBASSIGN MULASSIGN DIVASSIGN MODASSIGN
@@ -248,9 +246,14 @@ while_stmt
 	;
 
 for_stmt
-	: FOR expr ';' expr ';' expr code_block {
+	: FOR for_stmt_first_arg ';' expr ';' expr code_block {
 		$$ = new ast::Node(new ast::ForStmt($2, $4, $6, $7));
 	}
+	;
+
+for_stmt_first_arg
+	: expr
+	| var_decl
 	;
 
 return_stmt
@@ -374,7 +377,10 @@ attribute
 	;
 
 ident_node
-	: IDENT { $$ = new ast::Node(new ast::IdentNode($1)); }
+	: IDENT { 
+		$$ = new ast::Node(new ast::IdentNode($1));
+		free($1); 
+	}
 	;
 
 subscript
@@ -386,7 +392,7 @@ function_call
 	;
 
 literal
-	: STRINGVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
+	: STRINGVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); free($1); }
 	| INTVAL { $$ = new ast::Node(new ast::LiteralExpr((size_t)$1)); }
 	| BOOLVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }
 	| FLOATVAL { $$ = new ast::Node(new ast::LiteralExpr($1)); }

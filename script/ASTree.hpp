@@ -78,6 +78,7 @@ ENUM(eBinaryOp, char, BinOpEnum)
 ENUM(eUnaryType, char, UnaryTypeEnum)
 
 #define LiteralTypeEnum(X) \
+	X(ERROR) \
 	X(STRINGVAL) \
 	X(INTVAL) \
 	X(UINTVAL) \
@@ -250,8 +251,49 @@ struct LiteralExpr : public PrimaryExpr {
 
 	virtual ~LiteralExpr() {}
 
-	LiteralExpr(std::string _s)
-		: type(eLiteralType::STRINGVAL), str_val(_s) {}
+	LiteralExpr(char* _s)
+		: type(eLiteralType::STRINGVAL) {
+
+		register char* c = _s;
+		bool running = true;
+		while (running) {
+			switch (*c) {
+			case 0:
+				running = false;
+				break;
+			case '\\':
+				c++;
+				if (*c == 0) {
+					type = eLiteralType::ERROR;
+					str_val = "End of string found after escape sequence";
+					running = false;
+					break;
+				}
+				else {
+					switch (*c) {
+					case 'n':
+						str_val += '\n';
+						break;
+					case 'r':
+						str_val += '\r';
+						break;
+					case 't':
+						str_val += '\t';
+						break;
+					default:
+						str_val += *c;
+						break;
+					}
+					c++;
+				}
+				break;
+			default:
+				str_val += *c++;
+				break;
+			}
+		}
+
+	}
 	LiteralExpr(float _f)
 			: type(eLiteralType::FLOATVAL), flt_val(_f) {}
 	LiteralExpr(size_t _i)

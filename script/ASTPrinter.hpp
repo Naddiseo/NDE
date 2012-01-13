@@ -9,23 +9,30 @@ namespace ast {
 class ASTPrinter {
 	size_t tabs;
 	void tab();
-	//typedef bool (*printlist_callback_t)(Node*);
-	typedef std::function<bool(Node*)> printlist_callback_t;
+	typedef std::function<void(Node*, bool, std::string, bool)> printlist_callback_t;
 public:
 	ASTPrinter();
 	virtual ~ASTPrinter();
 
 	template<typename T>
-	void printlist(T _nodelist, std::string sep= ", ", bool print_last = false, bool indent = false, printlist_callback_t decider = NULL ) {
+	void printlist(T _nodelist, std::string sep= ", ", bool print_last = false, bool indent = false, printlist_callback_t callback = NULL) {
+		static printlist_callback_t default_callback = [](Node* node, bool is_last, std::string sep, bool print_last) {
+			if (!is_last || print_last) {
+				std::cout << sep;
+			}
+		};
+
+		if (!callback) {
+			callback = default_callback;
+		}
+
 		for (Node* node : *_nodelist) {
 			if (indent) {
 				tab();
 			}
 			print(node);
 
-			if (node != _nodelist->back() || print_last || (decider != NULL && decider(node))) {
-				std::cout << sep;
-			}
+			callback(node, node == _nodelist->back(), sep, print_last);
 
 		}
 	}

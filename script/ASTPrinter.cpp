@@ -152,6 +152,9 @@ void ASTPrinter::print(Decl* _node) {
 
 	print(_node->return_type);
 	std::cout << " " <<_node-> name;
+	if (_node->return_type->var_type->is_array) {
+		std::cout << "[]";
+	}
 }
 
 void ASTPrinter::print(VarDecl* _node) {
@@ -164,7 +167,13 @@ void ASTPrinter::print(VarDecl* _node) {
 }
 
 void ASTPrinter::print(declarations_t* _node) {
-	printlist(_node, "\n", true, true, [](Node* _node) { return _node->decl_node->decl_type == eDeclType::VAR; });
+	printlist_callback_t callback = [](Node* _node, bool is_last, std::string sep, bool print_last) {
+		if (_node->decl_node->decl_type == eDeclType::VAR) {
+			std::cout << ";\n";
+		}
+
+	};
+	printlist(_node, "\n", true, true, callback);
 }
 
 void ASTPrinter::print(vardecls_t* _node) {
@@ -204,6 +213,7 @@ void ASTPrinter::print(IfStmt* _node) {
 	print(_node->condition);
 	std::cout << ")";
 	print(_node->true_block);
+	tab();
 	std::cout << " else ";
 	print(_node->false_block);
 }
