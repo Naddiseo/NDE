@@ -11,7 +11,7 @@ ENUM_STR(eUnaryType, UnaryTypeEnum)
 ENUM_STR(eLiteralType, LiteralTypeEnum)
 
 const char* eNodeType_str[] = {
-#define NODEFN(klass, var_name, enum_name) #enum_name,
+#define NODEFN(klass, var_name, enum_name, ...) #enum_name,
 	NODETYPE(NODEFN)
 #undef NODEFN
 };
@@ -22,7 +22,7 @@ std::ostream& operator<<(std::ostream & out, eNodeType e) {
 
 Node::~Node() {
 	switch (type) {
-#define ENUM_CASE(klass, var_name, enum_name) case eNodeType::enum_name: {  delete var_name;  }; break;
+#define ENUM_CASE(klass, var_name, enum_name, ...) case eNodeType::enum_name: {  delete var_name;  }; break;
 	NODETYPE(ENUM_CASE);
 #undef ENUM_CASE
 	}

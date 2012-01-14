@@ -8,6 +8,8 @@
 NDESCRIPT_NS_BEGIN
 namespace ast {
 
+#define COND_DEL(name) { if (name != NULL) { delete name; } }
+
 #define ENUM_INNER(x) x,
 #define ENUM_INNER_STR(x) #x,
 
@@ -124,7 +126,7 @@ ENUM(eLiteralType, char, LiteralTypeEnum)
 	NODEFN(BreakStmt, break_stmt, BREAKSTMT)
 
 enum class eNodeType {
-#define TO_ENUM(klass, var_name, enum_name) enum_name,
+#define TO_ENUM(klass, var_name, enum_name,...) enum_name,
 	NODETYPE(TO_ENUM)
 #undef TO_ENUM
 };
@@ -132,7 +134,7 @@ enum class eNodeType {
 extern const char* eNodeType_str[];
 std::ostream& operator<<(std::ostream &, eNodeType);
 
-#define CLASS_FORWARD(klass, var_name, enum_name) class klass;
+#define CLASS_FORWARD(klass, var_name, enum_name, ...) class klass;
 	NODETYPE(CLASS_FORWARD)
 #undef CLASS_FORWARD
 
@@ -141,15 +143,18 @@ struct Node {
 	virtual ~Node();
 
 	union {
-#define TO_UNION(klass, var_name, enum_name) klass* var_name;
+#define TO_UNION(klass, var_name, enum_name, ...) klass* var_name;
 		NODETYPE(TO_UNION)
 #undef TO_UNION
 	};
 
 	eNodeType type;
-#define NodeConstructor(klass, var_name, enum_name) Node(klass* _v) : type(eNodeType::enum_name) { var_name = _v; }
+#define NodeConstructor(klass, var_name, enum_name, ...) Node(klass* _v) : type(eNodeType::enum_name) { var_name = _v; }
 	NODETYPE(NodeConstructor)
 #undef NodeConstructor
+
+	bool is_expr() const;
+	bool is_stmt() const;
 
 };
 
@@ -203,7 +208,7 @@ struct BinaryExpr : public ExprNode {
 	Node* lhs;
 	Node* rhs;
 
-	virtual ~BinaryExpr() {}
+	virtual ~BinaryExpr() { COND_DEL(lhs); COND_DEL(rhs);}
 
 	BinaryExpr() : op(eBinaryOp::ERROR) {}
 	BinaryExpr(eBinaryOp _o) : op(_o) {}
@@ -219,7 +224,7 @@ struct TernaryExpr : public ExprNode {
 	TernaryExpr(Node* _c, Node* _t, Node* _f)
 		: condition(_c), true_cond(_t), false_cond(_f) {}
 
-	virtual ~TernaryExpr() {}
+	virtual ~TernaryExpr() {COND_DEL(condition); COND_DEL(true_cond);COND_DEL(false_cond);}
 };
 
 struct UnaryExpr : public ExprNode {
@@ -229,7 +234,7 @@ struct UnaryExpr : public ExprNode {
 	UnaryExpr(eUnaryType _o, Node* _e)
 		: op(_o), expr(_e) {}
 
-	virtual ~UnaryExpr() {}
+	virtual ~UnaryExpr() {COND_DEL(expr);}
 };
 
 struct PrimaryExpr : public ExprNode {
@@ -317,7 +322,7 @@ struct AttributeNode : public PrimaryExpr {
 	AttributeNode(Node* _l, Node* _i)
 		: lhs(_l), ident(_i) {}
 
-	virtual ~AttributeNode() {}
+	virtual ~AttributeNode() {COND_DEL(lhs); COND_DEL(ident);}
 };
 
 struct SubscriptNode : public PrimaryExpr {
@@ -325,7 +330,7 @@ struct SubscriptNode : public PrimaryExpr {
 	Node* subscript;
 
 	SubscriptNode(Node* _b, Node* _sub) : base(_b), subscript(_sub) {}
-	virtual ~SubscriptNode() {}
+	virtual ~SubscriptNode() {COND_DEL(base); COND_DEL(subscript);}
 };
 
 struct FunctionCall : public PrimaryExpr {
@@ -334,15 +339,15 @@ struct FunctionCall : public PrimaryExpr {
 	Node* arguments;
 
 	FunctionCall(Node* _name, Node* _args) : is_trigger(false), name(_name), arguments(_args) {}
-	virtual ~FunctionCall() {}
+	virtual ~FunctionCall() {COND_DEL(name); COND_DEL(arguments);}
 };
 
 struct CodeBlock : public StmtNode {
 	Node* children;
 
-	CodeBlock() {}
+	CodeBlock() : children(NULL) {}
 	CodeBlock(Node* _c) : children(_c) {}
-	virtual ~CodeBlock() {}
+	virtual ~CodeBlock() {COND_DEL(children);}
 };
 
 struct Decl : StmtNode {
@@ -352,7 +357,7 @@ struct Decl : StmtNode {
 
 	Decl(Node* _return_type, eDeclType _t, std::string _name)
 		: return_type(_return_type), decl_type(_t), name(_name) {}
-	virtual ~Decl() {}
+	virtual ~Decl() {COND_DEL(return_type);}
 };
 
 struct declarations_t : public NodeList<Node> {};
@@ -362,7 +367,7 @@ struct VarDecl : public Decl {
 	VarDecl(Node* _return_type, std::string _name, Node* _default_value)
 		: Decl(_return_type, eDeclType::VAR, _name), default_value(_default_value) {}
 
-	virtual ~VarDecl() {}
+	virtual ~VarDecl() {COND_DEL(default_value);}
 };
 
 struct vardecls_t : public NodeList<Node> {};
@@ -378,7 +383,7 @@ struct FunctionDecl : public Decl {
 	FunctionDecl(Node* _return_type, std::string _name, bool i_e, Node* args, Node* b)
 		: Decl(_return_type, eDeclType::FUNCTION, _name), is_event(i_e), arguments(args), block(b) {}
 
-	virtual ~FunctionDecl() {}
+	virtual ~FunctionDecl() {COND_DEL(arguments); COND_DEL(block);}
 };
 
 struct ClassDecl : public Decl {
@@ -388,7 +393,7 @@ struct ClassDecl : public Decl {
 	ClassDecl(Node* _return_type, std::string _name, std::string _parent, Node* _decls)
 		: Decl(_return_type, eDeclType::CLASS, _name), parent(_parent), declarations(_decls) {}
 
-	virtual ~ClassDecl() {}
+	virtual ~ClassDecl() {COND_DEL(declarations);}
 };
 
 struct IfStmt :  public StmtNode {
@@ -398,7 +403,7 @@ struct IfStmt :  public StmtNode {
 
 	IfStmt(Node* _cond, Node* _true) : condition(_cond), true_block(_true), false_block(NULL) {}
 	IfStmt(Node* _cond, Node* _true, Node* _false) : condition(_cond), true_block(_true), false_block(_false) {}
-	virtual ~IfStmt() {}
+	virtual ~IfStmt() {COND_DEL(condition); COND_DEL(true_block); COND_DEL(false_block);}
 
 	void passDown(Node* block) {
 		if (false_block == NULL) {
@@ -412,6 +417,7 @@ struct IfStmt :  public StmtNode {
 			false_block = block;
 		}
 		else{
+			COND_DEL(block);
 			//std::cerr << "Got block of type " << block->type << std::endl;
 			//std::cerr << "Got false_block of type " << false_block->type << std::endl;
 		}
@@ -423,7 +429,7 @@ struct WhileStmt :  public StmtNode {
 	Node* block;
 
 	WhileStmt(Node* _cond, Node* _block) : condition(_cond), block(_block) {}
-	virtual ~WhileStmt() {}
+	virtual ~WhileStmt() {COND_DEL(condition); COND_DEL(block);}
 };
 
 struct ForStmt :  public StmtNode {
@@ -435,7 +441,7 @@ struct ForStmt :  public StmtNode {
 	ForStmt(Node* _begin, Node* _cond, Node* _counter, Node* _block)
 		: begin(_begin), condition(_cond), counter(_counter), block(_block) {}
 
-	virtual ~ForStmt() {}
+	virtual ~ForStmt() {COND_DEL(begin);COND_DEL(condition);COND_DEL(counter);COND_DEL(block);}
 };
 
 struct ExprStmt :  public StmtNode {
@@ -443,7 +449,7 @@ struct ExprStmt :  public StmtNode {
 
 	ExprStmt(Node* _expr) : expr(_expr) {}
 
-	virtual ~ExprStmt() {}
+	virtual ~ExprStmt() {COND_DEL(expr);}
 };
 
 struct ReturnStmt :  public StmtNode {
@@ -451,7 +457,7 @@ struct ReturnStmt :  public StmtNode {
 
 	ReturnStmt() : return_val(NULL) {}
 	ReturnStmt(Node* rv) : return_val(rv) {}
-	virtual ~ReturnStmt() {}
+	virtual ~ReturnStmt() {	if (return_val) { delete return_val; } }
 };
 
 struct BreakStmt : public StmtNode {
@@ -462,7 +468,9 @@ struct ContinueStmt : public StmtNode {
 };
 
 struct Program {
-	declarations_t* declarations;
+	Node* declarations;
+
+	virtual ~Program() { delete declarations; }
 };
 
 } //namespace ast

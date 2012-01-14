@@ -111,11 +111,13 @@ NDESCRIPT_NS_END
 %left '[' ']'
 %left '(' ')'
 
+%destructor { free ($$); printf ("%d", @$.begin.line); } <stringval>
+
 %start program
 %%
 
 program
-	: declarations { driver.program.declarations = $1->declarations; } 
+	: declarations { driver.program.declarations = $1;  YYACCEPT; } 
 	| /* empty*/ {  }
 	;
 
@@ -140,20 +142,26 @@ declaration
 class_decl
 	: CLASS IDENT optional_inherits '{' declarations '}' {
 		$$ = new ast::Node(new ast::ClassDecl(NULL, $2, $3, $5));
+		if ($3 != NULL) {
+			free ($3);
+		}
+		free($2);
 	}
 	;
 
 optional_inherits
 	: ':' IDENT { $$ = $2; }
-	| { $$ = const_cast<char*>(""); }
+	| { $$ = NULL; }
 	;
 
 function_decl
 	: var_type IDENT '(' optional_argument_list ')' code_block {
 		$$ = new ast::Node(new ast::FunctionDecl($1, std::string($2), false, $4, $6));
+		free($2);
 	}
 	| EVENT var_type IDENT '(' optional_argument_list ')' code_block {
 		$$ = new ast::Node(new ast::FunctionDecl($2, std::string($3), true, $5, $7));
+		free($3);
 	}
 	;
 
@@ -283,6 +291,7 @@ var_decl
 	: var_type IDENT optional_is_array optional_var_assign {
 		$1->var_type->is_array= $3;
 		$$ = new ast::Node(new ast::VarDecl($1, $2, $4));
+		free($2);
 	}
 	;
 
@@ -304,7 +313,7 @@ loop_control_stmt
 	;
 
 var_type
-	: IDENT { $$ = new ast::Node(new ast::VarType(ast::eReturnType::OBJECT, $1)); }
+	: IDENT { $$ = new ast::Node(new ast::VarType(ast::eReturnType::OBJECT, $1)); free($1); }
 	| INT { $$ = new ast::Node(new ast::VarType(ast::eReturnType::INT)); }
 	| UINT { $$ = new ast::Node(new ast::VarType(ast::eReturnType::UINT)); } 
 	| FLOAT { $$ = new ast::Node(new ast::VarType(ast::eReturnType::FLOAT)); }
