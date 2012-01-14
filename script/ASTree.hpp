@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <cassert>
 #include "Script.hpp"
 
 NDESCRIPT_NS_BEGIN
@@ -74,7 +75,8 @@ ENUM(eBinaryOp, char, BinOpEnum)
 	X(BNOT) \
 	X(NOT) \
 	X(INC) \
-	X(DEC)
+	X(DEC) \
+	X(SUB)
 ENUM(eUnaryType, char, UnaryTypeEnum)
 
 #define LiteralTypeEnum(X) \
@@ -126,6 +128,9 @@ enum class eNodeType {
 	NODETYPE(TO_ENUM)
 #undef TO_ENUM
 };
+
+extern const char* eNodeType_str[];
+std::ostream& operator<<(std::ostream &, eNodeType);
 
 #define CLASS_FORWARD(klass, var_name, enum_name) class klass;
 	NODETYPE(CLASS_FORWARD)
@@ -399,8 +404,16 @@ struct IfStmt :  public StmtNode {
 		if (false_block == NULL) {
 			false_block = block;
 		}
-		else {
+		else if (false_block->type == eNodeType::IFSTMT) {
 			false_block->if_stmt->passDown(block);
+		}
+		else if (block->type == eNodeType::IFSTMT) {
+			block->if_stmt->passDown(false_block);
+			false_block = block;
+		}
+		else{
+			//std::cerr << "Got block of type " << block->type << std::endl;
+			//std::cerr << "Got false_block of type " << false_block->type << std::endl;
 		}
 	}
 };

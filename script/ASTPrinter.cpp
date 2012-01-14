@@ -11,7 +11,7 @@ static const char* binop_map[] = {
 };
 
 static const char* uop_map[] = {
-	"~", "!", "++", "--"
+	"~", "!", "++", "--", "-"
 };
 
 ASTPrinter::ASTPrinter() : tabs(0) {}

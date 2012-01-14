@@ -11,6 +11,7 @@
 }
 
 %{
+#include <cassert>
 #include "ASTree.hpp"
 NDESCRIPT_NS_BEGIN
 class Driver;
@@ -221,6 +222,7 @@ optional_else_if_list
 else_if_list
 	: else_if_list else_if {
 		$$ = $1;
+		assert($$->type == ast::eNodeType::IFSTMT);
 		$$->if_stmt->passDown($2);
 	}
 	| else_if {
@@ -235,8 +237,8 @@ else_if
 	;
 
 optional_else
-	: ELSE code_block { $$ = $2; }
-	| { $$ = new ast::Node(new ast::CodeBlock(NULL)); }
+	: ELSE code_block { $$ = $2;  }
+	| { $$ = new ast::Node(new ast::CodeBlock()); }
 	;
 
 while_stmt
@@ -354,8 +356,7 @@ expr
 unary_expr
 	: '~' unary_expr %prec UNARY { $$ = new ast::Node(new ast::UnaryExpr(ast::eUnaryType::BNOT, $2)); }
 	| '!' unary_expr %prec UNARY { $$ = new ast::Node(new ast::UnaryExpr(ast::eUnaryType::NOT, $2)); }
-	| INC unary_expr %prec UNARY { $$ = new ast::Node(new ast::UnaryExpr(ast::eUnaryType::INC, $2)); }
-	| DEC unary_expr %prec UNARY { $$ = new ast::Node(new ast::UnaryExpr(ast::eUnaryType::DEC, $2)); }
+	| '-' unary_expr %prec UNARY { $$ = new ast::Node(new ast::UnaryExpr(ast::eUnaryType::SUB, $2)); }
 	| primary_expr
 	;
 

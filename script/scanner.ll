@@ -72,13 +72,13 @@ and      { return token::AND; }
 	return token::IDENT;
 }
 
--?[0-9]+\.[0-9]+ {
+[0-9]+\.[0-9]+ {
 	ss << yytext << " ";
 	ss >> yylval->floatval;
 	return token::FLOATVAL; 
 }
 
--?[0-9]+ {
+[0-9]+ {
 	ss << yytext << " ";
 	ss >> yylval->intval;
 	return token::INTVAL;
@@ -104,9 +104,6 @@ and      { return token::AND; }
 \*= { return token::MULASSIGN; }
 \/= { return token::DIVASSIGN; }
 \%= { return token::MODASSIGN; }
-
-\+\+ { return token::INC; }
-\-\- { return token::DEC; }
 
 \|\| { return token::OR; }
 &&   { return token::AND; }
