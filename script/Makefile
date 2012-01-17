@@ -4,7 +4,7 @@ CXXFLAGS= -I. -I.. -g3 -std=c++0x -DYYDEBUG=$(YYDEBUG) -Werror -Wfatal-errors -p
 SCANNERBASE=scanner
 PARSERBASE=parser
 
-SOURCES=Parser.cpp Scanner.cpp Driver.cpp ASTree.cpp ASTPrinter.cpp main.cpp
+SOURCES=Parser.cpp Scanner.cpp Driver.cpp ASTree.cpp ASTPrinter.cpp ASTVisitor.cpp SemTree.cpp  main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 DEPFILES:=$(SOURCES:.cpp=.d)
 
@@ -24,8 +24,8 @@ Parser.cpp: $(PARSERBASE).yy Scanner.hpp
 	$(CXX) $< -MM -MF $(patsubst %.o,%.d, $@) $(CXXFLAGS) 
 	$(CXX) -c $<  $(CXXFLAGS) -o $@
 	
-$(SCANNERBASE).ll:
-$(PARSERBASE).yy:
+#$(SCANNERBASE).ll:
+#$(PARSERBASE).yy:
 
 Scanner.hpp: Scanner.cpp
 

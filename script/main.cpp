@@ -8,6 +8,7 @@
 
 #include "Driver.hpp"
 #include "ASTree.hpp"
+#include "SemTree.hpp"
 #include "ASTPrinter.hpp"
 
 int
@@ -18,6 +19,7 @@ main(int argc, char* argv[]) {
 
 	if (argc > 1) {
 		script::ast::Program prog;
+		script::sem::Program sem_prog;
 		script::Driver driver(prog);
 
 		for (size_t i = 1; i < argc; i++) {
@@ -41,8 +43,11 @@ main(int argc, char* argv[]) {
 			std::cout << "Parsing " << filename << std::endl;
 			if (driver.parseFile(filename)) {
 				std::cout << "Success" << std::endl;
-				nde::script::ast::ASTPrinter printer;
-				printer.print(prog.declarations);
+				nde::script::ast::Printer printer;
+				printer.Visitor::walk(prog.declarations);
+				//printer.walk(prog.declarations);
+
+				sem_prog.walk(&prog);
 			}
 			else {
 				std::cerr << "Fail" << std::endl;

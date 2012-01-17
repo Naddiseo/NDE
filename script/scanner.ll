@@ -10,18 +10,15 @@ typedef NDESCRIPT_NS Parser::token_type token_type;
 
 #define yyterminate() return token::END
 
-#define YY_NO_UNISTD_H
-
 %}
-%option c++ 
-%option nounput debug yylineno stack batch
-%option prefix="NDE"
-/*%option yyclass="Scanner"*/
+%option c++ nounput debug yylineno stack batch nounistd prefix="NDE"
 
 %{
 #define YY_USER_ACTION  yylloc->columns(yyleng);
 static std::stringstream ss;
 %}
+
+FLOAT_T [0-9]+\.[0-9]+
 
 %%
 
@@ -60,6 +57,15 @@ and      { return token::AND; }
 	return token::BOOLVAL; 
 }
 
+\<\s*{FLOAT_T}\s+{FLOAT_T}\s+{FLOAT_T}\s*\> {
+	yytext++;
+	ss << yytext << " ";
+	yylval->vectorval = new float[3];
+	
+	ss >> yylval->vectorval[0] >> yylval->vectorval[1] >> yylval->vectorval[2];
+	return token::VECTORVAL;
+}
+
 \"[^\"]*\" {
 	yytext[yyleng-1] = 0;
 	yytext++;
@@ -72,7 +78,7 @@ and      { return token::AND; }
 	return token::IDENT;
 }
 
-[0-9]+\.[0-9]+ {
+{FLOAT_T} {
 	ss << yytext << " ";
 	ss >> yylval->floatval;
 	return token::FLOATVAL; 

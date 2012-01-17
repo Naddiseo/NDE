@@ -112,6 +112,7 @@ NDESCRIPT_NS_END
 %left '(' ')'
 
 %destructor { free ($$); printf ("%d", @$.begin.line); } <stringval>
+%destructor { delete [] $$; } <vectorval>
 
 %start program
 %%

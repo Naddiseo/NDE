@@ -14,28 +14,19 @@ static const char* uop_map[] = {
 	"~", "!", "++", "--", "-"
 };
 
-ASTPrinter::ASTPrinter() : tabs(0) {}
+Printer::Printer() : tabs(0) {}
 
-ASTPrinter::~ASTPrinter() {}
+Printer::~Printer() {}
 void
-ASTPrinter::tab() {
+Printer::tab() {
 	for (size_t i = 0; i < tabs; i++) {
 		std::cout << "\t";
 	}
 }
 
-void
-ASTPrinter::print(Node* _node) {
-	switch (_node->type) {
-#define SWITCH_PRINT(klass, var_name, enum_name) case eNodeType::enum_name: { print(_node->var_name); } break;
-	NODETYPE(SWITCH_PRINT)
-	default: break;
-	}
-}
-
-//#define PRINT(klass, var_name, enum_name) void ASTPrinter::print(klass* _node) { }
+//#define walk(klass, var_name, enum_name) void Printer::walk(klass* _node) { }
 //NODETYPE(PRINT)
-void ASTPrinter::print(VarType* _node) {
+void Printer::walk(VarType* _node) {
 	if (_node->type == eReturnType::OBJECT) {
 		std::cout << _node->class_name;
 	}
@@ -44,48 +35,48 @@ void ASTPrinter::print(VarType* _node) {
 	}
 }
 
-void ASTPrinter::print(ExprNode* _node) { std::cerr << "Printing EXPRNODE"; }
-void ASTPrinter::print(StmtNode* _node) { std::cerr << "Printing STMTNODE"; }
+void Printer::walk(ExprNode* _node) { std::cerr << "Printing EXPRNODE"; }
+void Printer::walk(StmtNode* _node) { std::cerr << "Printing STMTNODE"; }
 
-void ASTPrinter::print(expr_list_t* _node) {
+void Printer::walk(expr_list_t* _node) {
 	printlist(_node);
 }
-void ASTPrinter::print(stmt_list_t* _node) {
+void Printer::walk(stmt_list_t* _node) {
 	printlist(_node, ";\n", true, true);
 }
 
-void ASTPrinter::print(EmptyExpression* _node) {}
-void ASTPrinter::print(BinaryExpr* _node) {
+void Printer::walk(EmptyExpression* _node) {}
+void Printer::walk(BinaryExpr* _node) {
 	std::cout << "(";
-		print(_node->lhs);
+		walk(_node->lhs);
 	std::cout << ")" << binop_map[static_cast<char>(_node->op)] << "(";
-		print(_node->rhs);
+		walk(_node->rhs);
 	std::cout << ")";
 
 }
-void ASTPrinter::print(TernaryExpr* _node) {
+void Printer::walk(TernaryExpr* _node) {
 	std::cout << "(";
-		print(_node->condition);
+		walk(_node->condition);
 	std::cout << " ? ";
-		print(_node->true_cond);
+		walk(_node->true_cond);
 	std::cout << " : ";
-		print(_node->false_cond);
+		walk(_node->false_cond);
 	std::cout << ")";
 }
 
-void ASTPrinter::print(UnaryExpr* _node) {
+void Printer::walk(UnaryExpr* _node) {
 	std::cout << uop_map[static_cast<char>(_node->op)] << "(";
-		print(_node->expr);
+		walk(_node->expr);
 	std::cout << ")";
 }
 
-void ASTPrinter::print(PrimaryExpr* _node) { std::cerr << "Empty primary expr"; }
+void Printer::walk(PrimaryExpr* _node) { std::cerr << "Empty primary expr"; }
 
-void ASTPrinter::print(IdentNode* _node) {
+void Printer::walk(IdentNode* _node) {
 	std::cout << _node->ident << " ";
 }
 
-void ASTPrinter::print(LiteralExpr* _node) {
+void Printer::walk(LiteralExpr* _node) {
 	std::cout << "(";
 	switch (_node->type) {
 	case eLiteralType::STRINGVAL:
@@ -108,65 +99,65 @@ void ASTPrinter::print(LiteralExpr* _node) {
 	std::cout << ")";
 }
 
-void ASTPrinter::print(AttributeNode* _node) {
+void Printer::walk(AttributeNode* _node) {
 	std::cout << "(";
-		print(_node->lhs);
+		walk(_node->lhs);
 	std::cout << ".";
-	print(_node->ident);
+	walk(_node->ident);
 	std::cout << ")";
 }
 
-void ASTPrinter::print(SubscriptNode* _node) {
+void Printer::walk(SubscriptNode* _node) {
 
 	std::cout << "(";
-	print(_node->base);
+	walk(_node->base);
 	std::cout << "[";
-	print(_node->subscript);
+	walk(_node->subscript);
 	std::cout << "])";
 }
 
-void ASTPrinter::print(FunctionCall* _node) {
+void Printer::walk(FunctionCall* _node) {
 
 	if (_node->is_trigger) {
 		std::cout << "trigger ";
 	}
-	print(_node->name);
+	walk(_node->name);
 	std::cout << "(";
-	print(_node->arguments);
+	walk(_node->arguments);
 	std::cout << ")";
 }
 
-void ASTPrinter::print(CodeBlock* _node) {
+void Printer::walk(CodeBlock* _node) {
 
 	std::cout << " {" << std::endl;
 	tabs++;
 	if (_node->children) {
-		print(_node->children);
+		walk(_node->children);
 	}
 	tabs--;
 	tab();
 	std::cout << "}" << std::endl;
 }
 
-void ASTPrinter::print(Decl* _node) {
+void Printer::walk(Decl* _node) {
 
-	print(_node->return_type);
+	walk(_node->return_type);
 	std::cout << " " <<_node-> name;
 	if (_node->return_type->var_type->is_array) {
 		std::cout << "[]";
 	}
 }
 
-void ASTPrinter::print(VarDecl* _node) {
+void Printer::walk(VarDecl* _node) {
 
-	print((Decl*)_node);
+	walk((Decl*)_node);
 	if (_node->default_value) {
 		std::cout << " = ";
-		print(_node->default_value);
+		walk(_node->default_value);
 	}
 }
 
-void ASTPrinter::print(declarations_t* _node) {
+void Printer::walk(declarations_t* _node) {
 	printlist_callback_t callback = [](Node* _node, bool is_last, std::string sep, bool print_last) {
 		if (_node->decl_node->decl_type == eDeclType::VAR) {
 			std::cout << ";\n";
@@ -176,84 +167,84 @@ void ASTPrinter::print(declarations_t* _node) {
 	printlist(_node, "\n", true, true, callback);
 }
 
-void ASTPrinter::print(vardecls_t* _node) {
+void Printer::walk(vardecls_t* _node) {
 	printlist(_node, ", ");
 }
 
-void ASTPrinter::print(FunctionDecl* _node) {
+void Printer::walk(FunctionDecl* _node) {
 	if (_node->is_event) {
 		std::cout << "event ";
 	}
-	print((Decl*)_node);
+	walk((Decl*)_node);
 	std::cout << "(";
-	print(_node->arguments);
+	walk(_node->arguments);
 	std::cout << ")";
-	print(_node->block);
+	walk(_node->block);
 }
 
-void ASTPrinter::print(ClassDecl* _node) {
+void Printer::walk(ClassDecl* _node) {
 
 	std::cout << "class ";
-	//Decl::print(); // return type is null
+	//Decl::walk(); // return type is null
 	std::cout << _node->name;
 	if (_node->parent.size()) {
 		std::cout << " : " << _node->parent;
 	}
 	std::cout << " {" << std::endl;
 	tabs++;
-	print(_node->declarations);
+	walk(_node->declarations);
 	tabs--;
 	tab();
 	std::cout << std::endl << "}" << std::endl;
 }
 
-void ASTPrinter::print(IfStmt* _node) {
+void Printer::walk(IfStmt* _node) {
 
 	std::cout << "if (";
-	print(_node->condition);
+	walk(_node->condition);
 	std::cout << ")";
-	print(_node->true_block);
+	walk(_node->true_block);
 	tab();
 	std::cout << " else ";
-	print(_node->false_block);
+	walk(_node->false_block);
 }
 
-void ASTPrinter::print(WhileStmt* _node) {
+void Printer::walk(WhileStmt* _node) {
 	std::cout << "while (";
-	print(_node->condition);
+	walk(_node->condition);
 	std::cout << ")";
-	print(_node->block);
+	walk(_node->block);
 
 }
 
-void ASTPrinter::print(ForStmt* _node) {
+void Printer::walk(ForStmt* _node) {
 	std::cout << "for (";
-	print(_node->begin);
+	walk(_node->begin);
 	std::cout << ";";
-	print(_node->condition);
+	walk(_node->condition);
 	std::cout << ";";
-	print(_node->counter);
+	walk(_node->counter);
 	std::cout << ")";
-	print(_node->block);
+	walk(_node->block);
 }
 
-void ASTPrinter::print(ExprStmt* _node) {
+void Printer::walk(ExprStmt* _node) {
 
-	print(_node->expr);
+	walk(_node->expr);
 }
 
-void ASTPrinter::print(ReturnStmt* _node) {
+void Printer::walk(ReturnStmt* _node) {
 
 	std::cout << "return (";
-	print(_node->return_val);
+	walk(_node->return_val);
 	std::cout << ")";
 }
 
-void ASTPrinter::print(ContinueStmt* _node) {
+void Printer::walk(ContinueStmt* _node) {
 	std::cout << "continue";
 }
 
-void ASTPrinter::print(BreakStmt* _node) {
+void Printer::walk(BreakStmt* _node) {
 	std::cout << "break";
 }
 

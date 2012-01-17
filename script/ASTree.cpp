@@ -1,4 +1,5 @@
 #include "ASTree.hpp"
+#include "ASTEnums.hpp"
 
 NDESCRIPT_NS_BEGIN
 namespace ast {
@@ -22,7 +23,7 @@ std::ostream& operator<<(std::ostream & out, eNodeType e) {
 
 Node::~Node() {
 	switch (type) {
-#define ENUM_CASE(klass, var_name, enum_name, ...) case eNodeType::enum_name: {  delete var_name;  }; break;
+#define ENUM_CASE(klass, var_name, enum_name, ...) case eNodeType::enum_name: {  COND_DEL(var_name);  }; break;
 	NODETYPE(ENUM_CASE);
 #undef ENUM_CASE
 	}
