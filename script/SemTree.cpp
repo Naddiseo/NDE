@@ -27,6 +27,20 @@ SymbolEntry::SymbolEntry(pVarDecl v, size_t _level)
 SymbolEntry::SymbolEntry(pFunctionDecl f, size_t _level)
 	: symtype(FUNCTION), func(f), level(_level) {}
 
+
+location&
+SymbolEntry::get_location() {
+	switch (symtype) {
+	case CLASS:
+		return klass->loc;
+	case VARIABLE:
+		return var->loc;
+	case FUNCTION:
+		return func->loc;
+	}
+	throw std::runtime_error("Unknown symbol type");
+}
+
 SymbolEntry::~SymbolEntry() {}
 
 //std::map<std::string, pSymbolEntry> sym_map;
@@ -60,6 +74,11 @@ void SymbolTable::pushSymbol(std::string sym, pSymbolEntry& e) {
 	e->level = level;
 	if (sym_map.find(sym) != sym_map.end()) {
 		pSymbolEntry current = sym_map[sym];
+		if (current->level == level) {
+			SymbolRedefinedError::Throw(e->get_location(), sym);
+
+			throw SymbolRedefinedError(sym);
+		}
 		e->next = current;
 		current->prev = e;
 	}
@@ -92,6 +111,7 @@ ClassDecl::~ClassDecl() {}
 
 Program::~Program() {}
 
+/*
 void
 Program::walk(ast::Node* _node) {
 	switch (_node->type) {
@@ -100,6 +120,7 @@ Program::walk(ast::Node* _node) {
 	default: break;
 	}
 }
+*/
 
 void
 Program::walk(ast::Program* prog) {
@@ -108,6 +129,7 @@ Program::walk(ast::Program* prog) {
 	}
 
 	ast = prog;
+
 
 	for (ast::Node* decl : *prog->declarations->declarations) {
 		switch (decl->type) {
@@ -164,20 +186,31 @@ void Program::walk(ast::VarDecl* _node, pVarDecl var) {
 	var->is_array = _node->is_array();
 	var->return_type = _node->get_return_type();
 	var->ast = _node;
+	var->loc = _node->loc;
 
 	symtab.pushSymbol(var->name, var);
 
 }
 
 void Program::walk(ast::declarations_t* _node) {}
-void Program::walk(ast::vardecls_t* _node) {}
+void Program::walk(ast::vardecls_t* _node, var_decls& decls) {
+
+	for (ast::Node* decl : *_node) {
+		pVarDecl var(new VarDecl());
+		walk(decl->var_decl, var);
+		decls.push_back(var);
+	}
+}
+
 void Program::walk(ast::FunctionDecl* _node, pFunctionDecl func) {
 	func->name = _node->name;
 	func->ast = _node;
+	func->loc = _node->loc;
 
 	symtab.pushSymbol(func->name, func);
 	symtab.pushScope();
 	// grab args
+	walk(_node->arguments->var_decls, func->arguments);
 	// do code block
 
 	symtab.popScope();
@@ -187,6 +220,7 @@ void Program::walk(ast::ClassDecl* _node, pClassDecl klass) {
 
 	klass->name = _node->name;
 	klass->ast = _node;
+	klass->loc = _node->loc;
 
 
 	symtab.pushSymbol(klass->name, klass);
@@ -209,7 +243,7 @@ void Program::walk(ast::ClassDecl* _node, pClassDecl klass) {
 		};
 			break;
 		case ast::eNodeType::CLASSDECL: {
-			std::cerr << "Classes cannot contain other classes" << std::endl;
+			throw CompileError("Classes cannot contain other classes");
 		};
 			break;
 		default:

@@ -39,19 +39,24 @@ main(int argc, char* argv[]) {
 				filename = argv[i];
 			}
 		}
-		if (filename != NULL) {
-			std::cout << "Parsing " << filename << std::endl;
-			if (driver.parseFile(filename)) {
-				std::cout << "Success" << std::endl;
-				nde::script::ast::Printer printer;
-				printer.Visitor::walk(prog.declarations);
-				//printer.walk(prog.declarations);
+		try {
+			if (filename != NULL) {
+				std::cout << "Parsing " << filename << std::endl;
+				if (driver.parseFile(filename)) {
+					std::cout << "Success" << std::endl;
+					nde::script::ast::Printer printer;
+					printer.Visitor::walk(prog.declarations);
+					//printer.walk(prog.declarations);
 
-				sem_prog.walk(&prog);
+					sem_prog.walk(&prog);
+				}
+				else {
+					std::cerr << "Fail" << std::endl;
+				}
 			}
-			else {
-				std::cerr << "Fail" << std::endl;
-			}
+		} catch (std::exception& e) {
+			std::cerr << "Error: " << e.what() << std::endl;
+
 		}
 	}
 

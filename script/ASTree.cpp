@@ -21,6 +21,11 @@ std::ostream& operator<<(std::ostream & out, eNodeType e) {
 	 return out << eLiteralType_str[static_cast<size_t>(e)];
 }
 
+#define NodeConstructor(klass, var_name, enum_name) Node::Node(location& _loc, klass* _v) : loc(_loc), type(eNodeType::enum_name) { var_name = _v; _v->loc = _loc; }
+	NODETYPE(NodeConstructor)
+#undef NodeConstructor
+
+
 Node::~Node() {
 	switch (type) {
 #define ENUM_CASE(klass, var_name, enum_name, ...) case eNodeType::enum_name: {  COND_DEL(var_name);  }; break;

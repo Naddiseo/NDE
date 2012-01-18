@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <cassert>
+#include "location.hh"
 #include "Script.hpp"
 #include "ASTVisitor.hpp"
 #include "ASTEnums.hpp"
@@ -13,9 +14,17 @@ namespace ast {
 #define COND_DEL(name) { if (name != NULL) { delete name; name = NULL; } }
 
 
+struct LocationMixinNode {
+	location loc;
+
+	LocationMixinNode() {}
+	LocationMixinNode(location& _loc) : loc(_loc) {}
+};
+
 struct Node {
-	Node() {}
 	virtual ~Node();
+
+	const location& loc;
 
 	union {
 #define TO_UNION(klass, var_name, enum_name) klass* var_name;
@@ -24,9 +33,9 @@ struct Node {
 	};
 
 	eNodeType type;
-#define NodeConstructor(klass, var_name, enum_name) Node(klass* _v) : type(eNodeType::enum_name) { var_name = _v; }
-	NODETYPE(NodeConstructor)
-#undef NodeConstructor
+#define NodeConstructorForward(klass, var_name, enum_name) Node(location& _loc, klass* _v);
+	NODETYPE(NodeConstructorForward)
+#undef NodeConstructorForward
 
 	bool is_expr() const;
 	bool is_stmt() const;
@@ -34,7 +43,7 @@ struct Node {
 
 
 template<typename T>
-class NodeList : public iVisitorNode  {
+class NodeList : public iVisitorNode, public LocationMixinNode  {
 	std::vector<T*> nodes;
 public:
 	typedef typename std::vector<T*>::iterator iterator;
@@ -55,7 +64,7 @@ public:
 	const_reference back() const { return nodes.back(); }
 };
 
-struct VarType : public iVisitorNode  {
+struct VarType : public iVisitorNode, public LocationMixinNode  {
 	eReturnType type;
 	std::string class_name; // if type == OBJECT
 	bool is_array;
@@ -65,10 +74,10 @@ struct VarType : public iVisitorNode  {
 	virtual ~VarType() {}
 };
 
-struct ExprNode : public iVisitorNode  {
+struct ExprNode : public iVisitorNode, public LocationMixinNode  {
 	virtual ~ExprNode() {}
 };
-struct StmtNode : public iVisitorNode   {
+struct StmtNode : public iVisitorNode, public LocationMixinNode   {
 	virtual ~StmtNode() {}
 };
 

@@ -3,12 +3,33 @@
 #include <map>
 #include <string>
 #include <memory>
-#include <Script.hpp>
-#include <ASTree.hpp>
-#include <ASTVisitor.hpp>
+#include <stdexcept>
+#include <sstream>
+#include "Script.hpp"
+#include "ASTree.hpp"
+#include "ASTVisitor.hpp"
+#include "location.hh"
 
 NDESCRIPT_NS_BEGIN
 namespace sem {
+
+class SymbolRedefinedError : public std::runtime_error {
+public:
+	SymbolRedefinedError(std::string msg) : runtime_error(msg) {
+
+	}
+
+	static void Throw(location& loc, std::string sym) {
+		std::stringstream ss;
+		ss << loc << ", Symbol '" + sym + "' redefined";
+		throw SymbolRedefinedError(ss.str());
+	}
+};
+
+class CompileError : public std::runtime_error {
+public:
+	CompileError(std::string msg) : std::runtime_error("Compile Error: " + msg) {}
+};
 
 #define SEM_LIST(X) \
 	X(ClassDecl) \
@@ -52,6 +73,8 @@ struct SymbolEntry {
 	SymbolEntry(pClassDecl k, size_t _level);
 	SymbolEntry(pVarDecl v, size_t _level);
 	SymbolEntry(pFunctionDecl f, size_t _level);
+
+	location& get_location();
 	virtual ~SymbolEntry();
 };
 
@@ -72,7 +95,11 @@ public:
 	void pushSymbol(std::string sym, pFunctionDecl& f);
 };
 
-struct Decl {
+struct LocationNodeMixin {
+	location loc;
+};
+
+struct Decl : public LocationNodeMixin {
 	std::string name;
 	virtual ~Decl() {}
 };
@@ -88,6 +115,7 @@ struct ClassDecl : public Decl {
 };
 
 struct VarDecl : public Decl {
+	location loc;
 	ast::VarDecl* ast;
 
 	std::string name;
@@ -126,7 +154,7 @@ public:
 	Program() : ast(NULL), classes(), global_vars(), global_functions() {}
 	virtual ~Program();
 
-	void walk(ast::Node* _node);
+	//void walk(ast::Node* _node);
 	void walk(ast::Program* prog);
 	void walk(ast::VarType* _node);
 	void walk(ast::ExprNode* _node);
@@ -147,7 +175,7 @@ public:
 	void walk(ast::Decl* _node);
 	void walk(ast::VarDecl* _node, pVarDecl var);
 	void walk(ast::declarations_t* _node);
-	void walk(ast::vardecls_t* _node);
+	void walk(ast::vardecls_t* _node, var_decls& decls);
 	void walk(ast::FunctionDecl* _node, pFunctionDecl func);
 	void walk(ast::ClassDecl* _node, pClassDecl klass);
 	void walk(ast::IfStmt* _node);
