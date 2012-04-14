@@ -1,5 +1,5 @@
 #include <cppunit/extensions/HelperMacros.h>
-#include "script/Lexer.hpp"
+#include "script/Scanner.hpp"
 #include "script/Parser.hpp"
 #include "tests/scripttests/progs.hpp"
 

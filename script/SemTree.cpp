@@ -6,8 +6,17 @@ NDESCRIPT_NS_BEGIN
 namespace sem {
 
 #define ASSERT(__expr, msg) { if (!(__expr)) { sem_error(msg); } };
+#define LOG(msg) std::cerr << __FILE__ << ":" << __LINE__ << " " << msg << std::endl;
+#define PASS_NODE(to) { to->ast = _node; to->loc = _node->loc; };
 
-SymbolEntry::SymbolEntry() : level(0) {}
+static std::string
+to_string(location& loc) {
+	std::stringstream ss;
+	ss << loc;
+	return ss.str();
+}
+
+SymbolEntry::SymbolEntry() : symtype(), level(0) {}
 
 SymbolEntry::SymbolEntry(pClassDecl k)
 	: symtype(CLASS), klass(k), level(0) {}
@@ -75,9 +84,15 @@ void SymbolTable::pushSymbol(std::string sym, pSymbolEntry& e) {
 	if (sym_map.find(sym) != sym_map.end()) {
 		pSymbolEntry current = sym_map[sym];
 		if (current->level == level) {
-			SymbolRedefinedError::Throw(e->get_location(), sym);
+			std::stringstream ss;
+			ss
+				<< e->get_location()
+				<< ", symbol '"
+				<< sym
+				<< "' redefined. First defined "
+				<< current->get_location();
 
-			throw SymbolRedefinedError(sym);
+			throw SymbolRedefinedError(ss.str());
 		}
 		e->next = current;
 		current->prev = e;
@@ -122,6 +137,34 @@ Program::walk(ast::Node* _node) {
 }
 */
 
+void Program::walk(ast::Node* _node, pExprNode expr) {
+	//expr = pExprNode(new ExprNode());
+	switch(_node->type) {
+#define WALK(klass, var, enum_val) \
+	case ast::eNodeType::enum_val: { \
+		expr = p##klass(new klass()); \
+		walk((ast::klass*)_node->var, expr); \
+	}; break;
+
+	EXPRTYPE(WALK)
+#undef WALK
+	}
+}
+
+void Program::walk(ast::Node* _node, pStmtNode stmt) {
+	switch (_node->type) {
+#	define WALK(klass, var, enum_val) \
+		case ast::eNodeType::enum_val: { \
+			stmt = p##klass(new klass()); \
+			walk((ast::klass*)_node->var, stmt); \
+		}; break;
+
+	STMTTYPE(WALK)
+
+#	undef WALK
+	}
+}
+
 void
 Program::walk(ast::Program* prog) {
 	if (prog->declarations == NULL) {
@@ -129,7 +172,6 @@ Program::walk(ast::Program* prog) {
 	}
 
 	ast = prog;
-
 
 	for (ast::Node* decl : *prog->declarations->declarations) {
 		switch (decl->type) {
@@ -158,45 +200,151 @@ Program::walk(ast::Program* prog) {
 			std::cerr << "Unknown type " << decl->type << std::endl;
 			break;
 		}
+	}
 
+	ASSERT(in_breakable == 0, "Unmatched breaking?");
+}
+
+void Program::walk(ast::VarType* _node, pStmtNode stmt) {
+
+}
+
+void Program::walk(ast::ExprNode* _node, pExprNode expr) {
+}
+
+void Program::walk(ast::StmtNode* _node, pStmtNode stmt) {}
+
+void Program::walk(ast::expr_list_t* _node, expr_list& elist) {}
+
+void Program::walk(ast::stmt_list_t* _node, stmt_list& slist) {
+#define PUSH_CAST(v) slist.push_back(std::dynamic_pointer_cast<StmtNode>(v));
+	for (ast::Node* stmt : *_node) {
+		switch (stmt->type) {
+		case ast::eNodeType::IFSTMT: {
+			pIfStmt ifstmt(new IfStmt());
+			walk(stmt->if_stmt, ifstmt);
+			PUSH_CAST(ifstmt);
+		};
+			break;
+		case ast::eNodeType::WHILESTMT: {
+			pWhileStmt whilestmt(new WhileStmt());
+			walk(stmt->while_stmt, whilestmt);
+			PUSH_CAST(whilestmt);
+		};
+			break;
+		case ast::eNodeType::FORSTMT: {
+			pForStmt forstmt(new ForStmt());
+			walk(stmt->for_stmt, forstmt);
+			PUSH_CAST(forstmt);
+		};
+			break;
+		case ast::eNodeType::EXPRSTMT: {
+			pExprStmt exprstmt(new ExprStmt());
+			walk(stmt->expr_stmt, exprstmt);
+			PUSH_CAST(exprstmt);
+		};
+			break;
+		case ast::eNodeType::RETURNSTMT: {
+			pReturnStmt returnstmt(new ReturnStmt());
+			walk(stmt->return_stmt, returnstmt);
+			PUSH_CAST(returnstmt);
+		};
+			break;
+		case ast::eNodeType::CONTINUESTMT: {
+			pContinueStmt contstmt(new ContinueStmt());
+			walk(stmt->continue_stmt, contstmt);
+			PUSH_CAST(contstmt);
+		};
+			break;
+		case ast::eNodeType::BREAKSTMT: {
+			pBreakStmt breakstmt(new BreakStmt());
+			walk(stmt->break_stmt, breakstmt);
+			PUSH_CAST(breakstmt);
+		};
+			break;
+		case ast::eNodeType::VARDECL: {
+			pVarDecl varstmt(new VarDecl());
+			walk(stmt->var_decl, varstmt);
+			PUSH_CAST(varstmt);
+		};
+			break;
+		case ast::eNodeType::STMTNODE:
+		default:
+			throw CompileError((std::string)"Unknown Statement type " + ast::eNodeType_str[(size_t)stmt->type]);
+		}
 	}
 }
 
-void Program::walk(ast::VarType* _node) {}
-void Program::walk(ast::ExprNode* _node) {}
-void Program::walk(ast::StmtNode* _node) {}
-void Program::walk(ast::expr_list_t* _node) {}
-void Program::walk(ast::stmt_list_t* _node) {}
-void Program::walk(ast::EmptyExpression* _node) {}
-void Program::walk(ast::BinaryExpr* _node) {}
-void Program::walk(ast::TernaryExpr* _node) {}
-void Program::walk(ast::UnaryExpr* _node) {}
-void Program::walk(ast::PrimaryExpr* _node) {}
-void Program::walk(ast::IdentNode* _node) {}
-void Program::walk(ast::LiteralExpr* _node) {}
-void Program::walk(ast::AttributeNode* _node) {}
-void Program::walk(ast::SubscriptNode* _node) {}
-void Program::walk(ast::FunctionCall* _node) {}
-void Program::walk(ast::CodeBlock* _node) {}
-void Program::walk(ast::Decl* _node) {}
+void Program::walk(ast::EmptyExpression* _node, pExprNode expr) { throw CompileError("Shouldn't get here"); }
+
+void Program::walk(ast::BinaryExpr* _node, pBinaryExpr expr) {
+	PASS_NODE(expr);
+
+	expr->op = _node->op;
+
+	expr->lhs = pExprNode(new ExprNode);
+	expr->rhs = pExprNode(new ExprNode);
+
+	walk(_node->lhs, expr->lhs);
+}
+
+void Program::walk(ast::TernaryExpr* _node, pExprNode expr) {}
+
+void Program::walk(ast::UnaryExpr* _node, pExprNode expr) {}
+
+void Program::walk(ast::PrimaryExpr* _node, pExprNode expr) {}
+
+
+void Program::walk(ast::IdentNode* _node, pExprNode expr) {}
+
+void Program::walk(ast::LiteralExpr* _node, pExprNode expr) {}
+
+void Program::walk(ast::AttributeNode* _node, pExprNode expr) {}
+
+void Program::walk(ast::SubscriptNode* _node, pExprNode expr) {}
+
+
+void Program::walk(ast::FunctionCall* _node, pExprNode expr) {
+	PASS_NODE(expr);
+
+	pFunctionCall func(new FunctionCall());
+
+	walk(_node->name, func->name);
+	// grab args
+	walk(_node->arguments->expr_list, func->arguments);
+
+	expr = func;
+
+}
+
+void Program::walk(ast::CodeBlock* _node, pCodeBlock block) {
+	PASS_NODE(block);
+
+	symtab.pushScope();
+	walk(_node->children->stmt_list, block->stmts);
+	symtab.popScope();
+}
+
+void Program::walk(ast::Decl* _node) { throw CompileError("Should not get here"); }
+
 void Program::walk(ast::VarDecl* _node, pVarDecl var) {
 	ASSERT(_node->get_return_type() != ast::eReturnType::VOID, "Variables cannot be declared void");
 
 	var->name = _node->name;
 	var->is_array = _node->is_array();
 	var->return_type = _node->get_return_type();
-	var->ast = _node;
-	var->loc = _node->loc;
+	PASS_NODE(var);
 
 	symtab.pushSymbol(var->name, var);
-
 }
 
-void Program::walk(ast::declarations_t* _node) {}
+void Program::walk(ast::declarations_t* _node) { throw CompileError("Should not get here"); }
+
 void Program::walk(ast::vardecls_t* _node, var_decls& decls) {
 
 	for (ast::Node* decl : *_node) {
 		pVarDecl var(new VarDecl());
+		// TODO: what if it's an ident node?
 		walk(decl->var_decl, var);
 		decls.push_back(var);
 	}
@@ -204,24 +352,25 @@ void Program::walk(ast::vardecls_t* _node, var_decls& decls) {
 
 void Program::walk(ast::FunctionDecl* _node, pFunctionDecl func) {
 	func->name = _node->name;
-	func->ast = _node;
-	func->loc = _node->loc;
+	PASS_NODE(func);
+
+	current_fn = func;
 
 	symtab.pushSymbol(func->name, func);
 	symtab.pushScope();
 	// grab args
 	walk(_node->arguments->var_decls, func->arguments);
 	// do code block
+	walk(_node->block->code_block, func->body);
 
 	symtab.popScope();
+
+	current_fn.reset();
 }
 
 void Program::walk(ast::ClassDecl* _node, pClassDecl klass) {
-
+	PASS_NODE(klass);
 	klass->name = _node->name;
-	klass->ast = _node;
-	klass->loc = _node->loc;
-
 
 	symtab.pushSymbol(klass->name, klass);
 
@@ -255,13 +404,67 @@ void Program::walk(ast::ClassDecl* _node, pClassDecl klass) {
 
 }
 
-void Program::walk(ast::IfStmt* _node) {}
-void Program::walk(ast::WhileStmt* _node) {}
-void Program::walk(ast::ForStmt* _node) {}
-void Program::walk(ast::ExprStmt* _node) {}
-void Program::walk(ast::ReturnStmt* _node) {}
-void Program::walk(ast::ContinueStmt* _node) {}
-void Program::walk(ast::BreakStmt* _node) {}
+void Program::walk(ast::IfStmt* _node, pIfStmt stmt) {
+	PASS_NODE(stmt);
+
+	walk(_node->condition, stmt->condition);
+
+	stmt->true_block = pCodeBlock(new CodeBlock());
+	walk(_node->true_block->code_block, stmt->true_block);
+
+	walk(_node->false_block, stmt->false_block);
+}
+
+void Program::walk(ast::WhileStmt* _node, pWhileStmt stmt) {
+	PASS_NODE(stmt);
+
+	walk(_node->condition, stmt->condition);
+
+	in_breakable++;
+	stmt->body = pCodeBlock(new CodeBlock());
+	walk(_node->block->code_block, stmt->body);
+	in_breakable--;
+}
+
+void Program::walk(ast::ForStmt* _node, pForStmt stmt) {
+	PASS_NODE(stmt);
+
+	stmt->begin = pExprStmt(new ExprStmt());
+	stmt->condition = pExprStmt(new ExprStmt());
+	stmt->counter = pExprStmt(new ExprStmt());
+
+	symtab.pushScope(); // make sure any vars declared in for(var;;) don't escape
+
+	walk(_node->begin, stmt->begin->expr);
+	walk(_node->condition, stmt->condition->expr);
+	walk(_node->counter, stmt->counter->expr);
+
+
+	in_breakable++;
+	stmt->body = pCodeBlock(new CodeBlock());
+	walk(_node->block->code_block, stmt->body);
+	in_breakable--;
+	symtab.popScope();
+}
+
+void Program::walk(ast::ExprStmt* _node, pExprStmt stmt) {
+	stmt->expr = pExprNode(new ExprNode());
+	walk(_node->expr, stmt->expr);
+}
+
+void Program::walk(ast::ReturnStmt* _node, pReturnStmt stmt) {}
+
+void Program::walk(ast::ContinueStmt* _node, pContinueStmt stmt) {
+	if (in_breakable <= 0) {
+		std::cout << "in_breakable " << in_breakable;
+		throw CompileError(to_string(_node->loc) + ", cannot continue from here");
+	}
+}
+void Program::walk(ast::BreakStmt* _node, pBreakStmt stmt) {
+	if (in_breakable <= 0) {
+		throw CompileError(to_string(_node->loc) + ", cannot break from here");
+	}
+}
 
 
 void

@@ -1,6 +1,6 @@
 INCFLAGS=-I. `pkg-config sdl gl glu ILU bullet protobuf --cflags`
 LINKFLAGS=`pkg-config sdl gl glu ILU bullet protobuf --libs`
-CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DUSE_OPENGL=1 -DNDEBUG=1  -std=c++0x -Wall -Werror -Wfatal-errors 
+CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DUSE_OPENGL=1 -DNDEBUG=1  -std=c++0x -Wall -Wfatal-errors 
 CFLAGS=-g -I.
 MAKEDEPEND=$(CXX) $< -M $(CXXFLAGS) -o$.d
 
@@ -28,7 +28,7 @@ PHYSICS_SOURCES=$(addprefix physics/, $(PHYSICS_FILES))
 RESOURCES_FILES=
 RESOURCES_SOURCES=$(addprefix resources/, $(RESOURCES_FILES))
 
-SCRIPT_FILES=Lexer.cpp Token.cpp Parser.cpp ASTree.cpp toks.cpp ScriptBase.cpp
+SCRIPT_FILES=Scanner.cpp Parser.cpp ASTree.cpp toks.cpp ScriptBase.cpp
 SCRIPT_SOURCES=$(addprefix script/, $(SCRIPT_FILES))
 
 SOUND_FILES=
@@ -55,7 +55,7 @@ OBJECTS= $(SOURCES:.cpp=.o)
 DEPFILES:=$(SOURCES:.cpp=.d)
 
 ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
-	-include $(DEPFILES)
+#	-include $(DEPFILES)
 endif
 
 ifeq ($(NPROCS),)
@@ -70,7 +70,8 @@ endif
 	$(MAKE) -j$(NPROCS) NPROCS=$(NPROCS) $@
 else
 
-all: clear library scripttests
+all: clear 
+	make -C script
 
 scripttests: libNDE.a $(TESTS_SOURCES:.cpp=.o)
 	$(CXX)  $^ -L ./ -lNDE -lcppunit $(LINKFLAGS)  $(CXXFLAGS) -o ndetests.bin
@@ -82,11 +83,11 @@ libNDE.a:  $(OBJECTS)
 
 .cpp.o:
 	
-	$(CXX) $< -MM -MF $(patsubst %.o,%.d, $@) $(CXXFLAGS) 
+#	$(CXX) $< -MM -MF $(patsubst %.o,%.d, $@) $(CXXFLAGS) 
 	$(CXX) -c $<  $(CXXFLAGS) -o $@
 
 .c.o:
-	$(CXX) $< -MM -MF $(patsubst %.o,%.d, $@) $(CXXFLAGS) 
+	#$(CXX) $< -MM -MF $(patsubst %.o,%.d, $@) $(CXXFLAGS) 
 	$(CXX) -c $< $(CXXFLAGS) -Wno-error -Wno-all -Wno-fatal-errors -o $@
 
 proto: src/resources/pb/resource.pb.o
@@ -110,6 +111,6 @@ test: clear library scripttests
 run:
 	./nde.bin 
 
--include $(DEPFILES)
+#-include $(DEPFILES)
 
 endif

@@ -97,42 +97,65 @@ ENUM(eUnaryType, char, UnaryTypeEnum)
 ENUM(eLiteralType, char, LiteralTypeEnum)
 
 
-#define NODETYPE(NODEFN) \
-	NODEFN(VarType, var_type, VARTYPE) \
-	NODEFN(ExprNode, expr_node, EXPRNODE) \
-	NODEFN(StmtNode, stmt_node, STMTNODE) \
-	NODEFN(expr_list_t, expr_list, EXPRLIST) \
-	NODEFN(stmt_list_t, stmt_list, STMTLIST) \
-	NODEFN(EmptyExpression, empty_expression, EMPTYEXPRESSION) \
-	NODEFN(BinaryExpr, bin_expr, BINEXPR) \
-	NODEFN(TernaryExpr, ternary_expr, TERNARYEXPR) \
-	NODEFN(UnaryExpr, unary_expr, UNARYEXPR) \
-	NODEFN(PrimaryExpr, primary_expr, PRIMARYEXPR) \
-	NODEFN(IdentNode, ident_node, IDENTNODE) \
-	NODEFN(LiteralExpr, literal_expr, LITERALEXPR) \
-	NODEFN(AttributeNode, attribute_node, ATTRIBUTENODE) \
-	NODEFN(SubscriptNode, subscript_node, SUBSCRIPTNODE) \
-	NODEFN(FunctionCall, function_call, FUNCTIONCALL) \
-	NODEFN(CodeBlock, code_block, CODEBLOCK) \
-	NODEFN(Decl, decl_node, DECLNODE) \
-	NODEFN(VarDecl, var_decl, VARDECL) \
-	NODEFN(declarations_t, declarations, DECLARATIONS) \
-	NODEFN(vardecls_t, var_decls, VARDECLS) \
-	NODEFN(FunctionDecl, function_decl, FUNCTIONDECL) \
-	NODEFN(ClassDecl, class_decl, CLASSDECL) \
-	NODEFN(IfStmt, if_stmt, IFSTMT) \
-	NODEFN(WhileStmt, while_stmt, WHILESTMT) \
-	NODEFN(ForStmt, for_stmt, FORSTMT) \
-	NODEFN(ExprStmt, expr_stmt, EXPRSTMT) \
-	NODEFN(ReturnStmt, return_stmt, RETURNSTMT) \
-	NODEFN(ContinueStmt, continue_stmt, CONTINUESTMT) \
-	NODEFN(BreakStmt, break_stmt, BREAKSTMT)
+#define STMTTYPE(X) \
+	X(StmtNode, stmt_node, STMTNODE) \
+	X(CodeBlock, code_block, CODEBLOCK) \
+	X(IfStmt, if_stmt, IFSTMT) \
+	X(WhileStmt, while_stmt, WHILESTMT) \
+	X(ForStmt, for_stmt, FORSTMT) \
+	X(ExprStmt, expr_stmt, EXPRSTMT) \
+	X(ReturnStmt, return_stmt, RETURNSTMT) \
+	X(ContinueStmt, continue_stmt, CONTINUESTMT) \
+	X(BreakStmt, break_stmt, BREAKSTMT)
+
+#define EXPRTYPE(X) \
+	X(ExprNode, expr_node, EXPRNODE) \
+	X(EmptyExpression, empty_expression, EMPTYEXPRESSION) \
+	X(BinaryExpr, bin_expr, BINEXPR) \
+	X(TernaryExpr, ternary_expr, TERNARYEXPR) \
+	X(UnaryExpr, unary_expr, UNARYEXPR) \
+	X(PrimaryExpr, primary_expr, PRIMARYEXPR) \
+	X(LiteralExpr, literal_expr, LITERALEXPR) \
+	X(AttributeNode, attribute_node, ATTRIBUTENODE) \
+	X(SubscriptNode, subscript_node, SUBSCRIPTNODE) \
+	X(FunctionCall, function_call, FUNCTIONCALL) \
+	X(IdentNode, ident_node, IDENTNODE)
+
+#define LISTTYPE(X) \
+	X(expr_list_t, expr_list, EXPRLIST) \
+	X(stmt_list_t, stmt_list, STMTLIST) \
+	X(vardecls_t, var_decls, VARDECLS) \
+	X(declarations_t, declarations, DECLARATIONS)
+
+#define DECLTYPE(X) \
+	X(Decl, decl_node, DECLNODE) \
+	X(VarDecl, var_decl, VARDECL) \
+	X(FunctionDecl, function_decl, FUNCTIONDECL) \
+	X(ClassDecl, class_decl, CLASSDECL)
+
+#define NODETYPE(X) \
+	EXPRTYPE(X) \
+	STMTTYPE(X) \
+	LISTTYPE(X) \
+	DECLTYPE(X) \
+	X(VarType, var_type, VARTYPE)
+
+#define TO_ENUM(klass, var_name, enum_name) enum_name,
 
 enum class eNodeType {
-#define TO_ENUM(klass, var_name, enum_name) enum_name,
 	NODETYPE(TO_ENUM)
-#undef TO_ENUM
 };
+
+enum class eStmtType {
+	STMTTYPE(TO_ENUM)
+	DECLTYPE(TO_ENUM)
+};
+
+enum class eExprType {
+	EXPRTYPE(TO_ENUM)
+};
+
+#undef TO_ENUM
 
 extern const char* eNodeType_str[];
 std::ostream& operator<<(std::ostream &, eNodeType);

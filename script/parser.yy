@@ -303,8 +303,10 @@ optional_is_array
 
 trigger_call
 	: TRIGGER function_call ';' { // can't be used as a lhs
-		$$ = $2;
-		$$->function_call->is_trigger = true;
+		auto expr = $2;
+		expr->function_call->is_trigger = true;
+		
+		$$ = new ast::Node(@$, new ast::ExprStmt(expr));
 	}
 	;
 

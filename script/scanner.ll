@@ -26,7 +26,8 @@ FLOAT_T [0-9]+\.[0-9]+
 	yylloc->step();
 %}
 
-[\r\t ]+  { /* ignore whitespace */ yylloc->step(); }
+[\r ]+  { /* ignore whitespace */ yylloc->step(); }
+[\t] { yylloc->columns(4); yylloc->step(); }
 [\n] { yylloc->lines(yyleng); yylloc->step(); }
 
 int      { return token::INT; }

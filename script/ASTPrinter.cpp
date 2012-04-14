@@ -1,4 +1,4 @@
-#include "script/ASTPrinter.hpp"
+#include "ASTPrinter.hpp"
 
 NDESCRIPT_NS_BEGIN
 namespace ast {
@@ -73,7 +73,7 @@ void Printer::walk(UnaryExpr* _node) {
 void Printer::walk(PrimaryExpr* _node) { std::cerr << "Empty primary expr"; }
 
 void Printer::walk(IdentNode* _node) {
-	std::cout << _node->ident << " ";
+	std::cout <<"ident(" << _node->ident << ") ";
 }
 
 void Printer::walk(LiteralExpr* _node) {
