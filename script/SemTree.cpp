@@ -344,7 +344,6 @@ void Program::walk(ast::vardecls_t* _node, var_decls& decls) {
 
 	for (ast::Node* decl : *_node) {
 		pVarDecl var(new VarDecl());
-		// TODO: what if it's an ident node?
 		walk(decl->var_decl, var);
 		decls.push_back(var);
 	}
