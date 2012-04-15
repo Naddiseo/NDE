@@ -7,6 +7,7 @@ namespace sem {
 
 #define ASSERT(__expr, msg) { if (!(__expr)) { sem_error(msg); } };
 #define LOG(msg) std::cerr << __FILE__ << ":" << __LINE__ << " " << msg << std::endl;
+#define warn(msg) std::cerr << "Warn: " << msg << std::endl;
 #define PASS_NODE(to) { to->ast = _node; to->loc = _node->loc; };
 
 static std::string
@@ -64,12 +65,13 @@ void SymbolTable::popScope() {
 	for (std::pair<std::string, pSymbolEntry> entry : sym_map) {
 		pSymbolEntry current = entry.second;
 		if (current->level == level) {
-			if (current->next ) {
+			if (current->next) {
 				current->next->prev.reset();
 				sym_map[entry.first] = current->next;
 			}
 			else {
 				if (sym_map.find(entry.first) != sym_map.end()) {
+					warn("Erasing " << entry.first);
 				//TODO: sym_map.erase(entry.first);
 				}
 			}
@@ -451,7 +453,15 @@ void Program::walk(ast::ExprStmt* _node, pExprStmt stmt) {
 	walk(_node->expr, stmt->expr);
 }
 
-void Program::walk(ast::ReturnStmt* _node, pReturnStmt stmt) {}
+void Program::walk(ast::ReturnStmt* _node, pReturnStmt stmt) {
+	if (!current_fn) {
+		throw CompileError(to_string(_node->loc) + ", cannot return from here.");
+	}
+	else {
+		LOG("Returning from " << to_string(_node->loc) << ": " << current_fn->name);
+	}
+
+}
 
 void Program::walk(ast::ContinueStmt* _node, pContinueStmt stmt) {
 	if (in_breakable <= 0) {

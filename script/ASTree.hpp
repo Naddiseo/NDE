@@ -369,11 +369,10 @@ struct ContinueStmt : public StmtNode {
 struct Program : public iVisitorNode {
 	Node* declarations;
 
+	Program() : declarations(NULL) {}
+
 	virtual ~Program() {
-		if (declarations) {
-			delete declarations;
-		}
-		//COND_DEL(declarations);
+		COND_DEL(declarations);
 	}
 };
 

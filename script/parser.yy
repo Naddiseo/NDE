@@ -138,6 +138,7 @@ declaration
 	: function_decl
 	| var_decl_stmt
 	| class_decl 
+	| error { YYABORT; }
 	;
 
 class_decl
