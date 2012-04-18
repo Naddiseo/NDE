@@ -107,12 +107,15 @@ struct CodeBlock : public StmtNode {
 
 	virtual ~CodeBlock() {}
 };
-/*
-struct VarType : public LocationNodeMixin, public StmtNode {
+
+struct VarType : virtual public LocationNodeMixin, public StmtNode {
 	ast::VarType* ast;
 
 	virtual ~VarType() {}
-};*/
+
+	bool operator==(const ast::eReturnType& other) const;
+	bool operator!=(const ast::eReturnType& other) const { return !this->operator ==(other); }
+};
 
 struct Decl : virtual public LocationNodeMixin {
 	std::string name;
@@ -122,7 +125,7 @@ struct Decl : virtual public LocationNodeMixin {
 struct ClassDecl : public Decl {
 	ast::ClassDecl* ast;
 
-	virtual ~ClassDecl();
+	virtual ~ClassDecl() {}
 
 	pClassDecl parent;
 	var_decls vars;
@@ -150,10 +153,10 @@ struct FunctionDecl : public Decl {
 	pClassDecl klass;
 	bool is_event;
 
-	ast::eReturnType return_type;
+	pVarType return_type;
 
 	FunctionDecl()
-		: ast(NULL), body(new CodeBlock()), is_event(false), return_type(ast::eReturnType::VOID) {}
+		: ast(NULL), body(new CodeBlock()), is_event(false), return_type(new VarType()) {}
 
 	virtual ~FunctionDecl() {}
 };
@@ -312,7 +315,7 @@ public:
 	void walk(ast::Node* _node, pStmtNode expr);
 
 	void walk(ast::Program* prog);
-	void walk(ast::VarType* _node, pStmtNode stmt);
+	void walk(ast::VarType* _node, pVarType var);
 	void walk(ast::ExprNode* _node, pExprNode expr);
 	void walk(ast::StmtNode* _node, pStmtNode stmt);
 	void walk(ast::expr_list_t* _node, expr_list& elist);

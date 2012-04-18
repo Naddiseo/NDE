@@ -6,6 +6,8 @@ NDESCRIPT_NS_BEGIN
 namespace sem {
 
 #define ASSERT(__expr, msg) { if (!(__expr)) { sem_error(msg); } };
+#define DIE_IF(__expr, msg) { if (!(__expr)) { throw CompileError(msg); } }
+#define DIE_UNLESS(__expr, msg) DIE_IF(!(__expr), msg)
 #define LOG(msg) std::cerr << __FILE__ << ":" << __LINE__ << " " << msg << std::endl;
 #define warn(msg) std::cerr << "Warn: " << msg << std::endl;
 #define PASS_NODE(to) { to->ast = _node; to->loc = _node->loc; };
@@ -123,8 +125,19 @@ SymbolTable::pushSymbol(std::string sym, pFunctionDecl& f) {
 	pushSymbol(sym, e);
 }
 
+bool
+VarType::operator==(const ast::eReturnType& other) const {
+	if ((ast->type == ast::eReturnType::OBJECT) && (other == ast->type)) {
+		// test name/symbol?
+	}
+	else if ((ast->type == ast::eReturnType::LAST) || (other == ast::eReturnType::LAST)) {
+		throw CompileError(to_string(ast->loc) + ", Return type == LAST");
+	}
 
-ClassDecl::~ClassDecl() {}
+	return ast->type == other;
+}
+
+
 
 Program::~Program() {}
 
@@ -207,8 +220,8 @@ Program::walk(ast::Program* prog) {
 	ASSERT(in_breakable == 0, "Unmatched breaking?");
 }
 
-void Program::walk(ast::VarType* _node, pStmtNode stmt) {
-
+void Program::walk(ast::VarType* _node, pVarType var) {
+	PASS_NODE(var);
 }
 
 void Program::walk(ast::ExprNode* _node, pExprNode expr) {
@@ -357,8 +370,11 @@ void Program::walk(ast::FunctionDecl* _node, pFunctionDecl func) {
 
 	current_fn = func;
 
+	walk(_node->return_type->var_type, func->return_type);
+
 	symtab.pushSymbol(func->name, func);
 	symtab.pushScope();
+
 	// grab args
 	walk(_node->arguments->var_decls, func->arguments);
 	// do code block
@@ -458,15 +474,19 @@ void Program::walk(ast::ReturnStmt* _node, pReturnStmt stmt) {
 		throw CompileError(to_string(_node->loc) + ", cannot return from here.");
 	}
 	else {
-		LOG("Returning from " << to_string(_node->loc) << ": " << current_fn->name);
+
 		ast::eReturnType expr_return = get_expr_type(_node->return_val);
 
-		if (current_fn->return_type == ast::eReturnType::VOID and expr_return != ast::eReturnType::VOID) {
+		LOG("Returning from " << current_fn->name << ", which returns " << ast::eReturnType_str[static_cast<int>(current_fn->return_type)]);
+		if (*current_fn->return_type == ast::eReturnType::VOID and expr_return != ast::eReturnType::VOID) {
 			throw CompileError(to_string(_node->loc) + ", cannot return non-void from void function");
 		}
 
-		if (current_fn->return_type != expr_return) {
+		if (*current_fn->return_type != expr_return) {
 			throw CompileError(to_string(_node->loc) + ", mismatching return type");
+		}
+		else if (expr_return == ast::eReturnType::OBJECT) {
+			// must be the same kind of object
 		}
 
 
@@ -494,12 +514,21 @@ Program::sem_error(std::string msg) {
 ast::eReturnType
 Program::get_expr_type(ast::Node* _node) {
 	ast::Node* expr = _node;
+	ASSERT(_node, "Got null");
 	if (_node->is_stmt() and !_node->is_expr_stmt()) {
 		throw CompileError(to_string(_node->loc) + "Cannot determine return type of a statement");
 	}
 
 	if (_node->is_expr_stmt()) {
 		expr = _node->expr_stmt->expr;
+
+		if (expr == NULL) { // no return
+			return ast::eReturnType::VOID;
+		}
+	}
+
+	if (_node->is_expr_node() or _node->is_empty_expression()) {
+		return ast::eReturnType::LAST; // should this be an error?
 	}
 
 	if (expr->is_literal_expr()) {
@@ -523,6 +552,8 @@ Program::get_expr_type(ast::Node* _node) {
 			throw CompileError(to_string(lit->loc) + ", Unknown type");
 		}
 	}
+
+
 
 	throw CompileError(to_string(_node->loc) + ", Could not determine return type");
 	return ast::eReturnType::LAST;
