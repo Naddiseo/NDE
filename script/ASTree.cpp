@@ -25,6 +25,22 @@ std::ostream& operator<<(std::ostream & out, eNodeType e) {
 	NODETYPE(NodeConstructor)
 #undef NodeConstructor
 
+bool
+Node::is_expr() const {
+#define IS_EXPR(klass, var_name, enum_name) if (is_ ## var_name()) { return true; }
+	EXPRTYPE(IS_EXPR);
+#undef IS_EXPR
+	return false;
+}
+
+bool
+Node::is_stmt() const {
+#define IS_STMT(klass, var_name, enum_name) if (is_ ## var_name()) { return false; }
+	EXPRTYPE(IS_STMT);
+#undef IS_STMT
+	return true;
+}
+
 
 Node::~Node() {
 	switch (type) {

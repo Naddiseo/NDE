@@ -13,6 +13,8 @@
 NDESCRIPT_NS_BEGIN
 namespace sem {
 
+std::string to_string(const location& loc);
+
 class SymbolRedefinedError : public std::runtime_error {
 public:
 	SymbolRedefinedError(std::string msg) : runtime_error(msg) {}
@@ -21,6 +23,8 @@ public:
 class CompileError : public std::runtime_error {
 public:
 	CompileError(std::string msg) : std::runtime_error("Compile Error: " + msg) {}
+	CompileError(ast::Node* _node, std::string msg)
+		: std::runtime_error(to_string(_node->loc)) {}
 };
 
 
@@ -148,7 +152,8 @@ struct FunctionDecl : public Decl {
 
 	ast::eReturnType return_type;
 
-	FunctionDecl() : body(new CodeBlock()) {}
+	FunctionDecl()
+		: ast(NULL), body(new CodeBlock()), is_event(false), return_type(ast::eReturnType::VOID) {}
 
 	virtual ~FunctionDecl() {}
 };
@@ -300,6 +305,7 @@ public:
 		  in_breakable(0) {}
 	virtual ~Program();
 
+
 	//void walk(ast::Node* _node);
 
 	void walk(ast::Node* _node, pExprNode expr);
@@ -337,6 +343,7 @@ public:
 	void walk(ast::BreakStmt* _node, pBreakStmt stmt);
 
 	void sem_error(std::string msg);
+	ast::eReturnType get_expr_type(ast::Node* _node);
 };
 
 

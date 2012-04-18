@@ -10,8 +10,8 @@ namespace sem {
 #define warn(msg) std::cerr << "Warn: " << msg << std::endl;
 #define PASS_NODE(to) { to->ast = _node; to->loc = _node->loc; };
 
-static std::string
-to_string(location& loc) {
+std::string
+to_string(const location& loc) {
 	std::stringstream ss;
 	ss << loc;
 	return ss.str();
@@ -459,6 +459,17 @@ void Program::walk(ast::ReturnStmt* _node, pReturnStmt stmt) {
 	}
 	else {
 		LOG("Returning from " << to_string(_node->loc) << ": " << current_fn->name);
+		ast::eReturnType expr_return = get_expr_type(_node->return_val);
+
+		if (current_fn->return_type == ast::eReturnType::VOID and expr_return != ast::eReturnType::VOID) {
+			throw CompileError(to_string(_node->loc) + ", cannot return non-void from void function");
+		}
+
+		if (current_fn->return_type != expr_return) {
+			throw CompileError(to_string(_node->loc) + ", mismatching return type");
+		}
+
+
 	}
 
 }
@@ -475,10 +486,46 @@ void Program::walk(ast::BreakStmt* _node, pBreakStmt stmt) {
 	}
 }
 
-
 void
 Program::sem_error(std::string msg) {
 	std::cerr << "Semantic Error: " << msg << std::endl;
+}
+
+ast::eReturnType
+Program::get_expr_type(ast::Node* _node) {
+	ast::Node* expr = _node;
+	if (_node->is_stmt() and !_node->is_expr_stmt()) {
+		throw CompileError(to_string(_node->loc) + "Cannot determine return type of a statement");
+	}
+
+	if (_node->is_expr_stmt()) {
+		expr = _node->expr_stmt->expr;
+	}
+
+	if (expr->is_literal_expr()) {
+		ast::LiteralExpr* lit = expr->literal_expr;
+		switch (lit->type) {
+		case ast::eLiteralType::BOOLVAL:
+		case ast::eLiteralType::FALSE:
+		case ast::eLiteralType::TRUE:
+			return ast::eReturnType::BOOL;
+		case ast::eLiteralType::FLOATVAL:
+			return ast::eReturnType::FLOAT;
+		case ast::eLiteralType::INTVAL:
+			return ast::eReturnType::UINT;
+		case ast::eLiteralType::UINTVAL:
+			return ast::eReturnType::INT;
+		case ast::eLiteralType::STRINGVAL:
+			return ast::eReturnType::STRING;
+		case ast::eLiteralType::VECTORVAL:
+			return ast::eReturnType::VECTOR;
+		default:
+			throw CompileError(to_string(lit->loc) + ", Unknown type");
+		}
+	}
+
+	throw CompileError(to_string(_node->loc) + ", Could not determine return type");
+	return ast::eReturnType::LAST;
 }
 
 } // namespace sem

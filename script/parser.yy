@@ -335,9 +335,9 @@ optional_var_assign
 expr
 	: expr ASSIGN  expr { $$ = new ast::Node(@$, new ast::BinaryExpr($1, ast::eBinaryOp::ASSIGN, $3)); }
 	| expr BORASSIGN expr { $$ = new ast::Node(@$, new ast::BinaryExpr($1, ast::eBinaryOp::BORASSIGN, $3)); }
-	| expr  BANDASSIGN expr { $$ = new ast::Node(@$, new ast::BinaryExpr($1, ast::eBinaryOp::BANDASSIGN, $3)); }
+	| expr BANDASSIGN expr { $$ = new ast::Node(@$, new ast::BinaryExpr($1, ast::eBinaryOp::BANDASSIGN, $3)); }
 	| expr BXORASSIGN expr { $$ = new ast::Node(@$, new ast::BinaryExpr($1, ast::eBinaryOp::BXORASSIGN, $3)); }
-	| expr  LSHIFTASSIGN expr { $$ = new ast::Node(@$, new ast::BinaryExpr($1, ast::eBinaryOp::LSHIFTASSIGN, $3)); }
+	| expr LSHIFTASSIGN expr { $$ = new ast::Node(@$, new ast::BinaryExpr($1, ast::eBinaryOp::LSHIFTASSIGN, $3)); }
 	| expr RSHIFTASSIGN expr { $$ = new ast::Node(@$, new ast::BinaryExpr($1, ast::eBinaryOp::RSHIFTASSIGN, $3)); }
 	| expr ADDASSIGN expr { $$ = new ast::Node(@$, new ast::BinaryExpr($1, ast::eBinaryOp::ADDASSIGN, $3)); }
 	| expr SUBASSIGN expr { $$ = new ast::Node(@$, new ast::BinaryExpr($1, ast::eBinaryOp::SUBASSIGN, $3)); }

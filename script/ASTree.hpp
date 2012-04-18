@@ -39,6 +39,10 @@ struct Node {
 
 	bool is_expr() const;
 	bool is_stmt() const;
+
+#define NodeIsFunction(klass, var_name, enum_name) bool is_ ## var_name() const { return type == eNodeType::enum_name; }
+	NODETYPE(NodeIsFunction)
+#undef NodeIsFunction
 };
 
 template<typename T>

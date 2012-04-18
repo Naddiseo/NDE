@@ -229,8 +229,9 @@ void Printer::walk(ForStmt* _node) {
 }
 
 void Printer::walk(ExprStmt* _node) {
-
-	walk(_node->expr);
+	if (_node->expr != NULL) { // ExprStmt's expression can be empty
+		walk(_node->expr);
+	}
 }
 
 void Printer::walk(ReturnStmt* _node) {
