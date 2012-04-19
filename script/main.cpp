@@ -6,6 +6,11 @@
  */
 #include <iostream>
 
+#include <cppunit/ui/text/TestRunner.h>
+#include <cppunit/CompilerOutputter.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+
 #include "Driver.hpp"
 #include "ASTree.hpp"
 #include "SemTree.hpp"
@@ -14,15 +19,15 @@
 int
 main(int argc, char* argv[]) {
 	using namespace nde;
+	bool run_tests = false;
 	char* filename = NULL;
-
 
 	if (argc > 1) {
 		script::ast::Program prog;
 		script::sem::Program sem_prog;
 		script::Driver driver(prog);
 
-		for (size_t i = 1; i < argc; i++) {
+		for (int i = 1; i < argc; i++) {
 			if (argv[i][0] == '-') {
 				switch (argv[i][1]) {
 				case 'p':
@@ -30,6 +35,9 @@ main(int argc, char* argv[]) {
 					break;
 				case 'l':
 					driver.trace_scanning = true;
+					break;
+				case 't':
+					run_tests = true;
 					break;
 				default:
 					break;
@@ -40,7 +48,16 @@ main(int argc, char* argv[]) {
 			}
 		}
 		try {
-			if (filename != NULL) {
+			if (run_tests) {
+				CppUnit::Test* suite = CppUnit::TestFactoryRegistry::getRegistry().makeTest();
+
+				CppUnit::TextUi::TestRunner runner;
+				runner.addTest(suite);
+				runner.setOutputter(new CppUnit::CompilerOutputter(&runner.result(), std::cerr));
+
+				return runner.run() ? 0 : 1;
+			}
+			else if (filename != NULL) {
 				std::cout << "Parsing " << filename << std::endl;
 				if (driver.parseFile(filename)) {
 					std::cout << "Success" << std::endl;
