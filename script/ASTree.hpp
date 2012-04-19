@@ -113,7 +113,7 @@ struct TernaryExpr : public ExprNode {
 	Node* false_cond;
 
 	TernaryExpr(Node* _c, Node* _t, Node* _f, eExprType _type = eExprType::TERNARYEXPR)
-	: condition(_c), true_cond(_t), false_cond(_f), ExprNode(_type) {}
+	: ExprNode(_type),condition(_c), true_cond(_t), false_cond(_f) {}
 
 	virtual ~TernaryExpr() {COND_DEL(condition); COND_DEL(true_cond);COND_DEL(false_cond);}
 };
@@ -123,7 +123,7 @@ struct UnaryExpr : public ExprNode {
 	Node* expr;
 
 	UnaryExpr(eUnaryType _o, Node* _e, eExprType _type = eExprType::UNARYEXPR)
-		: op(_o), expr(_e), ExprNode(eExprType::UNARYEXPR) {}
+		: ExprNode(eExprType::UNARYEXPR), op(_o), expr(_e) {}
 
 	virtual ~UnaryExpr() {COND_DEL(expr);}
 };
@@ -136,7 +136,7 @@ struct PrimaryExpr : public ExprNode {
 struct IdentNode : public PrimaryExpr {
 	std::string ident;
 
-	IdentNode(std::string _i) : ident(_i), PrimaryExpr(eExprType::IDENTNODE) {}
+	IdentNode(std::string _i) : PrimaryExpr(eExprType::IDENTNODE),ident(_i) {}
 
 	virtual ~IdentNode() {}
 };
@@ -154,7 +154,7 @@ struct LiteralExpr : public PrimaryExpr {
 	virtual ~LiteralExpr() {}
 
 	LiteralExpr(char* _s)
-		: type(eLiteralType::STRINGVAL), bool_val(false), PrimaryExpr(eExprType::LITERALEXPR) {
+		: PrimaryExpr(eExprType::LITERALEXPR), type(eLiteralType::STRINGVAL), bool_val(false) {
 
 		register char* c = _s;
 		bool running = true;
@@ -197,13 +197,13 @@ struct LiteralExpr : public PrimaryExpr {
 
 	}
 	LiteralExpr(float _f)
-			: type(eLiteralType::FLOATVAL), flt_val(_f), bool_val(false), PrimaryExpr(eExprType::LITERALEXPR) {}
+			:  PrimaryExpr(eExprType::LITERALEXPR), type(eLiteralType::FLOATVAL), flt_val(_f), bool_val(false) {}
 	LiteralExpr(size_t _i)
-			: type(eLiteralType::INTVAL), int_val(_i), bool_val(false), PrimaryExpr(eExprType::LITERALEXPR) {}
+			: PrimaryExpr(eExprType::LITERALEXPR), type(eLiteralType::INTVAL), int_val(_i), bool_val(false) {}
 	LiteralExpr(bool _b)
-			: type(eLiteralType::BOOLVAL), bool_val(_b), PrimaryExpr(eExprType::LITERALEXPR) {}
+			: PrimaryExpr(eExprType::LITERALEXPR), type(eLiteralType::BOOLVAL), bool_val(_b) {}
 	//LiteralExpr(Vector _v)
-	//		: type(eLiteralType::STRINGVAL), vector_val(_v), PrimaryExpr(eExprType::LITERALEXPR) {}
+	//		: PrimaryExpr(eExprType::LITERALEXPR), type(eLiteralType::STRINGVAL), vector_val(_v) {}
 
 };
 
@@ -212,7 +212,7 @@ struct AttributeNode : public PrimaryExpr {
 	Node* ident;
 
 	AttributeNode(Node* _l, Node* _i)
-		: lhs(_l), ident(_i), PrimaryExpr(eExprType::ATTRIBUTENODE) {}
+		: PrimaryExpr(eExprType::ATTRIBUTENODE), lhs(_l), ident(_i) {}
 
 	virtual ~AttributeNode() {COND_DEL(lhs); COND_DEL(ident);}
 };
@@ -222,7 +222,7 @@ struct SubscriptNode : public PrimaryExpr {
 	Node* subscript;
 
 	SubscriptNode(Node* _b, Node* _sub)
-		: base(_b), subscript(_sub), PrimaryExpr(eExprType::SUBSCRIPTNODE) {}
+		: PrimaryExpr(eExprType::SUBSCRIPTNODE), base(_b), subscript(_sub) {}
 	virtual ~SubscriptNode() {COND_DEL(base); COND_DEL(subscript);}
 };
 
@@ -232,7 +232,7 @@ struct FunctionCall : public PrimaryExpr {
 	Node* arguments;
 
 	FunctionCall(Node* _name, Node* _args)
-		: is_trigger(false), name(_name), arguments(_args), PrimaryExpr(eExprType::FUNCTIONCALL) {}
+		: PrimaryExpr(eExprType::FUNCTIONCALL), is_trigger(false), name(_name), arguments(_args)  {}
 
 	virtual ~FunctionCall() {COND_DEL(name); COND_DEL(arguments);}
 };
@@ -250,7 +250,7 @@ struct Decl : StmtNode {
 	std::string name; // name of the var/function/class
 
 	Decl(Node* _return_type, eDeclType _t, std::string _name, eStmtType _type = eStmtType::DECLNODE)
-		: return_type(_return_type), decl_type(_t), name(_name), StmtNode(_type) {}
+		: StmtNode(_type), return_type(_return_type), decl_type(_t), name(_name) {}
 	virtual ~Decl() {COND_DEL(return_type);}
 };
 

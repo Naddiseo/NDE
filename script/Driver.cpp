@@ -8,7 +8,7 @@
 NDESCRIPT_NS_BEGIN
 
 Driver::Driver(class ast::Program& _program)
-	: trace_parsing(false), trace_scanning(false), lexer(NULL), program(_program)
+	: trace_scanning(false), trace_parsing(false), lexer(NULL), program(_program)
 {}
 
 Driver::~Driver() {}

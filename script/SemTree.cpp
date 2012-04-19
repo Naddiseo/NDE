@@ -163,6 +163,10 @@ void Program::walk(ast::Node* _node, pExprNode expr) {
 
 	EXPRTYPE(WALK)
 #undef WALK
+
+	default:
+		throw CompileError(to_string(_node->loc) + ", Unknown expression type");
+		break;
 	}
 }
 
@@ -177,6 +181,9 @@ void Program::walk(ast::Node* _node, pStmtNode stmt) {
 	STMTTYPE(WALK)
 
 #	undef WALK
+	default:
+		throw CompileError(to_string(_node->loc) + ", Unknown statement type");
+		break;
 	}
 }
 

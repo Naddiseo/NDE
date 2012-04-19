@@ -49,7 +49,7 @@ void Printer::walk(EmptyExpression* _node) {}
 void Printer::walk(BinaryExpr* _node) {
 	std::cout << "(";
 		walk(_node->lhs);
-	std::cout << ")" << binop_map[static_cast<char>(_node->op)] << "(";
+	std::cout << ")" << binop_map[static_cast<int>(_node->op)] << "(";
 		walk(_node->rhs);
 	std::cout << ")";
 
@@ -65,7 +65,7 @@ void Printer::walk(TernaryExpr* _node) {
 }
 
 void Printer::walk(UnaryExpr* _node) {
-	std::cout << uop_map[static_cast<char>(_node->op)] << "(";
+	std::cout << uop_map[static_cast<int>(_node->op)] << "(";
 		walk(_node->expr);
 	std::cout << ")";
 }
