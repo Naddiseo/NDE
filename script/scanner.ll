@@ -115,7 +115,28 @@ and      { return token::AND; }
 \|\| { return token::OR; }
 &&   { return token::AND; }
 
+\/\/.*$ { yylloc->step(); }
 
+"/*" {
+	register int c;
+	
+	for (;;) {
+		while ((c = yyinput()) != '*' && (c != EOF)) { /* skip comment */ }
+		
+		if (c == '*') {
+			while ((c = yyinput()) == '*') { /* skip astrix */ }
+			if (c == '/') {
+				break; // the end is in site
+			}
+		}
+		
+		if (c == EOF) {
+			driver.error("EOF in comment");
+			break;
+		}
+	}
+	yylloc->step();
+}
 
 [;\(\)\{\}\[\],\.\:\?\|&~^!\+\-\*\/%] { return static_cast<token_type>(yytext[0]); }
 
