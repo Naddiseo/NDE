@@ -331,7 +331,9 @@ void Program::walk(ast::LiteralExpr* _node, pExprNode expr) {}
 
 void Program::walk(ast::AttributeNode* _node, pExprNode expr) {}
 
-void Program::walk(ast::SubscriptNode* _node, pExprNode expr) {}
+void Program::walk(ast::SubscriptNode* _node, pExprNode expr) {
+	PASS_NODE(expr);
+}
 
 
 void Program::walk(ast::FunctionCall* _node, pExprNode expr) {
@@ -524,12 +526,14 @@ void Program::walk(ast::ReturnStmt* _node, pReturnStmt stmt) {
 }
 
 void Program::walk(ast::ContinueStmt* _node, pContinueStmt stmt) {
+	PASS_NODE(stmt);
 	if (in_breakable <= 0) {
 		std::cout << "in_breakable " << in_breakable;
 		throw CompileError(to_string(_node->loc) + ", cannot continue from here");
 	}
 }
 void Program::walk(ast::BreakStmt* _node, pBreakStmt stmt) {
+	PASS_NODE(stmt);
 	if (in_breakable <= 0) {
 		throw CompileError(to_string(_node->loc) + ", cannot break from here");
 	}
