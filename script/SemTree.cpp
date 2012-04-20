@@ -485,11 +485,12 @@ void Program::walk(ast::ExprStmt* _node, pExprStmt stmt) {
 }
 
 void Program::walk(ast::ReturnStmt* _node, pReturnStmt stmt) {
+	PASS_NODE(stmt);
 	if (!current_fn) {
 		throw CompileError(to_string(_node->loc) + ", cannot return from here.");
 	}
 	else {
-
+		/* // This should got in the semantic processor, not here
 		ast::eReturnType expr_return = get_expr_type(_node->return_val);
 
 		LOG("Returning from " << current_fn->name << ", which returns " << ast::eReturnType_str[static_cast<int>(current_fn->return_type)]);
@@ -503,6 +504,19 @@ void Program::walk(ast::ReturnStmt* _node, pReturnStmt stmt) {
 		else if (expr_return == ast::eReturnType::OBJECT) {
 			// must be the same kind of object
 		}
+		*/
+		ast::Node* to_walk = _node->return_val;
+		if (to_walk->is_expr_stmt()) {
+			to_walk = to_walk->expr_stmt->expr;
+
+			if (to_walk == NULL) { // no return
+				stmt->return_val = pEmptyExpression(new EmptyExpression());
+				return;
+			}
+		}
+
+		stmt->return_val = pExprNode(new ExprNode());
+		walk(to_walk, stmt->return_val);
 
 
 	}
