@@ -2,6 +2,9 @@
 #include <iostream>
 #include "ASTree.hpp"
 
+/*
+ * TODO: variables can't be void
+ */
 NDESCRIPT_NS_BEGIN
 namespace sem {
 
@@ -163,6 +166,11 @@ void Program::walk(ast::Node* _node, pExprNode expr) {
 
 	EXPRTYPE(WALK)
 #undef WALK
+
+	case ast::eNodeType::VARDECL: {
+		pVarDecl var(new VarDecl());
+		walk(_node->var_decl, var); // this adds to scope.
+	}; break;
 
 	default:
 		throw CompileError(to_string(_node->loc) + ", Unknown expression type");
@@ -532,6 +540,8 @@ Program::get_expr_type(ast::Node* _node) {
 		if (expr == NULL) { // no return
 			return ast::eReturnType::VOID;
 		}
+
+		return get_expr_type(expr);
 	}
 
 	if (_node->is_expr_node() or _node->is_empty_expression()) {
@@ -559,8 +569,6 @@ Program::get_expr_type(ast::Node* _node) {
 			throw CompileError(to_string(lit->loc) + ", Unknown type");
 		}
 	}
-
-
 
 	throw CompileError(to_string(_node->loc) + ", Could not determine return type");
 	return ast::eReturnType::LAST;
