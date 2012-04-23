@@ -67,7 +67,7 @@ NDESCRIPT_NS_END
 %token EQUAL NEQUAL LTE GTE LT GT
 
 /* OTHER */
-%token LSHIFT RSHIFT INC DEC
+%token LSHIFT RSHIFT /* INC DEC */
 
 %type <stringval> optional_inherits
 %type <boolval> optional_is_array
@@ -168,12 +168,13 @@ function_decl
 	;
 
 optional_argument_list
-	: argument_list
+	: argument_list optional_comma
 	| { $$ = new ast::Node(@$, new ast::vardecls_t()); }
 	;
 
 argument_list
 	: argument_list ',' var_decl {
+		assert($1->var_decls);
 		$1->var_decls->push_back($3);
 		$$ = $1;
 	}
@@ -214,8 +215,6 @@ statement
 	| expr_stmt
 	| trigger_call
 	| loop_control_stmt
-	| BREAK { $$ = new ast::Node(@$, new ast::BreakStmt()); }
-	| CONTINUE { $$ = new ast::Node(@$, new ast::ContinueStmt()); }
 	;
 
 if_stmt
@@ -291,8 +290,25 @@ var_decl_stmt
 
 var_decl
 	: var_type IDENT optional_is_array optional_var_assign {
-		$1->var_type->is_array= $3;
-		$$ = new ast::Node(@$, new ast::VarDecl($1, $2, $4));
+		$1->var_type->is_array = $3;
+		auto var =new ast::VarDecl($1, $2, $4);
+		$$ = new ast::Node(@$, var);
+		
+		std::cout 
+			<< "Found variable " << var->name 
+			<< " of type " << var->get_return_type()
+			<< " which is " << (!var->is_array() ? "not " : "") << "an array"
+			<< std::endl;
+		
+		if (var->default_value == NULL) {
+			std::cout << "There is not a default value";
+		}
+		else {
+			std::cout << "There is a default value";
+		}
+		
+		std::cout << std::endl;
+		
 		free($2);
 	}
 	;
@@ -384,6 +400,11 @@ atom
 	: ident_node {  }
 	| literal
 	| '(' expr ')' { $$ = $2; }
+	| '{' optional_expr_list '}' {
+		 
+		$$ = new ast::Node(@$, new ast::ArrayNode($2));
+		std::cerr << "Found an array initializer of size " << $2->expr_list->size()  << std::endl; 
+	}
 	;
 
 attribute
@@ -414,8 +435,13 @@ literal
 	;
 
 optional_expr_list
-	: expr_list
+	: expr_list optional_comma
 	| /* empty */ { $$ = new ast::Node(@$, new ast::expr_list_t()); }
+	;
+
+optional_comma
+	: ','
+	| /* empty */
 	;
 
 expr_list

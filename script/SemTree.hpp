@@ -262,6 +262,12 @@ struct IdentNode : public PrimaryExpr {
 	virtual ~IdentNode() {}
 };
 
+struct ArrayNode : public PrimaryExpr {
+	ast::ArrayNode* ast;
+
+	virtual ~ArrayNode() {}
+};
+
 struct LiteralExpr : public PrimaryExpr {
 	ast::LiteralExpr* ast;
 
@@ -326,6 +332,7 @@ public:
 	void walk(ast::UnaryExpr* _node, pExprNode expr);
 	void walk(ast::PrimaryExpr* _node, pExprNode expr);
 	void walk(ast::IdentNode* _node, pExprNode expr);
+	void walk(ast::ArrayNode* _node, expr_list expr);
 	void walk(ast::LiteralExpr* _node, pExprNode expr);
 	void walk(ast::AttributeNode* _node, pExprNode expr);
 	void walk(ast::SubscriptNode* _node, pExprNode expr);

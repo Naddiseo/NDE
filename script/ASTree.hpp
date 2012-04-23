@@ -207,6 +207,15 @@ struct LiteralExpr : public PrimaryExpr {
 
 };
 
+struct ArrayNode : public PrimaryExpr {
+	Node* expr_list;
+
+	ArrayNode(Node* _expr_list)
+		: PrimaryExpr(eExprType::ARRAYNODE), expr_list(_expr_list) {}
+
+	virtual ~ArrayNode() { COND_DEL(expr_list); }
+};
+
 struct AttributeNode : public PrimaryExpr {
 	Node* lhs;
 	Node* ident;
@@ -252,6 +261,10 @@ struct Decl : StmtNode {
 	Decl(Node* _return_type, eDeclType _t, std::string _name, eStmtType _type = eStmtType::DECLNODE)
 		: StmtNode(_type), return_type(_return_type), decl_type(_t), name(_name) {}
 	virtual ~Decl() {COND_DEL(return_type);}
+
+
+	inline eReturnType get_return_type() const { return return_type->var_type->type; }
+	inline bool is_array() const { return return_type->var_type->is_array; }
 };
 
 struct declarations_t : public NodeList<Node> {};

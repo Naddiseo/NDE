@@ -35,18 +35,26 @@ void Printer::walk(VarType* _node) {
 	}
 }
 
-void Printer::walk(ExprNode* _node) { std::cerr << "Printing EXPRNODE"; }
-void Printer::walk(StmtNode* _node) { std::cerr << "Printing STMTNODE"; }
+void
+Printer::walk(ExprNode* _node) { std::cerr << "Printing EXPRNODE"; }
 
-void Printer::walk(expr_list_t* _node) {
+void
+Printer::walk(StmtNode* _node) { std::cerr << "Printing STMTNODE"; }
+
+void
+Printer::walk(expr_list_t* _node) {
 	printlist(_node);
 }
-void Printer::walk(stmt_list_t* _node) {
+void
+Printer::walk(stmt_list_t* _node) {
 	printlist(_node, ";\n", true, true);
 }
 
-void Printer::walk(EmptyExpression* _node) {}
-void Printer::walk(BinaryExpr* _node) {
+void
+Printer::walk(EmptyExpression* _node) {}
+
+void
+Printer::walk(BinaryExpr* _node) {
 	std::cout << "(";
 		walk(_node->lhs);
 	std::cout << ")" << binop_map[static_cast<int>(_node->op)] << "(";
@@ -54,7 +62,8 @@ void Printer::walk(BinaryExpr* _node) {
 	std::cout << ")";
 
 }
-void Printer::walk(TernaryExpr* _node) {
+void
+Printer::walk(TernaryExpr* _node) {
 	std::cout << "(";
 		walk(_node->condition);
 	std::cout << " ? ";
@@ -64,19 +73,23 @@ void Printer::walk(TernaryExpr* _node) {
 	std::cout << ")";
 }
 
-void Printer::walk(UnaryExpr* _node) {
+void
+Printer::walk(UnaryExpr* _node) {
 	std::cout << uop_map[static_cast<int>(_node->op)] << "(";
 		walk(_node->expr);
 	std::cout << ")";
 }
 
-void Printer::walk(PrimaryExpr* _node) { std::cerr << "Empty primary expr"; }
+void
+Printer::walk(PrimaryExpr* _node) { std::cerr << "Empty primary expr"; }
 
-void Printer::walk(IdentNode* _node) {
-	std::cout <<"ident(" << _node->ident << ") ";
+void
+Printer::walk(IdentNode* _node) {
+	std::cout << _node->ident;
 }
 
-void Printer::walk(LiteralExpr* _node) {
+void
+Printer::walk(LiteralExpr* _node) {
 	std::cout << "(";
 	switch (_node->type) {
 	case eLiteralType::STRINGVAL:
@@ -99,7 +112,15 @@ void Printer::walk(LiteralExpr* _node) {
 	std::cout << ")";
 }
 
-void Printer::walk(AttributeNode* _node) {
+void
+Printer::walk(ArrayNode* _node) {
+	std::cout << "{";
+		walk(_node->expr_list);
+	std::cout << "}";
+}
+
+void
+Printer::walk(AttributeNode* _node) {
 	std::cout << "(";
 		walk(_node->lhs);
 	std::cout << ".";
@@ -107,7 +128,8 @@ void Printer::walk(AttributeNode* _node) {
 	std::cout << ")";
 }
 
-void Printer::walk(SubscriptNode* _node) {
+void
+Printer::walk(SubscriptNode* _node) {
 
 	std::cout << "(";
 	walk(_node->base);
@@ -116,7 +138,8 @@ void Printer::walk(SubscriptNode* _node) {
 	std::cout << "])";
 }
 
-void Printer::walk(FunctionCall* _node) {
+void
+Printer::walk(FunctionCall* _node) {
 
 	if (_node->is_trigger) {
 		std::cout << "trigger ";
@@ -127,7 +150,8 @@ void Printer::walk(FunctionCall* _node) {
 	std::cout << ")";
 }
 
-void Printer::walk(CodeBlock* _node) {
+void
+Printer::walk(CodeBlock* _node) {
 
 	std::cout << " {" << std::endl;
 	tabs++;
@@ -139,7 +163,8 @@ void Printer::walk(CodeBlock* _node) {
 	std::cout << "}" << std::endl;
 }
 
-void Printer::walk(Decl* _node) {
+void
+Printer::walk(Decl* _node) {
 
 	walk(_node->return_type);
 	std::cout << " " <<_node-> name;
@@ -148,7 +173,8 @@ void Printer::walk(Decl* _node) {
 	}
 }
 
-void Printer::walk(VarDecl* _node) {
+void
+Printer::walk(VarDecl* _node) {
 
 	walk((Decl*)_node);
 	if (_node->default_value) {
@@ -157,7 +183,8 @@ void Printer::walk(VarDecl* _node) {
 	}
 }
 
-void Printer::walk(declarations_t* _node) {
+void
+Printer::walk(declarations_t* _node) {
 	printlist_callback_t callback = [](Node* _node, bool is_last, std::string sep, bool print_last) {
 		if (_node->decl_node->decl_type == eDeclType::VAR) {
 			std::cout << ";\n";
@@ -167,11 +194,13 @@ void Printer::walk(declarations_t* _node) {
 	printlist(_node, "\n", true, true, callback);
 }
 
-void Printer::walk(vardecls_t* _node) {
+void
+Printer::walk(vardecls_t* _node) {
 	printlist(_node, ", ");
 }
 
-void Printer::walk(FunctionDecl* _node) {
+void
+Printer::walk(FunctionDecl* _node) {
 	if (_node->is_event) {
 		std::cout << "event ";
 	}
@@ -182,7 +211,8 @@ void Printer::walk(FunctionDecl* _node) {
 	walk(_node->block);
 }
 
-void Printer::walk(ClassDecl* _node) {
+void
+Printer::walk(ClassDecl* _node) {
 
 	std::cout << "class ";
 	//Decl::walk(); // return type is null
@@ -198,7 +228,8 @@ void Printer::walk(ClassDecl* _node) {
 	std::cout << std::endl << "}" << std::endl;
 }
 
-void Printer::walk(IfStmt* _node) {
+void
+Printer::walk(IfStmt* _node) {
 
 	std::cout << "if (";
 	walk(_node->condition);
@@ -209,7 +240,8 @@ void Printer::walk(IfStmt* _node) {
 	walk(_node->false_block);
 }
 
-void Printer::walk(WhileStmt* _node) {
+void
+Printer::walk(WhileStmt* _node) {
 	std::cout << "while (";
 	walk(_node->condition);
 	std::cout << ")";
@@ -217,7 +249,8 @@ void Printer::walk(WhileStmt* _node) {
 
 }
 
-void Printer::walk(ForStmt* _node) {
+void
+Printer::walk(ForStmt* _node) {
 	std::cout << "for (";
 	walk(_node->begin);
 	std::cout << ";";
@@ -228,24 +261,28 @@ void Printer::walk(ForStmt* _node) {
 	walk(_node->block);
 }
 
-void Printer::walk(ExprStmt* _node) {
+void
+Printer::walk(ExprStmt* _node) {
 	if (_node->expr != NULL) { // ExprStmt's expression can be empty
 		walk(_node->expr);
 	}
 }
 
-void Printer::walk(ReturnStmt* _node) {
+void
+Printer::walk(ReturnStmt* _node) {
 
 	std::cout << "return (";
 	walk(_node->return_val);
 	std::cout << ")";
 }
 
-void Printer::walk(ContinueStmt* _node) {
+void
+Printer::walk(ContinueStmt* _node) {
 	std::cout << "continue";
 }
 
-void Printer::walk(BreakStmt* _node) {
+void
+Printer::walk(BreakStmt* _node) {
 	std::cout << "break";
 }
 

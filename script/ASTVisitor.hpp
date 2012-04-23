@@ -28,6 +28,7 @@ public:
 	virtual void walk(PrimaryExpr* node) = 0;
 	virtual void walk(IdentNode* node) = 0;
 	virtual void walk(LiteralExpr* node) = 0;
+	virtual void walk(ArrayNode* node) = 0;
 	virtual void walk(AttributeNode* node) = 0;
 	virtual void walk(SubscriptNode* node) = 0;
 	virtual void walk(FunctionCall* node) = 0;

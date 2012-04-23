@@ -55,6 +55,7 @@ public:
 	virtual void walk(PrimaryExpr* _node);
 	virtual void walk(IdentNode* _node);
 	virtual void walk(LiteralExpr* _node);
+	virtual void walk(ArrayNode* _node);
 	virtual void walk(AttributeNode* _node);
 	virtual void walk(SubscriptNode* _node);
 	virtual void walk(FunctionCall* _node);

@@ -317,6 +317,7 @@
 	 *   : IDENT
 	 *   | literal
 	 *   | LPAREN expr RPAREN
+	 *   | LBRACE optional_expr_list RBRACE
 	 *   ;
 	 */
 

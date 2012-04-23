@@ -30,7 +30,7 @@ static std::string valid_syntax_sources[] = {
 	"string a[] = \"hello\";",
 	"bool a[] = true;",
 	"bool a[] = false;",
-	"float a[] = 1.1;",
+	"float a[] = {1.1};",
 
 	"int a[] = b[4];",
 

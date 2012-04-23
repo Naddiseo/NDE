@@ -119,7 +119,8 @@ ENUM(eLiteralType, char, LiteralTypeEnum)
 	X(AttributeNode, attribute_node, ATTRIBUTENODE) \
 	X(SubscriptNode, subscript_node, SUBSCRIPTNODE) \
 	X(FunctionCall, function_call, FUNCTIONCALL) \
-	X(IdentNode, ident_node, IDENTNODE)
+	X(IdentNode, ident_node, IDENTNODE) \
+	X(ArrayNode, array_node, ARRAYNODE)
 
 #define LISTTYPE(X) \
 	X(expr_list_t, expr_list, EXPRLIST) \
