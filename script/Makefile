@@ -2,11 +2,12 @@ YYDEBUG=1
 #CXX=/usr/bin/g++
 CXXFLAGS= \
 	-I. -I.. \
-	-Wl,--no-as-needed -lcppunit \
 	-g3 -std=c++0x \
 	-DYYDEBUG=$(YYDEBUG) \
 	-Wall -Werror -Wfatal-errors \
 	-pipe -fomit-frame-pointer -D_FORTIFY_SOURCE=2 -fstack-protector-all
+
+CXXLDFLAGS=-lcppunit 
 
 SCANNERBASE=scanner
 PARSERBASE=parser
@@ -19,7 +20,7 @@ DEPFILES:=$(SOURCES:.cpp=.d)
 
 
 all: clear $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o ndes.bin $(OBJECTS) 
+	$(CXX) $(CXXFLAGS) -o ndes.bin $(OBJECTS) $(CXXLDFLAGS)
 
 
 Scanner.cpp: $(SCANNERBASE).ll
@@ -31,7 +32,7 @@ Parser.cpp: $(PARSERBASE).yy Scanner.hpp
 	
 .cpp.o:
 	@-#$(CXX) $< -MM -MF $(patsubst %.o,%.d, $@) $(CXXFLAGS) 
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< $(CXXLDFLAGS) -o $@
 	
 #$(SCANNERBASE).ll:
 #$(PARSERBASE).yy:
