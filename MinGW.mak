@@ -4,7 +4,7 @@ MINGWLIB=$(MINGWDIR)/lib
 CXX=$(MINGWDIR)/bin/g++
 
 BULLETLIBS=BulletDynamics BulletSoftBody BulletCollision LinearMath
-OTHERLIBS=opengl32 SDL glu32 ILU DevIL protobuf z
+OTHERLIBS=opengl32 SDL glu32 ILU DevIL protobuf z python
 LIBS=$(OTHERLIBS) $(BULLETLIBS)
 INCS=$(MINGWINC) $(MINGWINC)/bullet . ./includes
 

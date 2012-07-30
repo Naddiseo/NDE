@@ -1,30 +1,56 @@
 INCFLAGS=-I./includes -I.
-LINKFLAGS=`pkg-config sdl gl glu ILU bullet protobuf --cflags --libs`
+LINKFLAGS=`pkg-config sdl gl glu ILU bullet protobuf python --cflags --libs`
 CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DUSE_OPENGL=1 -DNDEBUG=1  -std=c++0x -Wall -Werror -Wfatal-errors 
 CFLAGS=-g -I./includes 
 
-GAME_FILES=Camera.cpp EngineModule.cpp Entity.cpp Game.cpp Input.cpp KeyboardMap.cpp Scene.cpp Settings.cpp World.cpp
-GAME_SOURCES=$(addprefix src/game/, $(GAME_FILES))
+AI_FILES=
+AI_SOURCES=$(addprefix ai/, $(AI_FILES))
 
-GRAPHICS_FILES=Face.cpp iGraphicsLibrary.cpp IsRendered.cpp OpenGL.cpp Renderer.cpp SkyBox.cpp
-GRAPHICS_SOURCES=$(addprefix src/graphics/, $(GRAPHICS_FILES))
+GAME_FILES=
+GAME_SOURCES=$(addprefix game/, $(GAME_FILES))
 
-MATH_FILES=util.cpp
-MATH_SOURCES=$(addprefix src/math/, $(MATH_FILES))
+GRAPHICS_FILES=
+GRAPHICS_SOURCES=$(addprefix graphics/, $(GRAPHICS_FILES))
 
-MISC_FILES=HasId.cpp debug.cpp
-MISC_SOURCES=$(addprefix src/misc/, $(MISC_FILES))
+LIB_FILES=
+LIB_SOURCES=$(addprefix lib/, $(LIB_FILES))
 
-RESOURCES_FILES=Assets.cpp AssetsLoader.cpp Color.cpp Material.cpp Mesh.cpp Terrain.cpp
-RESOURCES_SOURCES=$(addprefix src/resources/, $(RESOURCES_FILES))
+MATH_FILES=
+MATH_SOURCES=$(addprefix math/, $(MATH_FILES))
 
-SOURCES=$(GAME_SOURCES) $(GRAPHICS_SOURCES) $(RESOURCES_SOURCES) $(MISC_SOURCES) $(MATH_SOURCES)
+PHYSICS_FILES=
+PHYSICS_SOURCES=$(addprefix physics/, $(PHYSICS_FILES))
 
-OBJECTS=src/resources/pb/resource.pb.o $(SOURCES:.cpp=.o)
+RESOURCES_FILES=
+RESOURCES_SOURCES=$(addprefix resources/, $(RESOURCES_FILES))
+
+SCRIPT_FILES=
+SCRIPT_SOURCES=$(addprefix script/, $(SCRIPT_FILES))
+
+SOUND_FILES=
+SOUND_SOURCES=$(addprefix sound/, $(SOUND_FILES))
+
+SYS_FILES=
+SYS_SOURCES=$(addprefix sys/, $(SYS_FILES))
+
+TESTS_FILES=
+TESTS_SOURCES=$(addprefix tests/, $(TESTS_FILES))
+
+TOOLS_FILES=
+TOOLS_SOURCES=$(addprefix tools/, $(TOOLS_FILES))
+
+UI_FILES=
+UI_SOURCES=$(addprefix ui/, $(UI_FILES))
+
+SOURCES=$(AI_SOURCES) $(GAME_SOURCES) $(GRAPHICS_SOURCES) $(LIB_SOURCES) $(MATH_SOURCES) \
+		$(PHYSICS_SOURCES) $(RESOURCES_SOURCES) $(SCRIPT_SOURCES) $(SOUND_SOURCES) $(SYS_SOURCES) \
+		$(TOOLS_SOURCES) $(UI_SOURCES)
+
+OBJECTS=$(SOURCES:.cpp=.o)
 
 all: clear library test01
 
-test01: libNDE.a tests/test01.o tests/KeyboardMapSetup.o tests/DrawAxis.o tests/Box.o tests/ShootBox.o
+test01: libNDE.a game/main.o
 	$(CXX)  $^ -L ./ -lNDE $(LINKFLAGS)  $(CXXFLAGS)   -o nde.bin
 
 library: libNDE.a
@@ -38,13 +64,6 @@ libNDE.a:  $(OBJECTS)
 .c.o: 
 	$(CXX) -c $< $(CXXFLAGS) -Wno-error -Wno-all -Wno-fatal-errors -o $@
 
-proto: src/resources/pb/resource.pb.o
-
-src/resources/pb/resource.pb.o: src/resources/pb/resource.pb.cc
-	$(CXX) -c $< $(CXXFLAGS) -Wno-error -Wno-all -Wno-fatal-errors -o $@
-
-src/resources/pb/resource.pb.cc: src/resources/pb/resource.proto
-	protoc --cpp_out=. $^
 
 clean:
 	-rm `find . \( -name "*.o" -o -name "*.bin" -o -name "*.so" -o -name "*.a" -o -name "*.yy.c" -o -name "*.pb.h" -o -name "*.pb.cc" -o -name "*.o" -o -name "*.output" \)  -print`
