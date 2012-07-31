@@ -6,7 +6,7 @@ use 5.10.0;
 
 my ($folder, $name) = @ARGV;
 
-my $hpp_path = "./includes/$folder/$name\.hpp";
+my $hpp_path = "./src/$folder/$name\.hpp";
 my $cpp_path = "./src/$folder/$name\.cpp";
 
 if (-f $hpp_path || -f $cpp_path) {
@@ -29,7 +29,7 @@ public:
 	virtual ~$name\();
 };
 
-}
+} // namespace nde
 
 EOF
 
@@ -42,5 +42,5 @@ $name\::$name\() {}
 
 $name\::~$name\() {}
 
-}
+} // namespace nde
 EOF

@@ -1,24 +1,24 @@
-INCFLAGS=-I./includes -I.
+INCFLAGS=-I./src -I.
 LINKFLAGS=`pkg-config sdl gl glu ILU bullet protobuf python --cflags --libs`
-CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DUSE_OPENGL=1 -DNDEBUG=1  -std=c++0x -Wall -Werror -Wfatal-errors 
+CXXFLAGS=-g $(INCFLAGS) $(LINKFLAGS) -DUSE_OPENGL=1 -DNDEBUG=1 -DUSE_BULLET=1  -std=c++0x -Wall -Werror -Wfatal-errors 
 CFLAGS=-g -I./includes 
 
 AI_FILES=
 AI_SOURCES=$(addprefix ai/, $(AI_FILES))
 
-GAME_FILES=
+GAME_FILES=Camera.cpp Entity.cpp Game.cpp Player.cpp Scene.cpp Settings.cpp
 GAME_SOURCES=$(addprefix game/, $(GAME_FILES))
 
-GRAPHICS_FILES=
+GRAPHICS_FILES=OpenGL.cpp Renderer.cpp
 GRAPHICS_SOURCES=$(addprefix graphics/, $(GRAPHICS_FILES))
 
 LIB_FILES=
 LIB_SOURCES=$(addprefix lib/, $(LIB_FILES))
 
-MATH_FILES=
+MATH_FILES=Utils.cpp
 MATH_SOURCES=$(addprefix math/, $(MATH_FILES))
 
-PHYSICS_FILES=
+PHYSICS_FILES=Body.cpp World.cpp
 PHYSICS_SOURCES=$(addprefix physics/, $(PHYSICS_FILES))
 
 RESOURCES_FILES=
@@ -42,10 +42,9 @@ TOOLS_SOURCES=$(addprefix tools/, $(TOOLS_FILES))
 UI_FILES=
 UI_SOURCES=$(addprefix ui/, $(UI_FILES))
 
-SOURCES=$(AI_SOURCES) $(GAME_SOURCES) $(GRAPHICS_SOURCES) $(LIB_SOURCES) $(MATH_SOURCES) \
+SOURCES=$(addprefix src/,$(AI_SOURCES) $(GAME_SOURCES) $(GRAPHICS_SOURCES) $(LIB_SOURCES) $(MATH_SOURCES) \
 		$(PHYSICS_SOURCES) $(RESOURCES_SOURCES) $(SCRIPT_SOURCES) $(SOUND_SOURCES) $(SYS_SOURCES) \
-		$(TOOLS_SOURCES) $(UI_SOURCES)
-
+		$(TOOLS_SOURCES) $(UI_SOURCES))
 OBJECTS=$(SOURCES:.cpp=.o)
 
 all: clear library test01
